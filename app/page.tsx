@@ -3,7 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { inter } from './ui/fonts';
 import Image from 'next/image';
-import Amazoncover from '/Amazon_CIAT_(3).jpg';
+import Amazoncover from '/public/Amazon_CIAT_(3).jpg';
 
 export default function Page() {
   return (    
