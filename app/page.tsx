@@ -3,6 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { inter } from './ui/fonts';
 import Image from 'next/image';
+import Amazoncover from '/Amazon_CIAT_(3).jpg';
 
 export default function Page() {
   return (    
@@ -25,9 +26,9 @@ export default function Page() {
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-31 md:py-16">
           {/* Add Hero Images Here */}
-          <Image src='/Amazon_CIAT_(3).jpg' width={1000} height={760} className="hidden md:block"
+          <Image src={Amazoncover} width={1000} height={760} className="hidden md:block"
         alt="Screenshots of the dashboard project showing desktop version"/>
-                  <Image src='/Amazon_CIAT_(3).jpg' width={560} height={620} className="block md:hidden"
+                  <Image src={Amazoncover} width={560} height={620} className="block md:hidden"
         alt="Screenshots of the dashboard project showing mobile version"/>
 
         </div>
