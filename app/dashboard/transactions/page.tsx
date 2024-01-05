@@ -7,7 +7,7 @@ import contract from '@truffle/contract';
 import Web3 from 'web3';
 import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner } from '@chakra-ui/react';
 //import CarbonChainJSON from '@CarbonChain.json';
-import CarbonChainJSON from '@/build/contracts/CarbonChain.json';
+import CarbonChainJSON from '/app/build/contracts/CarbonChain.json';
 import React from 'react';
 //import { load, loadAccount, loadContract } from '../src/funcs';
 
