@@ -71,7 +71,7 @@ export default function Page(){
             <Spacer />
             <Spacer />
             <Heading as='h1'>AmazonCoin Carbon Market Tools</Heading>
-            <Heading as='h2' size='md' noOfLines={1}>An Open Permissioned Blockchain Prototype</Heading>
+            <Heading as='h2' size='md' noOfLines={1}>Stakeholders served: Consortium, Beneficiaries</Heading>
             <Box h='30px'/>
             <HStack w='md'>
               <Input
