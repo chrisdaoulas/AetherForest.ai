@@ -48,6 +48,8 @@ export default function Page(){
     const addressAccount = accounts[0];
     await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
     setInputAddress('');
+    setInputCredits('');
+    setInputCID('');
     setRefresh(true);
   };
 
