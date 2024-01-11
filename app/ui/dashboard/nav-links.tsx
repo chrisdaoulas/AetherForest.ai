@@ -8,7 +8,8 @@ import {
   TrophyIcon,
   CakeIcon,
   CalculatorIcon,
-  DocumentIcon
+  DocumentIcon,
+  WalletIcon
 } from '@heroicons/react/24/outline';
 
 import Link from 'next/link';
@@ -27,6 +28,7 @@ const links = [
   },
   { name: 'Projects', href: '/dashboard/projects', icon: UserGroupIcon },
   { name: 'Transactions', href: '/dashboard/transactions', icon: ShoppingCartIcon },
+  { name: 'Invoices', href: '/dashboard/invoices', icon: WalletIcon },
   { name: 'Carbon Credits', href: '/dashboard/carbon_credit_flow', icon: TrophyIcon },
   { name: 'Metrics', href: '/dashboard/metrics', icon: CalculatorIcon },
   { name: 'Documentation', href: '/dashboard/documents', icon: DocumentIcon },
