@@ -75,67 +75,53 @@ const MyComponent = ({
     
     <h1 className={`${lusitana.className} text-2xl`}>All Events Listener</h1>
     
-    <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search Events..." />
         
       </div>
-  <div className="flex w-full items-center justify-between">
+       <div className="flex w-full items-center justify-between">
   
-  <div className="mt-6 flow-root">
+         <div className="mt-6 flow-root">
   
-    <div className="inline-block min-w-full align-middle">
+           <div className="inline-block min-w-full align-middle">
       
-      <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-        
-    
-
-
+             <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
         
 
-    
+              <table className="hidden min-w-full text-gray-900 md:table" style={{width: '300px'}}>
+                <thead className="rounded-lg text-left text-sm font-normal" style={{ fontFamily: 'Righteous, sans-serif' }}>
+                  <tr>
+                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6"> BlockNumber</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Event Name</th>
+                    <th scope="col" className="px-3 py-5 font-medium">From</th>
+                    <th scope="col" className="px-3 py-5 font-medium">To</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Credits/Cid</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Block Hash</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Transaction Hash</th>
 
+                  </tr>
+                </thead>
+                <tbody className="bg-white">
+                {events.map((event, index) => (
+                  /* //LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
+        //address, data, topics, returnValues, event, signature, raw
+        0 1 2 _ _length_ _from to value */
+                  <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
+                    <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
+                    <td className="whitespace-nowrap px-3 py-3">{event['data']['returnValues']['from']}</td>
+                    <td className="whitespace-nowrap px-3 py-3"> <strong>{event['data']['returnValues'][1]}</strong></td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {event['name']=='Googledeets' && event['data']['returnValues']['cid']}
+                      {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>
+                    <td className="whitespace-nowrap px-3 py-3">{event['data']['transactionHash']}</td>
 
-<table className="hidden min-w-full text-gray-900 md:table" style={{width: '300px'}}>
-
-        <thead className="rounded-lg text-left text-sm font-normal" style={{ fontFamily: 'Righteous, sans-serif' }}>
-          <tr>
-
-            <th scope="col" className="px-4 py-5 font-medium sm:pl-6"> BlockNumber</th>
-            <th scope="col" className="px-3 py-5 font-medium">Event Name</th>
-            <th scope="col" className="px-3 py-5 font-medium">From</th>
-            <th scope="col" className="px-3 py-5 font-medium">To</th>
-            <th scope="col" className="px-3 py-5 font-medium">Credits/Cid</th>
-            <th scope="col" className="px-3 py-5 font-medium">Block Hash</th>
-            <th scope="col" className="px-3 py-5 font-medium">Transaction Hash</th>
-
-            
-                        
-          </tr>
-        </thead>
-        <tbody className="bg-white">
-        {events.map((event, index) => (
-          /* //LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
-//address, data, topics, returnValues, event, signature, raw
-0 1 2 _ _length_ _from to value */
-          <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
-            <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
-            <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
-            <td className="whitespace-nowrap px-3 py-3">{event['data']['returnValues']['from']}</td>
-            <td className="whitespace-nowrap px-3 py-3"> <strong>{event['data']['returnValues'][1]}</strong></td>
-            <td className="whitespace-nowrap px-3 py-3">
-              {event['name']=='Googledeets' && event['data']['returnValues']['cid']}
-              {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
-                  </td>
-            <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>
-            <td className="whitespace-nowrap px-3 py-3">{event['data']['transactionHash']}</td>
-            
-            
-            </tr>
-          ))}
-          </tbody>
-        </table>
-     
-
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
