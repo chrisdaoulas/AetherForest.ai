@@ -1,8 +1,9 @@
 // pages/index.js or your Next.js component
 
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import {Web3} from 'web3';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import { Suspense } from 'react';
@@ -26,11 +27,14 @@ const MyComponent = ({
 }) => {  
   
   
-
-
-  const [events, setEvents] = useState([]);
+  const queryParam = searchParams.query || '';
+  const currentPage = Number(searchParams.page) || 1;
+  const [events, setEvents] = useState<event[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(queryParam);
+  const router = useRouter();
 
   
+
 
   interface event {
     name: any;
@@ -40,34 +44,57 @@ const MyComponent = ({
       // For example, you can use the 'raw' property to access all event data
       raw: any;
     };
+    number: any;
   }
 
-  const query = searchParams.query || '';
-  const currentPage = Number(searchParams.page) || 1;
+
 
   useEffect(() => {
     const init = async () => {
-      // Connect to the local Ethereum node
-      const web3 = new Web3('http://localhost:8545');
+    // Connect to the local Ethereum node
+    const web3 = new Web3('http://localhost:8545');
 
-      // Replace 'CarbonChain' with your contract ABI and address
-      const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
+    // Replace 'CarbonChain' with your contract ABI and address
+    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
 
-      const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
-     // Get all events from the contract ABI
-     const allEvents = await contract.getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' });
+    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    // Get all events from the contract ABI
+    const allEvents = await contract.getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' });
 
-      // Subscribe to all events
-      allEvents.forEach((event) => {
-        //console.log(`Event ${event['name']} Data:`, event['args']);
-        setEvents((prevEvents) => [...prevEvents, { name: event.event, data: event, number: event.blockNumber }]);
-        
-      });
+    setEvents([]);
+
+    // Subscribe to all events
+    allEvents.forEach((event) => {
+    //console.log(`Event ${event['name']} Data:`, event['args']);
+    //setEvents((prevEvents) => [...prevEvents, { name: event.event, data: event, number: event.blockNumber }]);      
+    setEvents((prevEvents) => [{ name: event.event, data: event, number: event.blockNumber }, ...prevEvents]);
+
+      }); 
+ 
+          
       
     };
 
     init();
-  }, []);
+  }, [currentPage,searchQuery]);
+
+  const filteredEvents = events.filter((event) =>
+  event.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+/* const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Enter') {
+    // Trigger refresh or any other action you want on Enter key press
+    // In this case, re-fetch the data with the updated searchQuery
+    // You might want to debounce this operation in a real-world scenario
+    // to avoid unnecessary requests on every keystroke
+    //setSearchQuery(searchQuery);
+    window.location.reload();
+  }
+}; */
+const handleKeyPress = () => {
+  window.location.reload();
+};
 
  return (
   
@@ -76,7 +103,37 @@ const MyComponent = ({
     <h1 className={`${lusitana.className} text-2xl`}>All Events Listener</h1>
     
      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search Events..." />
+        <Search placeholder="Events..." 
+           //value={searchQuery}
+           //onChange={(e) => setSearchQuery(e.target.value)}
+           //onKeyPress={handleKeyPress}
+
+        />
+        <div>
+        <button       className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+
+                type="button"
+                style={{
+                  margin: 
+                  "10px",
+                }
+              
+                }
+                onClick={handleKeyPress}
+              >
+                {"SEARCH"}
+          </button>
+        </div>
+{/*             <button
+                type="button"
+                style={{
+                  margin: 
+                  "10px"
+                }}
+                onClick={handleKeyPress}
+              >
+                {"SEARCH"}
+          </button> */}
         
       </div>
        <div className="flex w-full items-center justify-between">
@@ -87,7 +144,7 @@ const MyComponent = ({
       
              <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
         
-
+             
               <table className="hidden min-w-full text-gray-900 md:table" style={{width: '300px'}}>
                 <thead className="rounded-lg text-left text-sm font-normal" style={{ fontFamily: 'Righteous, sans-serif' }}>
                   <tr>
@@ -102,10 +159,10 @@ const MyComponent = ({
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                {events.map((event, index) => (
-                  /* //LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
-        //address, data, topics, returnValues, event, signature, raw
-        0 1 2 _ _length_ _from to value */
+                {filteredEvents.map((event, index) => (
+                  /* LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
+                 address, data, topics, returnValues, event, signature, raw
+                    returnValues keys: 0 1 2 _ _length_ _from to value */
                   <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
@@ -120,8 +177,10 @@ const MyComponent = ({
 
                     </tr>
                   ))}
+                  
                   </tbody>
                 </table>
+                
               </div>
             </div>
           </div>
@@ -130,6 +189,8 @@ const MyComponent = ({
 
      
   );
+
+
 };
 
 export default MyComponent;
