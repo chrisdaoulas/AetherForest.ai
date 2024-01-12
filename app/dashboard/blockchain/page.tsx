@@ -115,13 +115,17 @@ const MyComponent = ({
         <tbody className="bg-white">
         {events.map((event, index) => (
           /* //LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
-//address, data, topics, returnValues, event, signature, raw */
+//address, data, topics, returnValues, event, signature, raw
+0 1 2 _ _length_ _from to value */
           <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
             <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
             <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
-            <td className="whitespace-nowrap px-3 py-3">{event['data']['address']}</td>
+            <td className="whitespace-nowrap px-3 py-3">{event['data']['returnValues']['from']}</td>
             <td className="whitespace-nowrap px-3 py-3"> <strong>{event['data']['returnValues'][1]}</strong></td>
-            <td className="whitespace-nowrap px-3 py-3">{event['data']['returnValues'][0].toString()}</td>
+            <td className="whitespace-nowrap px-3 py-3">
+              {event['name']=='Googledeets' && event['data']['returnValues']['cid']}
+              {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
+                  </td>
             <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>
             <td className="whitespace-nowrap px-3 py-3">{event['data']['transactionHash']}</td>
             
