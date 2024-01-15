@@ -1,7 +1,8 @@
 'use client'
-
+import { System } from 'typescript';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { lusitana } from '@/app/ui/fonts';
 //import contract from '@truffle/contract';
 
 import Web3 from 'web3';
@@ -85,13 +86,18 @@ export default function Page(){
 
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
-    contract.methods.balanceOf(inputAccountBalance).call;
+    const balance = await contract.methods.balanceOf(inputAccountBalance).call({from: addressAccount}).then();
+    const balvalue = balance.toString()
+    //System.out.println("Total balance of account is:\t" + balance);
+    console.log('Balance: ',balance.toString());
     //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
     //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
 
     console.log('Balance Checked')
     setAccountBalance('');
     setRefresh(true);
+    
+    return balvalue;
   
   };
 
@@ -116,10 +122,16 @@ export default function Page(){
             <Spacer />
             <Spacer />
             <Spacer />
-            <Heading as='h1'>AmazonCoin Carbon Market Tools</Heading>
-            <Heading as='h2' size='md' noOfLines={1}>Stakeholders served: Consortium, Beneficiaries</Heading>
-            <Text>Transfer Triggered AmazonCoin Carbon Credits</Text>
+            <h1 className={`${lusitana.className} text-3xl`}>AmazonCoin Carbon Market Tools</h1>
+            <h1 className={`${lusitana.className} text-2xl`}>Stakeholders served: Consortium, Beneficiaries</h1>
+            
+            <Spacer />
+            <Spacer />
+            <Spacer />
+
             <Box h='30px'/>
+            <Text className={`${lusitana.className} text-1xl`}>Transfer Triggered AmazonCoin Carbon Credits</Text>
+
             <HStack w='md'>
               <Input
               type='text'
@@ -142,10 +154,12 @@ export default function Page(){
               onChange={handleInputChangeCID}
               value={inputCID}
               />                           
-              <Button onClick={handleTransfer} bg='green.200'>SEND</Button>
+              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{  margin:  "10px"}} onClick={handleTransfer} bg='green.200'>SEND</Button>
+
             </HStack>
             <Box h='30px' />
-            <Text>Inquire balance of Accounts</Text>
+            <Text className={`${lusitana.className} text-1xl`}>Inquire balance of Accounts</Text>
             <Input
               type='text'
               size='md'
@@ -153,7 +167,10 @@ export default function Page(){
               onChange={hanldeInputAccountBalance}
               value={inputAccountBalance}
               />
-             <Button onClick={handleBalance} bg='green.200'>BALANCE</Button>
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleBalance} bg='green.200'>BALANCE</Button>
+              <Text className={`${lusitana.className} text-0.5x0.5`}>Balance</Text>
+
 
           </div>
           <Spacer />
