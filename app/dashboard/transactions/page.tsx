@@ -24,33 +24,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 export default function Page(){
   
-  function Alerts() {
-    return (
-      <>
-        
-        <Alert color="success" isOpen={ successAlert }>
-          <span className="alert-icon">
-            <i className="ni ni-like-2"></i>
-          </span>
-          <span className="alert-text">
-            <strong>Success!</strong>{" "}
-            This is a success alert—check it out!
-          </span>
-          <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
-            onClick={() => {setSuccessAlert(false)}}
-          >
-              <span aria-hidden="true">&times;</span>
-          </button>
-      </Alert>
-        
-      </>
-    );
-  }
-    
+
   //state variables
   const [inputAddress, setInputAddress] = React.useState<any>(null); //for receiver address any state
   const [inputCredits, setInputCredits] = React.useState<any>(null); //for credits to be sent any state
@@ -61,10 +35,27 @@ export default function Page(){
   const [inputAccount, setInputAccount] = React.useState<any>(null); //for receiver address for allowance
   const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
   const [inputOffsets, setInputOffsets] = React.useState<any>(null); 
-  const [inputAlerts, setInputAlerts] = React.useState<any>(null);
-  const [successAlert, setSuccessAlert] = React.useState(); 
+  //const [inputAlerts, setInputAlerts] = React.useState<any>(null);
+  //const [successAlert, setSuccessAlert] = React.useState(); 
 
-
+  //Alerts
+  function Alerts() {
+    return (
+      <>
+        
+        <UncontrolledAlert color="success">
+        <span className="alert-icon">
+          <i className="ni ni-like-2"></i>
+        </span>
+        <span className="alert-text">
+          <strong>Success!</strong>{" "}
+          This is a success alert—check it out!
+        </span>
+      </UncontrolledAlert>        
+      </>
+    );
+  }
+    
 
 
   // HANDLERS
@@ -183,7 +174,7 @@ export default function Page(){
     setInputOffsets('');
     setRefresh(true);
     
-    setInputAlerts('Carbon Offsets Successfully Claimed');
+    //setInputAlerts('Carbon Offsets Successfully Claimed');
     Alerts();
   };
 
