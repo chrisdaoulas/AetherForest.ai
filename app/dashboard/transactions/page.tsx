@@ -23,13 +23,29 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 
 export default function Page(){
+  
   function Alerts() {
     return (
       <>
         
-        <Alert color="success">
-          <strong>{inputAlerts} completed with success</strong> 
-        </Alert>
+        <Alert color="success" isOpen={ successAlert }>
+          <span className="alert-icon">
+            <i className="ni ni-like-2"></i>
+          </span>
+          <span className="alert-text">
+            <strong>Success!</strong>{" "}
+            This is a success alert—check it out!
+          </span>
+          <button
+            type="button"
+            className="close"
+            data-dismiss="alert"
+            aria-label="Close"
+            onClick={() => {setSuccessAlert(false)}}
+          >
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </Alert>
         
       </>
     );
@@ -45,7 +61,8 @@ export default function Page(){
   const [inputAccount, setInputAccount] = React.useState<any>(null); //for receiver address for allowance
   const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
   const [inputOffsets, setInputOffsets] = React.useState<any>(null); 
-  const [inputAlerts, setInputAlerts] = React.useState<any>(null); 
+  const [inputAlerts, setInputAlerts] = React.useState<any>(null);
+  const [successAlert, setSuccessAlert] = React.useState(); 
 
 
 
