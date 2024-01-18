@@ -1,5 +1,6 @@
 'use client'
-import { System } from 'typescript';
+
+import { Alert } from "reactstrap";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { lusitana } from '@/app/ui/fonts';
@@ -20,7 +21,19 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 //var Contract = require('web3-eth-contract');
 
 
+
 export default function Page(){
+  function Alerts() {
+    return (
+      <>
+        
+        <Alert color="success">
+          <strong>{inputAlerts} completed with success</strong> 
+        </Alert>
+        
+      </>
+    );
+  }
     
   //state variables
   const [inputAddress, setInputAddress] = React.useState<any>(null); //for receiver address any state
@@ -28,6 +41,13 @@ export default function Page(){
   const [inputCID, setInputCID] = React.useState<any>(null); //for CID associated to file: to change address any state
   const [inputAccountBalance, setAccountBalance] = React.useState<any>(null); //for credits to be sent any state
   const [refresh, setRefresh] = React.useState<boolean>(true);
+  const[balValue,setBalvalue]=React.useState<any>(null);
+  const [inputAccount, setInputAccount] = React.useState<any>(null); //for receiver address for allowance
+  const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
+  const [inputOffsets, setInputOffsets] = React.useState<any>(null); 
+  const [inputAlerts, setInputAlerts] = React.useState<any>(null); 
+
+
 
 
   // HANDLERS
@@ -36,8 +56,11 @@ export default function Page(){
   const handleInputChangeAddress = (e:any) => setInputAddress(e.currentTarget.value);
   const handleInputChangeCredits = (e:any) => setInputCredits(e.currentTarget.value);
   const handleInputChangeCID = (e:any) => setInputCID(e.currentTarget.value);
-  const hanldeInputAccountBalance = (e:any) => setAccountBalance(e.currentTarget.value);
-  
+  const handleInputAccountBalance = (e:any) => setAccountBalance(e.currentTarget.value);
+  const handleInputAccount = (e:any) => setInputAccount(e.currentTarget.value);
+  const handleInputAllowance = (e:any) => setInputAllowance(e.currentTarget.value);
+  const handleInputOffsets = (e:any) => setInputOffsets(e.currentTarget.value);
+
   //Event handle to initiate the amazoncoin.sol's transfer method
   const handleTransfer = async () => {
     //const theContract = contract(CarbonChainJSON);
@@ -97,9 +120,56 @@ export default function Page(){
     setAccountBalance('');
     setRefresh(true);
     
-    return balvalue;
+    setBalvalue(balvalue);
+    
   
   };
+
+  const handleAllowance = async () => {
+
+    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
+    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    //contract.deploy();
+
+    const accounts = await web3.eth.getAccounts();
+    const addressAccount = accounts[0];
+    await contract.methods.approve(inputAccount,inputAllowance).send({from: addressAccount}).then();
+    //const balvalue = balance.toString()
+    //System.out.println("Total balance of account is:\t" + balance);
+    console.log('Allowance set for ',inputAllowance);
+    //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
+    //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
+
+    console.log('Allowance Approved')
+    setInputAccount('');
+    setInputAllowance('');
+    setRefresh(true);
+
+  };
+
+  const handleOffsets = async () => {
+
+    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
+    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    //contract.deploy();
+
+    const accounts = await web3.eth.getAccounts();
+    const addressAccount = accounts[0];
+    await contract.methods.claimCarbonOffsets(inputOffsets).send({from:addressAccount}).then();
+    //const balvalue = balance.toString()
+    //System.out.println("Total balance of account is:\t" + balance);
+    //console.log('Allowance set for ',inputOffsets);
+    //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
+    //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
+
+    console.log('Offsets Claimed')
+    setInputOffsets('');
+    setRefresh(true);
+    
+    setInputAlerts('Carbon Offsets Successfully Claimed');
+    Alerts();
+  };
+
 
 
 
@@ -164,14 +234,49 @@ export default function Page(){
               type='text'
               size='md'
               placeholder='Account Balance'
-              onChange={hanldeInputAccountBalance}
+              onChange={handleInputAccountBalance}
               value={inputAccountBalance}
               />
              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{margin:"10px"}} onClick={handleBalance} bg='green.200'>BALANCE</Button>
-              <Text className={`${lusitana.className} text-0.5x0.5`}>Balance</Text>
+              <Text className={`${lusitana.className} text-0.5x0.5`}>Balance: {balValue}</Text>
 
+              <Box h='30px' />
+            <Text className={`${lusitana.className} text-1xl`}>Approve Allowance of Accounts</Text>
+            <HStack w='md'>
+            <Input
+              type='text'
+              size='md'
+              placeholder='Account'
+              onChange={handleInputAccount}
+              value={inputAccount}
+              />
+              <Input
+              type='text'
+              size='md'
+              placeholder='Allowance'
+              onChange={handleInputAllowance}
+              value={inputAllowance}
+              />
+              
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleAllowance} bg='green.200'>APPROVE</Button>
+              </HStack>
+              
 
+              <Box h='30px' />
+            <Text className={`${lusitana.className} text-1xl`}>Claim Carbon Offsets</Text>
+            <Input
+              type='text'
+              size='md'
+              placeholder='Carbon Offsets'
+              onChange={handleInputOffsets}
+              value={inputOffsets}
+              />
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleOffsets} bg='green.200'>CLAIM</Button>
+{/*               <Text className={`${lusitana.className} text-0.5x0.5`}>Balance: {balValue}</Text>
+ */}
           </div>
           <Spacer />
         </HStack>
