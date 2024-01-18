@@ -1,18 +1,20 @@
 'use client'
 
-import { Alert } from "reactstrap";
-import type { NextPage } from 'next';
+
+
 import Head from 'next/head';
 import { lusitana } from '@/app/ui/fonts';
-//import contract from '@truffle/contract';
+import { Alert } from "reactstrap";
+
 
 import Web3 from 'web3';
-import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner } from '@chakra-ui/react';
+import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
 //import CarbonChainJSON from '@CarbonChain.json';
 //import CarbonChainJSON from '@/build/contracts/CarbonChain.json';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
 
 import React from 'react';
+
 //import { load, loadAccount, loadContract } from '../src/funcs';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
@@ -21,8 +23,10 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 //var Contract = require('web3-eth-contract');
 
 
-
-export default function Page(){
+  //Alerts
+  
+  export default function Page(){
+    
   
 
   //state variables
@@ -34,29 +38,23 @@ export default function Page(){
   const[balValue,setBalvalue]=React.useState<any>(null);
   const [inputAccount, setInputAccount] = React.useState<any>(null); //for receiver address for allowance
   const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
-  const [inputOffsets, setInputOffsets] = React.useState<any>(null); 
-  //const [inputAlerts, setInputAlerts] = React.useState<any>(null);
+  const [inputOffsets, setInputOffsets] = React.useState<any>(null);
+  const [showSuccessNotification, setShowSuccessNotification] = React.useState<boolean>(false);
+ 
+  const [inputAlerts, setInputAlerts] = React.useState<any>(null);
   //const [successAlert, setSuccessAlert] = React.useState(); 
 
-  //Alerts
-  function Alerts() {
+ 
+  function SuccessNotification() {
     return (
-      <>
-        
-        <UncontrolledAlert color="success">
-        <span className="alert-icon">
-          <i className="ni ni-like-2"></i>
-        </span>
-        <span className="alert-text">
-          <strong>Success!</strong>{" "}
-          This is a success alert—check it out!
-        </span>
-      </UncontrolledAlert>        
-      </>
+      <div className="mb-4 rounded-lg bg-green-600 bg-success-100 px-6 py-5 text-white text-success-700" role="alert">
+      <strong>Success!</strong> {inputAlerts}
+      <button onClick={() => setShowSuccessNotification(false)} className="float-right">
+        Close
+      </button>
+    </div>
     );
   }
-    
-
 
   // HANDLERS
 
@@ -68,6 +66,7 @@ export default function Page(){
   const handleInputAccount = (e:any) => setInputAccount(e.currentTarget.value);
   const handleInputAllowance = (e:any) => setInputAllowance(e.currentTarget.value);
   const handleInputOffsets = (e:any) => setInputOffsets(e.currentTarget.value);
+  
 
   //Event handle to initiate the amazoncoin.sol's transfer method
   const handleTransfer = async () => {
@@ -96,6 +95,12 @@ export default function Page(){
     setInputCredits('');
     setInputCID('');
     setRefresh(true);
+    setShowSuccessNotification(true);
+
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 5000);
+    setInputAlerts('Transfer Successful');
   
   };
 
@@ -153,6 +158,13 @@ export default function Page(){
     setInputAllowance('');
     setRefresh(true);
 
+    setShowSuccessNotification(true);
+
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 5000);
+    setInputAlerts('Allowance Successfully Approved');
+
   };
 
   const handleOffsets = async () => {
@@ -174,8 +186,16 @@ export default function Page(){
     setInputOffsets('');
     setRefresh(true);
     
-    //setInputAlerts('Carbon Offsets Successfully Claimed');
-    Alerts();
+    setShowSuccessNotification(true);
+
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 5000);
+    setInputAlerts('Carbon Offsets Successfully Claimed');
+    
+  
+  
+
   };
 
 
@@ -185,9 +205,11 @@ export default function Page(){
   //triggers changes when the component mounts or when the dependencies change
 
   //component layout render
+  
 
   return (
-    <div>
+    <div className="w-full">
+      <div className="flex w-full items-center justify-between">
         <Head>
           <title>AmazonCoin</title>
           <meta name="description" content="CarbonChain." />
@@ -283,11 +305,17 @@ export default function Page(){
               />
              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{margin:"10px"}} onClick={handleOffsets} bg='green.200'>CLAIM</Button>
-{/*               <Text className={`${lusitana.className} text-0.5x0.5`}>Balance: {balValue}</Text>
- */}
+              {showSuccessNotification && <SuccessNotification />}
           </div>
           <Spacer />
         </HStack>
+        </div>
     </div>
-  )
-} 
+  );
+};
+
+
+
+
+
+
