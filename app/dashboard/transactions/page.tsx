@@ -19,6 +19,7 @@ import React from 'react';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+const contractAddress = '0xCace1b78160AE76398F486c8a18044da0d66d86D'; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
@@ -81,7 +82,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
     //theContract.setProvider('ws://localhost:7545');
     //const CarbonChain =  theContract.deploy();
 
-    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
+    
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     //contract.deploy();
 
@@ -116,7 +117,6 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
     //theContract.setProvider('ws://localhost:7545');
     //const CarbonChain =  theContract.deploy();
 
-    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     //contract.deploy();
 
@@ -140,7 +140,6 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
   const handleAllowance = async () => {
 
-    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     //contract.deploy();
 
@@ -169,7 +168,6 @@ var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
   const handleOffsets = async () => {
 
-    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     //contract.deploy();
 

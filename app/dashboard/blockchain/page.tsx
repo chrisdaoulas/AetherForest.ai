@@ -26,7 +26,7 @@ const MyComponent = ({
   };
 }) => {  
   
-  
+  const web3 = new Web3('http://localhost:8545');
   const queryParam = searchParams.query || '';
   const currentPage = Number(searchParams.page) || 1;
   const [events, setEvents] = useState<event[]>([]);
@@ -34,7 +34,13 @@ const MyComponent = ({
   const router = useRouter();
 
   
-
+  async function timestamp(blockNumber) {
+    //const blockN = await web3.eth.getTransaction(txHash)
+    //const blockData = await web3.eth.getBlock(blockN.blockNumber)
+    const blocktime = web3.eth.getBlock(blockNumber )
+    //return blockData.timestamp.toString()
+    return blocktime.toString()
+  }
 
   interface event {
     name: any;
@@ -52,10 +58,10 @@ const MyComponent = ({
   useEffect(() => {
     const init = async () => {
     // Connect to the local Ethereum node
-    const web3 = new Web3('http://localhost:8545');
+    
 
     // Replace 'CarbonChain' with your contract ABI and address
-    const contractAddress = '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6'; 
+    const contractAddress = '0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D'; 
 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     // Get all events from the contract ABI
@@ -67,7 +73,7 @@ const MyComponent = ({
     allEvents.forEach((event) => {
     //console.log(`Event ${event['name']} Data:`, event['args']);
     //setEvents((prevEvents) => [...prevEvents, { name: event.event, data: event, number: event.blockNumber }]);      
-    setEvents((prevEvents) => [{ name: event.event, data: event, number: event.blockNumber }, ...prevEvents]);
+    setEvents((prevEvents) => [{ name: event.event, date: event.raw, data: event, number: event.blockNumber }, ...prevEvents]);
 
       }); 
  
@@ -150,9 +156,10 @@ const handleKeyPress = () => {
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6"> BlockNumber</th>
                     <th scope="col" className="px-3 py-5 font-medium">Event Name</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Date & Time</th>
                     <th scope="col" className="px-3 py-5 font-medium">From</th>
                     <th scope="col" className="px-3 py-5 font-medium">To</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Credits/Cid</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Credits/ Cid/ Allowance</th>
                     <th scope="col" className="px-3 py-5 font-medium">Block Hash</th>
                     <th scope="col" className="px-3 py-5 font-medium">Transaction Hash</th>
 
@@ -166,10 +173,26 @@ const handleKeyPress = () => {
                   <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
-                    <td className="whitespace-nowrap px-3 py-3">{event['data']['returnValues']['from']}</td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {/* {Date(event['data']['returnValues']['timestamp'].toString()*1000)} */}
+                      {event['name']=='CarbonOffsetsClaimed' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
+                      {event['name']=='CID' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
+                      {event['name']=='Approval' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
+
+                      {event['name']=='Transfer' && Object.keys(event['data']['returnValues'])}
+                      </td>
+{/*                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['raw']['data'][5]}</strong></td>
+ */}                    <td className="whitespace-nowrap px-3 py-3">
+                      {event['data']['returnValues']['from']}
+                      {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
+                      {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
+
+                      </td>
                     <td className="whitespace-nowrap px-3 py-3"> <strong>{event['data']['returnValues'][1]}</strong></td>
                     <td className="whitespace-nowrap px-3 py-3">
-                      {event['name']=='Googledeets' && event['data']['returnValues']['cid']}
+                      {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][1].toString().concat(" AMZ")}
+                      {event['name']=='Approval' && event['data']['returnValues'][2].toString().concat(" AMZ")}
+                      {event['name']=='CID' && event['data']['returnValues']['cid']}
                       {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
                     </td>
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>

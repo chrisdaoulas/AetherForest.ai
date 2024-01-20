@@ -12,12 +12,12 @@ contract CarbonChain {
     uint8 public decimals;
     uint256 public tokenPrice;
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Googledeets(string cid);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    event TokensPurchased(address indexed buyer, uint256 amount);
-    event TokensSold(address indexed seller, uint256 amount);
-    event CarbonOffsetsClaimed(address indexed account, uint256 amount);
+    event Transfer(address indexed from, address indexed to, uint256 value,string cid, uint256 timestamp);
+    event CID(string cid, uint256 timestamp);
+    event Approval(address indexed owner, address indexed spender, uint256 value, uint256 timestamp);
+    event TokensPurchased(address indexed buyer, uint256 amount, uint256 timestamp);
+    event TokensSold(address indexed seller, uint256 amount, uint256 timestamp);
+    event CarbonOffsetsClaimed(address indexed account, uint256 amount, uint256 timestamp);
 
     constructor(
         string memory tokenName,
@@ -45,9 +45,9 @@ contract CarbonChain {
 
         tokenBalance[msg.sender] -= value;
         tokenBalance[to] += value;
-
-        emit Transfer(msg.sender, to, value);
-        emit Googledeets(cid);
+	
+        emit Transfer(msg.sender, to, value, cid, block.timestamp);
+	emit CID(cid, block.timestamp);
         return true;
     }
 
@@ -55,7 +55,7 @@ contract CarbonChain {
         require(spender != address(0), "Invalid spender address");
 
         allowance[msg.sender][spender] = value;
-        emit Approval(msg.sender, spender, value);
+        emit Approval(msg.sender, spender, value, block.timestamp);
         return true;
     }
 
@@ -88,7 +88,7 @@ contract CarbonChain {
         tokenBalance[address(this)] -= tokensToTransfer;
         tokenBalance[msg.sender] += tokensToTransfer;
 
-        emit TokensPurchased(msg.sender, tokensToTransfer);
+        emit TokensPurchased(msg.sender, tokensToTransfer,block.timestamp);
     }
 
     function sellTokens(uint256 numberOfTokens) external {
@@ -102,7 +102,7 @@ contract CarbonChain {
 
         payable(msg.sender).transfer(numberOfTokens * tokenPrice);
 
-        emit TokensSold(msg.sender, tokensToTransfer);
+        emit TokensSold(msg.sender, tokensToTransfer,block.timestamp);
     }
 
     function claimCarbonOffsets(uint256 amount) external {
@@ -112,6 +112,6 @@ contract CarbonChain {
         tokenBalance[msg.sender] -= amount;
         carbonOffsets[msg.sender] += amount;
 
-        emit CarbonOffsetsClaimed(msg.sender, amount);
+        emit CarbonOffsetsClaimed(msg.sender, amount,block.timestamp);
     }
 }
