@@ -12,7 +12,7 @@ contract CarbonChain {
     uint8 public decimals;
     uint256 public tokenPrice;
 
-    event Transfer(address indexed from, address indexed to, uint256 value,string cid, uint256 timestamp);
+    event Transfer(address indexed from, address indexed to, uint256 value);
     event CID(string cid, uint256 timestamp);
     event Approval(address indexed owner, address indexed spender, uint256 value, uint256 timestamp);
     event TokensPurchased(address indexed buyer, uint256 amount, uint256 timestamp);
@@ -46,7 +46,7 @@ contract CarbonChain {
         tokenBalance[msg.sender] -= value;
         tokenBalance[to] += value;
 	
-        emit Transfer(msg.sender, to, value, cid, block.timestamp);
+        emit Transfer(msg.sender, to, value);
 	emit CID(cid, block.timestamp);
         return true;
     }

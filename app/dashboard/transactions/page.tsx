@@ -19,7 +19,7 @@ import React from 'react';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = '0xCace1b78160AE76398F486c8a18044da0d66d86D'; 
+const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659'; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
@@ -106,29 +106,13 @@ const contractAddress = '0xCace1b78160AE76398F486c8a18044da0d66d86D';
   };
 
   const handleBalance = async () => {
-    //const theContract = contract(CarbonChainJSON);
-    //theContract.setProvider('ws://localhost:7545');
-    //const theContract = new Contract(CarbonChainJSON);
-    //await theContract.at('0xc76736aeB40a1C39f1C2BA381bc121aab8016F6C');
-    //onst CarbonChain = await theContract.deployed();
-    
-    //const theContract = new web3.eth.Contract(CarbonChainJSON.abi,'0xc76736aeB40a1C39f1C2BA381bc121aab8016F6C');
-    //let theContract = new web3.eth.Contract(CarbonChainJSON.abi).at('0xc76736aeB40a1C39f1C2BA381bc121aab8016F6C');
-    //theContract.setProvider('ws://localhost:7545');
-    //const CarbonChain =  theContract.deploy();
-
+ 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
-    //contract.deploy();
-
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     const balance = await contract.methods.balanceOf(inputAccountBalance).call({from: addressAccount}).then();
     const balvalue = balance.toString()
-    //System.out.println("Total balance of account is:\t" + balance);
     console.log('Balance: ',balance.toString());
-    //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-    //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-
     console.log('Balance Checked')
     setAccountBalance('');
     setRefresh(true);
@@ -141,17 +125,10 @@ const contractAddress = '0xCace1b78160AE76398F486c8a18044da0d66d86D';
   const handleAllowance = async () => {
 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
-    //contract.deploy();
-
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.approve(inputAccount,inputAllowance).send({from: addressAccount}).then();
-    //const balvalue = balance.toString()
-    //System.out.println("Total balance of account is:\t" + balance);
     console.log('Allowance set for ',inputAllowance);
-    //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-    //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-
     console.log('Allowance Approved')
     setInputAccount('');
     setInputAllowance('');
@@ -169,17 +146,9 @@ const contractAddress = '0xCace1b78160AE76398F486c8a18044da0d66d86D';
   const handleOffsets = async () => {
 
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
-    //contract.deploy();
-
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.claimCarbonOffsets(inputOffsets).send({from:addressAccount}).then();
-    //const balvalue = balance.toString()
-    //System.out.println("Total balance of account is:\t" + balance);
-    //console.log('Allowance set for ',inputOffsets);
-    //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-    //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-
     console.log('Offsets Claimed')
     setInputOffsets('');
     setRefresh(true);

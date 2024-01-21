@@ -6,10 +6,14 @@ import {Web3} from 'web3';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-import { Suspense } from 'react';
+
+
 //import ethers from 'ethers';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
-import { Spacer } from '@chakra-ui/react';
+
+
+
+
 
 //Possible options for getPastEvents: 
 //LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
@@ -29,18 +33,14 @@ const MyComponent = ({
   const web3 = new Web3('http://localhost:8545');
   const queryParam = searchParams.query || '';
   const currentPage = Number(searchParams.page) || 1;
+  
   const [events, setEvents] = useState<event[]>([]);
+  const [transfer, setTransfer] = useState<event[]>([]);
+  const [cid, setCID] = useState<event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>(queryParam);
   const router = useRouter();
 
-  
-  async function timestamp(blockNumber) {
-    //const blockN = await web3.eth.getTransaction(txHash)
-    //const blockData = await web3.eth.getBlock(blockN.blockNumber)
-    const blocktime = web3.eth.getBlock(blockNumber )
-    //return blockData.timestamp.toString()
-    return blocktime.toString()
-  }
+
 
   interface event {
     name: any;
@@ -61,9 +61,10 @@ const MyComponent = ({
     
 
     // Replace 'CarbonChain' with your contract ABI and address
-    const contractAddress = '0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D'; 
-
+     
+    const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    
     // Get all events from the contract ABI
     const allEvents = await contract.getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' });
 
@@ -71,14 +72,14 @@ const MyComponent = ({
 
     // Subscribe to all events
     allEvents.forEach((event) => {
-    //console.log(`Event ${event['name']} Data:`, event['args']);
-    //setEvents((prevEvents) => [...prevEvents, { name: event.event, data: event, number: event.blockNumber }]);      
-    setEvents((prevEvents) => [{ name: event.event, date: event.raw, data: event, number: event.blockNumber }, ...prevEvents]);
+   
+    setEvents((prevEvents) => 
+        [{ name: event.event, date: event.date, data: event, number: event.blockNumber }, ...prevEvents]
+    
+        );
+        
+      });
 
-      }); 
- 
-          
-      
     };
 
     init();
@@ -88,19 +89,27 @@ const MyComponent = ({
   event.name.toLowerCase().includes(searchQuery.toLowerCase())
 );
 
-/* const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  if (e.key === 'Enter') {
-    // Trigger refresh or any other action you want on Enter key press
-    // In this case, re-fetch the data with the updated searchQuery
-    // You might want to debounce this operation in a real-world scenario
-    // to avoid unnecessary requests on every keystroke
-    //setSearchQuery(searchQuery);
-    window.location.reload();
-  }
-}; */
 const handleKeyPress = () => {
   window.location.reload();
 };
+
+function dating(event){
+  //return Date(Number(date)*1000);
+  //return Date(date);
+  //return Date(Number(date.toString())*1000);
+  //return Number(date.toString())*1000;
+  //date = Date(date);
+  //date = Number(date.toString())*1000;
+  //const date = Number(event['data']['returnValues']['timestamp'].toString())*1000;
+  //const d = Date(date);
+  
+  //return (await web3.eth.getBlock(Number(bn.toString()))).timestamp;
+  //const timestampInSeconds = 1705762650;
+  //const date = Date(timestampInSeconds * 1000); // Multiply by 1000 to convert to milliseconds
+  //return date;
+
+}
+
 
  return (
   
@@ -130,16 +139,6 @@ const handleKeyPress = () => {
                 {"SEARCH"}
           </button>
         </div>
-{/*             <button
-                type="button"
-                style={{
-                  margin: 
-                  "10px"
-                }}
-                onClick={handleKeyPress}
-              >
-                {"SEARCH"}
-          </button> */}
         
       </div>
        <div className="flex w-full items-center justify-between">
@@ -174,21 +173,21 @@ const handleKeyPress = () => {
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
                     <td className="whitespace-nowrap px-3 py-3">
-                      {/* {Date(event['data']['returnValues']['timestamp'].toString()*1000)} */}
-                      {event['name']=='CarbonOffsetsClaimed' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
-                      {event['name']=='CID' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
-                      {event['name']=='Approval' && Date(event['data']['returnValues']['timestamp'].toString()*1000)}
-
-                      {event['name']=='Transfer' && Object.keys(event['data']['returnValues'])}
+                      {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues']['timestamp'].toString()}
+                      {event['name']=='CID' && event['data']['returnValues']['timestamp'].toString()}
+                      {event['name']=='Approval' && event.name}
+                      {event['name']=='Transfer' && 'see CID'}
                       </td>
-{/*                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['raw']['data'][5]}</strong></td>
- */}                    <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3">
                       {event['data']['returnValues']['from']}
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
                       {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
 
                       </td>
-                    <td className="whitespace-nowrap px-3 py-3"> <strong>{event['data']['returnValues'][1]}</strong></td>
+                    <td className="whitespace-nowrap px-3 py-3"> 
+                    <strong>{event['data']['returnValues'][1]}</strong>
+                    <strong>{event['name']=='CID' && event['data']['returnValues'][1]}</strong>
+                    </td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][1].toString().concat(" AMZ")}
                       {event['name']=='Approval' && event['data']['returnValues'][2].toString().concat(" AMZ")}
