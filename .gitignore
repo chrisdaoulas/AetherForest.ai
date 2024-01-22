@@ -34,5 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-#cache/console-history.txt
-#cache/console-history.txt
+
+# Ignore cache/console-history.txt
+cache/console-history.txt
+
