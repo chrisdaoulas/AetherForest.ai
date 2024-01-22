@@ -2,7 +2,6 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useSearchParams, useRouter,usePathname } from 'next/navigation';
-import { Router } from 'next/router';
 
 import { useDebouncedCallback } from 'use-debounce';
 

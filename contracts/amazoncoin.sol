@@ -38,6 +38,10 @@ contract CarbonChain {
         return tokenBalance[account];
     }
 
+    function carbonOffs() external view returns (uint256) {
+        return carbonOffsets[msg.sender];
+    }
+
     function transfer(address to, uint256 value, string memory cid) external returns (bool) {
         require(to != address(0), "Invalid recipient address");
         require(value > 0, "Invalid token amount");

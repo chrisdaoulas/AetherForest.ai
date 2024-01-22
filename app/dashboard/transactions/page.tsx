@@ -4,22 +4,19 @@
 
 import Head from 'next/head';
 import { lusitana } from '@/app/ui/fonts';
-import { Alert } from "reactstrap";
+
 
 
 import Web3 from 'web3';
 import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
-//import CarbonChainJSON from '@CarbonChain.json';
-//import CarbonChainJSON from '@/build/contracts/CarbonChain.json';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
 
 import React from 'react';
 
-//import { load, loadAccount, loadContract } from '../src/funcs';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659'; 
+const contractAddress = '0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44'; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
@@ -41,6 +38,10 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
   const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
   const [inputOffsets, setInputOffsets] = React.useState<any>(null);
   const [showSuccessNotification, setShowSuccessNotification] = React.useState<boolean>(false);
+  const [inputBuyTokens, setInputBuyTokens] = React.useState<any>(null);
+  const [inputSellTokens, setInputSellTokens] = React.useState<any>(null);
+  const[offValue,setOffValue]=React.useState<any>(null);
+  
  
   const [inputAlerts, setInputAlerts] = React.useState<any>(null);
   //const [successAlert, setSuccessAlert] = React.useState(); 
@@ -67,6 +68,8 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
   const handleInputAccount = (e:any) => setInputAccount(e.currentTarget.value);
   const handleInputAllowance = (e:any) => setInputAllowance(e.currentTarget.value);
   const handleInputOffsets = (e:any) => setInputOffsets(e.currentTarget.value);
+  const handleInputBuyTokens = (e:any) => setInputBuyTokens(e.currentTarget.value);
+  const handleInputSellTokens = (e:any) => setInputSellTokens(e.currentTarget.value);
   
 
   //Event handle to initiate the amazoncoin.sol's transfer method
@@ -149,9 +152,11 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.claimCarbonOffsets(inputOffsets).send({from:addressAccount}).then();
+    const carbonOffsets = await contract.methods.carbonOffs().call({from:addressAccount}).then();;
     console.log('Offsets Claimed')
     setInputOffsets('');
     setRefresh(true);
+    setOffValue(carbonOffsets.toString());
     
     setShowSuccessNotification(true);
 
@@ -160,19 +165,40 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
     }, 5000);
     setInputAlerts('Carbon Offsets Successfully Claimed');
     
-  
-  
-
   };
 
 
-
+  const handleBuyTokens = async () => {
+ 
+    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const accounts = await web3.eth.getAccounts();
+    const addressAccount = accounts[1];
+    await contract.methods.buyTokens(inputBuyTokens).send({from: addressAccount}).then();
+    console.log('Tokens Bought')
+    setInputBuyTokens('');
+    setRefresh(true);
+  
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 5000);
+    setInputAlerts('Tokens Successfully Bought');
+  
+  };
 
   // React useEffect Hook
   //triggers changes when the component mounts or when the dependencies change
 
   //component layout render
   
+  const ColoredLine = ({ color }) => (
+    <hr
+        style={{
+            color: color,
+            backgroundColor: color,
+            height: 2
+        }}
+    />
+  );
 
   return (
     <div className="w-full">
@@ -198,7 +224,7 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
 
             <Box h='30px'/>
             <Text className={`${lusitana.className} text-1xl`}>Transfer Triggered AmazonCoin Carbon Credits</Text>
-
+            
             <HStack w='md'>
               <Input
               type='text'
@@ -223,8 +249,9 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
               />                           
               <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{  margin:  "10px"}} onClick={handleTransfer} bg='green.200'>SEND</Button>
-
+            
             </HStack>
+            <ColoredLine color="grey" />
             <Box h='30px' />
             <Text className={`${lusitana.className} text-1xl`}>Inquire balance of Accounts</Text>
             <Input
@@ -237,10 +264,12 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{margin:"10px"}} onClick={handleBalance} bg='green.200'>BALANCE</Button>
               <Text className={`${lusitana.className} text-0.5x0.5`}>Balance: {balValue}</Text>
+              <ColoredLine color="grey" />
+              
+            <Box h='30px' />
 
-              <Box h='30px' />
             <Text className={`${lusitana.className} text-1xl`}>Approve Allowance of Accounts</Text>
-            <HStack w='md'>
+            <HStack w='full'>
             <Input
               type='text'
               size='md'
@@ -260,8 +289,10 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
               type="button" style={{margin:"10px"}} onClick={handleAllowance} bg='green.200'>APPROVE</Button>
               </HStack>
               
-
+              <ColoredLine color="grey" />
               <Box h='30px' />
+              
+              
             <Text className={`${lusitana.className} text-1xl`}>Claim Carbon Offsets</Text>
             <Input
               type='text'
@@ -272,7 +303,28 @@ const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
               />
              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{margin:"10px"}} onClick={handleOffsets} bg='green.200'>CLAIM</Button>
+              <Text className={`${lusitana.className} text-0.5x0.5`}>Offsets: {offValue}</Text>
+              <ColoredLine color="grey" />
+
+
+              <Box h='30px' />
+            <Text className={`${lusitana.className} text-1xl`}>Buy Tokens</Text>
+            <Input
+              type='text'
+              size='md'
+              placeholder='Number of Tokens'
+              onChange={handleInputBuyTokens}
+              value={inputBuyTokens}
+              />
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleBuyTokens} bg='green.200'>BUY</Button>
+              
+              <ColoredLine color="grey" />
+              
+            <Box h='30px' />
+
               {showSuccessNotification && <SuccessNotification />}
+              
           </div>
           <Spacer />
         </HStack>

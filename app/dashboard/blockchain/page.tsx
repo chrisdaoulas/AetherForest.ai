@@ -1,11 +1,14 @@
 // pages/index.js or your Next.js component
 
 'use client'
+import { format,fromUnixTime, addDays } from 'date-fns';
+
 import { useEffect, useState} from 'react';
 import {Web3} from 'web3';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
+
 
 
 //import ethers from 'ethers';
@@ -35,8 +38,7 @@ const MyComponent = ({
   const currentPage = Number(searchParams.page) || 1;
   
   const [events, setEvents] = useState<event[]>([]);
-  const [transfer, setTransfer] = useState<event[]>([]);
-  const [cid, setCID] = useState<event[]>([]);
+  const [prevEvents, setPrevEvents] = useState<event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>(queryParam);
   const router = useRouter();
 
@@ -62,7 +64,7 @@ const MyComponent = ({
 
     // Replace 'CarbonChain' with your contract ABI and address
      
-    const contractAddress = '0x3aAde2dCD2Df6a8cAc689EE797591b2913658659';
+    const contractAddress = '0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44';
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     
     // Get all events from the contract ABI
@@ -73,8 +75,12 @@ const MyComponent = ({
     // Subscribe to all events
     allEvents.forEach((event) => {
    
-    setEvents((prevEvents) => 
-        [{ name: event.event, date: event.date, data: event, number: event.blockNumber }, ...prevEvents]
+    setEvents((prevEvents) => {
+      setPrevEvents(prevEvents);
+     return  [{ name: event.event, date: event.timestamp, data: event, number: event.blockNumber }, ...prevEvents]
+    }
+        
+        //[{ name: event.event, date: event.date, data: event, number: event.blockNumber }, ...prevEvents]
     
         );
         
@@ -93,22 +99,6 @@ const handleKeyPress = () => {
   window.location.reload();
 };
 
-function dating(event){
-  //return Date(Number(date)*1000);
-  //return Date(date);
-  //return Date(Number(date.toString())*1000);
-  //return Number(date.toString())*1000;
-  //date = Date(date);
-  //date = Number(date.toString())*1000;
-  //const date = Number(event['data']['returnValues']['timestamp'].toString())*1000;
-  //const d = Date(date);
-  
-  //return (await web3.eth.getBlock(Number(bn.toString()))).timestamp;
-  //const timestampInSeconds = 1705762650;
-  //const date = Date(timestampInSeconds * 1000); // Multiply by 1000 to convert to milliseconds
-  //return date;
-
-}
 
 
  return (
@@ -155,7 +145,7 @@ function dating(event){
                   <tr>
                     <th scope="col" className="px-4 py-5 font-medium sm:pl-6"> BlockNumber</th>
                     <th scope="col" className="px-3 py-5 font-medium">Event Name</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Date & Time</th>
+                    <th scope="col" className="px-3 py-5 font-medium">Unix Timestamp</th>
                     <th scope="col" className="px-3 py-5 font-medium">From</th>
                     <th scope="col" className="px-3 py-5 font-medium">To</th>
                     <th scope="col" className="px-3 py-5 font-medium">Credits/ Cid/ Allowance</th>
@@ -175,18 +165,23 @@ function dating(event){
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues']['timestamp'].toString()}
                       {event['name']=='CID' && event['data']['returnValues']['timestamp'].toString()}
-                      {event['name']=='Approval' && event.name}
-                      {event['name']=='Transfer' && 'see CID'}
+                      {event['name']=='Approval' && event['data']['returnValues']['timestamp'].toString()}
+                      {event['name']=='Transfer' && events[index - 1]['data']['returnValues']['timestamp'].toString()}
+                      
+                      
                       </td>
                   <td className="whitespace-nowrap px-3 py-3">
                       {event['data']['returnValues']['from']}
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
                       {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
+                      {event['name']=='CID' && prevEvents[1]['data']['returnValues'][0].toString()}
+
 
                       </td>
                     <td className="whitespace-nowrap px-3 py-3"> 
                     <strong>{event['data']['returnValues'][1]}</strong>
                     <strong>{event['name']=='CID' && event['data']['returnValues'][1]}</strong>
+                    <strong>{event['name']=='CID' && events[index+1]['data']['returnValues'][1].toString()}</strong>
                     </td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][1].toString().concat(" AMZ")}
