@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#Ignored directories
+C:\Users\cdaou\OneDrive\Documents\MSBDGA\Github\AmazoniaCoin\cache
+
 # dependencies
 /node_modules
 /.pnp
@@ -38,3 +41,4 @@ next-env.d.ts
 # Ignore cache/console-history.txt
 cache/console-history.txt
 
+cache/console-history.txt
