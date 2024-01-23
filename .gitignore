@@ -40,5 +40,3 @@ next-env.d.ts
 
 # Ignore cache/console-history.txt
 cache/console-history.txt
-
-cache/console-history.txt
