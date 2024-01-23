@@ -1,7 +1,7 @@
 // pages/index.js or your Next.js component
 
 'use client'
-import { format,fromUnixTime, addDays } from 'date-fns';
+import { format,fromUnixTime } from 'date-fns';
 
 import { useEffect, useState} from 'react';
 import {Web3} from 'web3';
@@ -35,14 +35,18 @@ const MyComponent = ({
   
   const web3 = new Web3('http://localhost:8545');
   const queryParam = searchParams.query || '';
-  const currentPage = Number(searchParams.page) || 1;
+  //const currentPage = Number(searchParams.page) || 1;
   
   const [events, setEvents] = useState<event[]>([]);
   const [prevEvents, setPrevEvents] = useState<event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>(queryParam);
   const router = useRouter();
+  
 
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   interface event {
     name: any;
@@ -72,6 +76,7 @@ const MyComponent = ({
 
     setEvents([]);
 
+
     // Subscribe to all events
     allEvents.forEach((event) => {
    
@@ -91,14 +96,38 @@ const MyComponent = ({
     init();
   }, [currentPage,searchQuery]);
 
-  const filteredEvents = events.filter((event) =>
+const filteredEvents = events.filter((event) =>
   event.name.toLowerCase().includes(searchQuery.toLowerCase())
+  
 );
+
+const eventsToDisplay = filteredEvents.slice(startIndex, endIndex);
+
 
 const handleKeyPress = () => {
   window.location.reload();
 };
 
+const renderPaginationButtons = () => {
+  const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
+
+  const buttons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    buttons.push(
+      <button
+        key={i}
+        onClick={() => setCurrentPage(i)}
+        className={`mx-1 px-3 py-2 rounded ${
+          i === currentPage ? 'bg-green-500 text-white' : 'bg-gray-300'
+        }`}
+      >
+        {i}
+      </button>
+    );
+  }
+
+  return buttons;
+};
 
 
  return (
@@ -115,17 +144,12 @@ const handleKeyPress = () => {
 
         />
         <div>
-        <button       className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-
-                type="button"
+        <button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"                type="button"
                 style={{
                   margin: 
                   "10px",
-                }
-              
-                }
-                onClick={handleKeyPress}
-              >
+                }}
+                onClick={handleKeyPress}>
                 {"SEARCH"}
           </button>
         </div>
@@ -143,19 +167,19 @@ const handleKeyPress = () => {
               <table className="hidden min-w-full text-gray-900 md:table" style={{width: '300px'}}>
                 <thead className="rounded-lg text-left text-sm font-normal" style={{ fontFamily: 'Righteous, sans-serif' }}>
                   <tr>
-                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6"> BlockNumber</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Event Name</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Timestamp</th>
-                    <th scope="col" className="px-3 py-5 font-medium">From</th>
-                    <th scope="col" className="px-3 py-5 font-medium">To</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Credits/ Cid/ Allowance</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Block Hash</th>
-                    <th scope="col" className="px-3 py-5 font-medium">Transaction Hash</th>
+                    <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>BlockNumber</strong></th>
+                    <th scope="col" className="px-4 py-5 font-medium"><strong>Event Name</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>Timestamp</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>From</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>To</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>Credits/ Cid/ Allowance</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>Block Hash</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>Transaction Hash</strong></th>
 
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                {filteredEvents.map((event, index) => (
+                {eventsToDisplay.map((event, index) => (
 
                   /* LogIndex, transactionIndex, transactionHash, blockHash, blockNumber, 
                  address, data, topics, returnValues, event, signature, raw
@@ -171,19 +195,19 @@ const handleKeyPress = () => {
                       {event['name']=='CarbonOffsetsClaimed' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
                       {event['name']=='CID' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
                       {event['name']=='Approval' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
-                      {event['name']=='Transfer' && format(fromUnixTime(Number(events[index - 1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
+                      {event['name']=='Transfer' && format(fromUnixTime(Number(events[startIndex+index-1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['data']['returnValues']['from']}
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
                       {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
-                      {event['name']=='CID' && events[index+1]['data']['returnValues'][0].toString()}
+                      {event['name']=='CID' && events[startIndex+index+1]['data']['returnValues'][0].toString()}
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3"> 
                       <strong>{event['data']['returnValues'][1]}</strong>
-                      <strong>{event['name']=='CID' && event['data']['returnValues'][1]}</strong>
+                      <strong>{event['name']=='Transfer' && event['data']['returnValues'][1].toString}</strong>
                       <strong>{event['name']=='CID' && events[index+1]['data']['returnValues'][1].toString()}</strong>
                     </td>
                     
@@ -203,6 +227,9 @@ const handleKeyPress = () => {
                   
                   </tbody>
                 </table>
+
+                <div className="flex mt-4">{renderPaginationButtons()}</div>
+
                 
               </div>
             </div>
