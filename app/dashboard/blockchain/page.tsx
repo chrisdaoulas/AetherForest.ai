@@ -8,10 +8,6 @@ import {Web3} from 'web3';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-
-
-
-//import ethers from 'ethers';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
 
 
