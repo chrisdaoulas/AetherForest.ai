@@ -3,12 +3,24 @@
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
+    name: 'Public',
+    email: 'public@public.com',
     password: '123456',
   },
+  {
+    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    name: 'Consortium',
+    email: 'consortium@amazonascoin.com',
+    password: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  },
+  {
+    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    name: 'Beneficiaries',
+    email: 'beneficiaries@amazonascoin.com',
+    password: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+  },
 ];
-
+/* 
 const customers = [
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
@@ -179,10 +191,11 @@ const revenue = [
   { month: 'Nov', revenue: 3000 },
   { month: 'Dec', revenue: 4800 },
 ];
-
+*/
 module.exports = {
-  users,
-  customers,
-  invoices,
-  revenue,
+  users
+ // customers,
+ // invoices,
+ // revenue,
 };
+ 

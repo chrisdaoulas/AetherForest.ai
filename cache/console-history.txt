@@ -1,3 +1,0 @@
-      const past = await contract.getPastEvents('allEvents', { fromBlock: 0, toBlock: 10 });
-accounts
-const accounts = await ethers.getSigners()
