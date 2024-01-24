@@ -8,13 +8,13 @@ const users = [
     password: '123456',
   },
   {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    id: '420544b2-4001-4271-9855-fec4b6a6442a',
     name: 'Consortium',
     email: 'consortium@amazonascoin.com',
     password: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
   },
   {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    id: '430544b2-4001-4271-9855-fec4b6a6442a',
     name: 'Beneficiaries',
     email: 'beneficiaries@amazonascoin.com',
     password: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',

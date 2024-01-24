@@ -64,7 +64,7 @@ const MyComponent = ({
 
     // Replace 'CarbonChain' with your contract ABI and address
      
-    const contractAddress = '0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44';
+    const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     
     // Get all events from the contract ABI

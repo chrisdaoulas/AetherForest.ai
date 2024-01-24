@@ -1,4 +1,4 @@
-import {Card} from '@/app/ui/dashboard/cards';
+/* import {Card} from '@/app/ui/dashboard/cards';
 import { Suspense } from 'react';
 //import { fetchCardData } from '@/app/lib/data';
 import CardWrapper from '@/app/ui/dashboard/cards';
@@ -6,7 +6,7 @@ import { CardsSkeleton,InvoiceSkeleton, LatestInvoicesSkeleton, RevenueChartSkel
 import RevenueChart from '../../ui/dashboard/revenue-chart';
 import LatestInvoices from '../../ui/dashboard/latest-invoices';
 import { lusitana } from '../../ui/fonts';
-//import { fetchLatestInvoices } from '../../lib/data';
+//import { fetchLatestInvoices } from '../../lib/data'; */
 
 export default async function Page(){
 
@@ -24,7 +24,7 @@ export default async function Page(){
                 <Card title="Pending" value={totalPendingInvoices} type="pending" />
                 <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
                 <Card title="Total Customers" value={numberOfCustomers} type="customers" />
-            </div> */}
+            </div> */}{/* 
             <div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8'>
                 <Suspense fallback={<RevenueChartSkeleton/>}>                
                     <RevenueChart />
@@ -36,7 +36,7 @@ export default async function Page(){
                     <CardWrapper/>
                 </Suspense>
                 
-            </div>
+            </div>  */}
         </main>
     );
 }
