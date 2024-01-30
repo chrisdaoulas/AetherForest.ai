@@ -16,7 +16,7 @@ import React from 'react';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'; 
+const contractAddress = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
@@ -216,7 +216,7 @@ const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
             <Spacer />
             <Spacer />
             <h1 className={`${lusitana.className} text-3xl`}>AmazonCoin Carbon Market Tools</h1>
-            <h1 className={`${lusitana.className} text-2xl`}>Stakeholders served: Consortium, Beneficiaries</h1>
+            <h1 className={`${lusitana.className} text-2xl`}>strongStakeholders served: Consortium, Beneficiaries</h1>
             
             <Spacer />
             <Spacer />
