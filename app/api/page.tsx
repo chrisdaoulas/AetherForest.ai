@@ -2,17 +2,19 @@
 
  
 import { useEffect, useState } from 'react';
+import { lusitana } from '../ui/fonts';
 
 const Home = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([]);//useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('http://localhost:3001/');
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.json();//await response.json();
           setItems(data);
+         
         } else {
           console.error('Error fetching data:', response.statusText);
         }
@@ -25,30 +27,42 @@ const Home = () => {
   }, []);
   
   return (
-    <div>
-      <h1>Data from defrate.db</h1>
-      <table border="1">
-        <thead>
+    <div className="w-full">
+             <div className="flex w-full items-center justify-between">
+  
+  <div className="mt-6 flow-root">
+
+    <div className="inline-block min-w-full align-middle">
+
+      <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+      <h1 className={`${lusitana.className} text-3xl`}>Automated Carbon Credit Flow</h1>
+      <table className="hidden min-w-full text-gray-900 md:table" style={{width: '300px'}} >
+        <thead className="rounded-lg text-left text-sm font-normal" style={{ fontFamily: 'Righteous, sans-serif' }}>
           <tr>
-            <th>ID</th>
-            <th>Time</th> 
-            <th>Rate of Deforestation</th>
-            <th>CID</th>
+            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>Time</strong></th> 
+            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>Rate of Deforestation</strong></th> 
+            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>CID</strong></th> 
+          
             
           </tr>
         </thead>
         <tbody>
           {items.map((row, index) => (
             <tr key={index}>
-              <td>{row[0]}</td>
-              <td>{row[1]}</td>
-              <td>{row[2]}</td>
-              <td>{row[3]}</td>
+              <td>{row.Time}</td>
+              <td>{row.Rate_of_Deforestation}</td>
+              <td>{row.File_Hash}</td>
             </tr>
-          ))}
+          ))} 
+            
+          
         </tbody>
       </table>
-    </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
   );
 };
 
