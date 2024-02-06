@@ -16,7 +16,7 @@ import React from 'react';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; 
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 

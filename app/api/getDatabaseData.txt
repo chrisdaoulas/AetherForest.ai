@@ -1,0 +1,70 @@
+import { Database } from 'sqlite3';
+import { open } from 'sqlite';
+
+//export default async function handler(req, res) {
+  const dbPath = './defrate.db';
+
+  let db = null;
+
+
+      // If the database instance is not initialized, open the database connection
+      db =  open({
+        filename: dbPath, // Specify the database file path
+        driver: Database, // Specify the database driver (sqlite3 in this case)
+      });
+    
+
+    const query = 'SELECT * FROM Deforestation_Rate';
+
+    const rows = db.all(query);
+
+    console.log(JSON.stringify(rows));
+    
+    
+//}
+
+
+//export default async function handler(req, res) {
+ /*  try {
+    const SQL = await initSqlJs();
+    const dbPath = './defrate.db';
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', dbPath, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = (e) => {
+      const uInt8Array = new Uint8Array(xhr.response);
+      const loadedDb = new SQL.Database(uInt8Array);
+
+      const query = 'SELECT * FROM Deforestation_Rate';
+      const result = loadedDb.exec(query);
+
+      if (result.length > 0 && result[0].values.length > 0) {
+        res.status(200).json(result[0].values);
+      } else {
+        res.status(404).json({ error: 'No data found.' });
+      }
+    };
+    xhr.send();
+  } catch (error) {
+    console.error('Error loading the database:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } 
+
+  const dbPath = './defrate.db';
+
+  const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READONLY);
+
+  const query = 'SELECT * FROM Deforestation_Rate';
+
+  db.all(query, [], (err, rows) => {
+        if (err) {
+          console.error('Error executing the query:', err.message);
+        } else {    
+          console.log(JSON.stringify(rows));
+        }
+        }); 
+
+
+
+  } */
+//}

@@ -1,8 +1,6 @@
 'use client'
-
 import { useEffect, useState } from 'react';
 import sqlite3 from 'sqlite3';
-
 
 const Home = () => {
 
@@ -42,3 +40,49 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+/* 'use client'
+
+import sqlite3 from 'sqlite3';
+import { useEffect, useState } from 'react';
+
+
+
+export default function Page(){
+
+const [defRates, setDefRates] = useState([]);
+
+useEffect(() => {
+
+const fetchData = async () => {
+    try {
+    const response = await fetch('/lib/carbon');
+    const data = await response.json();
+    setDefRates(data);
+    } catch (error) {
+    console.error('Error fetching data:', error);
+    }
+};
+
+fetchData();
+}, []);
+
+return (
+<div>
+    <h1>Deforestation Rates</h1>
+    <ul>
+    {defRates.map((defRate) => (
+        <li key={defRate.id}>{defRate.Rate_of_Deforestation}</li>
+    ))}
+    </ul>
+</div>
+);
+
+};
+
+
+
+
+ */
