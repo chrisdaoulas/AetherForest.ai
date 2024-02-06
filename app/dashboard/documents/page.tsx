@@ -29,13 +29,9 @@ const DocumentationPage = () => {
 
       <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}} >
       <h2 className='mt-10 mb-2'><strong>Whitepaper</strong></h2>
-        {/* <p>Read our whitepaper for more in-depth information about AmazonasCoin <a className="md:text-green-600" 
-        href={pdf } target="_blank" rel="noopener noreferrer">here.</a></p> */}
-        <BlobProvider document={"./whitepaper.pdf"}>
-  {({ url }) => (
-    <a href={url} target="_blank">Open in new tab</a>
-  )}
-</BlobProvider>
+        <p>Read our whitepaper for more in-depth information about AmazonasCoin <a className="md:text-green-600" 
+        href="https://github.com/chrisdaoulas/AmazoniaCoin/blob/main/public/pdf/whitepaper.pdf" target="_blank" rel="noopener noreferrer">here.</a></p>
+
       </section>
 
       <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}}>
