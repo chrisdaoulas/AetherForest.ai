@@ -34,16 +34,6 @@ const DocumentationPage = () => {
 
       </section>
 
-      <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}}>
-        <h2 className='mt-10 mb-2'><strong>Installation</strong></h2>
-        <p>Include instructions on how to install and set up the project. Use code snippets where necessary.</p>
-      </section>
-
-    <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}}>
-        <h2 className='mt-10 mb-2'><strong>Usage Examples</strong></h2>
-        <p>Illustrate how to use the project with examples and code snippets.</p>
-    </section>
-
     <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}}>
         <h2 className='mt-10 mb-2'><strong>Contacts at Universite Libre de Bruxelles</strong></h2>
         <p>christos.daoulas@ulb.be</p>

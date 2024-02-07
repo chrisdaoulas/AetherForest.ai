@@ -33,7 +33,8 @@ import Link from 'react-router-dom';
 
         
         <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          The Kayapo indigenous people protect more than 9 million hectares (22 million acres) of Amazon Rainforest (roughly the size of Portugal). They continue to live within their traditional culture. They do not engage in large-scale deforestation and fight to protect their territory, one of the world's richest ecosystems, from the ravages of the outside world.
+          
+            The Kayapo indigenous people safeguard over 9 million hectares (22 million acres) of the Amazon Rainforest, an expanse equivalent to Portugal. With a commitment to their traditional way of life, they resist large-scale deforestation, protecting their territory—a biodiversity haven. The ~8,000 Kayapó preserve an area akin to Portugal or South Korea, primarily composed of primary forest with patches of savannah on Brazilian shield bedrock. This territory fosters diverse species like white-lipped peccary, tapir, giant armadillo, giant otter, giant anteater, jaguar, hyacinth macaw, harpy eagle, white-whiskered spider monkey, and saki monkey, facing threats elsewhere.
         </p>
 
 
