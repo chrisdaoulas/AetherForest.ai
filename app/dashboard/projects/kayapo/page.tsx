@@ -6,10 +6,6 @@ import { useMemo } from 'react';
 
 
 
-
-
-
-
 export default function Page() {    
 
    
@@ -25,7 +21,7 @@ export default function Page() {
 
 
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: "AIzaSyDmOnsV-JmnpIjilgkqzghEFOYTJAvFKKw",
+        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, //"AIzaSyDmOnsV-JmnpIjilgkqzghEFOYTJAvFKKw",
         libraries: libraries as any,
     });
 

@@ -5,7 +5,11 @@ const nextConfig = { webpack: (config) => {
    config.resolve.alias.canvas = false;
 
    return config;
- },};
+ },
+ env: {
+  GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+}  
+};
 
 module.exports = nextConfig;
 
