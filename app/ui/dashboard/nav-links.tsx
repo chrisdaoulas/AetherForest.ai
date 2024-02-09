@@ -15,6 +15,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { useUser, UserProvider } from '@/app/login/user';
 
 
 // Map of links to display in the side navigation.
@@ -31,11 +32,16 @@ const links = [
 
 ];
 
+const filteredLinks = links.filter((link) => {
+  return !(useUser?.role === 'public' && link.name === 'Transactions');
+});
+
 export default function NavLinks() {
   const pathname = usePathname();
   return (
+    <UserProvider>
     <>
-      {links.map((link) => {
+      {filteredLinks.map((link) => {
         const LinkIcon = link.icon;
         return (
           <Link
@@ -52,5 +58,6 @@ export default function NavLinks() {
         );
       })}
     </>
+    </UserProvider>
   );
 }

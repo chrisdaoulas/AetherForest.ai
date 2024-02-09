@@ -1,22 +1,19 @@
 'use client'
 
-
-
 import Head from 'next/head';
 import { lusitana } from '@/app/ui/fonts';
-
-
 
 import Web3 from 'web3';
 import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
-
 import React from 'react';
+import { UserProvider} from '@/app/login/user';
+
 
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'; 
+const contractAddress = process.env.NEXT_PUBLIC_HARDHAT; 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
