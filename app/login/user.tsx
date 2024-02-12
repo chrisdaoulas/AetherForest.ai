@@ -5,7 +5,8 @@ interface User {
     id: string;
     name: string;
     email: string;
-    role: 'public' | 'consortium' | 'beneficiary';
+    password: string;
+    role: string; //'public' | 'consortium' | 'beneficiary';
 }
 
 interface UserState {

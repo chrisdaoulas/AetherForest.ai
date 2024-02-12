@@ -22,7 +22,7 @@ import { useUser, UserProvider } from '@/app/login/user';
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  { name: 'Blockchain', href: '/dashboard/blockchain', icon: DocumentDuplicateIcon},
+  { name: 'Blockchain', href: '/dashboard/blockchain', icon: DocumentDuplicateIcon },
   { name: 'Projects', href: '/dashboard/projects', icon: UserGroupIcon },
   { name: 'Transactions', href: '/dashboard/transactions', icon: ShoppingCartIcon },
   //{ name: 'Invoices', href: '/dashboard/invoices', icon: WalletIcon },
@@ -32,32 +32,42 @@ const links = [
 
 ];
 
-const filteredLinks = links.filter((link) => {
-  return !(useUser?.role === 'public' && link.name === 'Transactions');
-});
 
-export default function NavLinks() {
+
+//export default function NavLinks() {
+const NavLinks: React.FC = () => {
+
+  const { state } = useUser();
+  console.log('User Role:', state.user?.toString())
+
+  const filteredLinks = links.filter((link) => {
+    return !(state.user?.role === 'public' && link.name === 'Transactions');
+  });
+
   const pathname = usePathname();
   return (
     <UserProvider>
-    <>
-      {filteredLinks.map((link) => {
-        const LinkIcon = link.icon;
-        return (
-          <Link
-            key={link.name}
-            href={link.href}
-            className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",{
-              'bg-sky-100 text-blue-600': pathname===link.href,
-            },
-            )}
-          >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
-          </Link>
-        );
-      })}
-    </>
+      <>
+        {filteredLinks.map((link) => {
+          const LinkIcon = link.icon;
+          return (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3", {
+                'bg-sky-100 text-blue-600': pathname === link.href,
+              },
+              )}
+            >
+              <LinkIcon className="w-6" />
+              <p className="hidden md:block">{link.name}</p>
+            </Link>
+          );
+        })}
+      </>
     </UserProvider>
   );
 }
+
+export default NavLinks;
+

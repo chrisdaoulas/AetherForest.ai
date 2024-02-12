@@ -13,34 +13,20 @@ import { useUser } from './app/login/user';
 async function getUser(email: string): Promise<User | undefined> {
   try {
 
-    const { dispatch } = useUser();
-
-    //const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
-    const userQueryResult = await sql<User>`SELECT * FROM users WHERE email=${email}`;
-
-    // Ensure that the queryResult is not empty
-    if (userQueryResult.rows && userQueryResult.rows.length > 0) {
-      const user = userQueryResult.rows[0];
-
-      const updatedUser = {
-        ...user,
-        role: determineUserRole(user.name.toString()),
-      };
     
 
-      dispatch({ type: 'SET_USER', payload: updatedUser });
+    const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
 
-    //return user.rows[0];
-    return userQueryResult.rows[0];
-  }}     
+    return user.rows[0];
+  }
 
-   catch (error) {
+  catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
 }
 
-function determineUserRole(name: string): 'public' | 'consortium' | 'beneficiary' {
+function determineUserRole(name: string){//: 'public' | 'consortium' | 'beneficiary' {
   if (name === 'Public') {
     return 'public';
   } else if (name === 'Consortium') {
@@ -65,17 +51,42 @@ export const { auth, signIn, signOut } = NextAuth({
         const { email, password } = parsedCredentials.data;
         const user = await getUser(email);
         if (!user) return null;
+      
 
         //const passwordsMatch = password===user.password;
         const passwordsMatch = await bcrypt.compare(password, user.password);
 
-        if (passwordsMatch) return user;
-        console.log(user.toString())
+        if (passwordsMatch){// return user;
+
+        //const { dispatch } = useUser();
+
+        //const userQueryResult = await sql<User>`SELECT * FROM users WHERE email=${email}`;
+
+
+
+        // Ensure that the queryResult is not empty
+       // if (userQueryResult.rows && userQueryResult.rows.length > 0) {
+        //  const user = userQueryResult.rows[0];
+
+          const updatedUser = {
+            ...user,
+            role: determineUserRole(user.name.toString()),
+          };
+
+          
+          //dispatch({ type: 'SET_USER', payload: updatedUser });
+
+          console.log(updatedUser.toString())
+          return updatedUser;
+          //console.log(user.toString())
+
+        } 
 
       }
-      console.log('Invalid credentials');
-      return null;
-    },
+
+        console.log('Invalid credentials');
+        return null;
+      },
   }),
   ],
 })
