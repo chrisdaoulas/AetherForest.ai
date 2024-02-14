@@ -15,7 +15,14 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { useUser, UserProvider } from '@/app/login/user';
+//import { useUser, UserProvider } from '@/app/login/user';
+import React, { useState, useEffect, useContext } from 'react';
+//import { useUser } from '@/app/components/UserContext';
+
+import {UserContext} from '@/app/components/context';
+import Provider from '@/app/components/context';
+
+
 
 
 // Map of links to display in the side navigation.
@@ -37,16 +44,26 @@ const links = [
 //export default function NavLinks() {
 const NavLinks: React.FC = () => {
 
-  const { state } = useUser();
-  console.log('User Role:', state.user?.toString())
+  //const { user } = useContext(UserContext);
+  //const { state } = useUser();
+  
+  //const { username, password, user, signin, } = useUser();
+
+  //const { username, password } = signinData;
+  const { user } = useContext(UserContext);
+
+
+  console.log('User Role:', user.role ) //state.user?.role.toString())
+
 
   const filteredLinks = links.filter((link) => {
-    return !(state.user?.role === 'public' && link.name === 'Transactions');
+    return !(user?.role === 'public' && link.name === 'Transactions');
   });
 
   const pathname = usePathname();
+
   return (
-    <UserProvider>
+    <Provider>
       <>
         {filteredLinks.map((link) => {
           const LinkIcon = link.icon;
@@ -65,8 +82,33 @@ const NavLinks: React.FC = () => {
           );
         })}
       </>
-    </UserProvider>
+    </Provider>
+  ); 
+
+ /*  return (
+   // <UserProvider>
+      <>
+        {links
+          //.filter((link)) //=> !(state.user?.role === 'public' && link.name === 'Transactions'))
+          .map((link) => {
+            const LinkIcon = link.icon;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3", {
+                  'bg-sky-100 text-blue-600': pathname === link.href,
+                })}
+              >
+                <LinkIcon className="w-6" />
+                <p className="hidden md:block">{link.name}</p>
+              </Link>
+            );
+          })}
+      </>
+   // </UserProvider>
   );
+ */
 }
 
 export default NavLinks;

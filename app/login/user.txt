@@ -15,10 +15,33 @@ interface UserState {
 
 type UserAction = { type: 'SET_USER'; payload: User | undefined };
 
-const userReducer = (state: UserState, action: UserAction): UserState => {
+/* const userReducer = (state: UserState, action: UserAction): UserState => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload };
+    default:
+      return state;
+  }
+}; */
+
+export const determineUserRole = (name: string): string => {
+  if (name === 'Public') {
+    return 'public';
+  } else if (name === 'Consortium') {
+    return 'consortium';
+  } else if (name === 'Beneficiaries') {
+    return 'beneficiary';
+  }
+  return 'public';
+};
+
+const userReducer = (state: UserState, action: UserAction): UserState => {
+  switch (action.type) {
+    case 'SET_USER':
+      const updatedUser = action.payload
+        ? { ...action.payload, role: determineUserRole(action.payload.name) }
+        : undefined;
+      return { ...state, user: updatedUser };
     default:
       return state;
   }

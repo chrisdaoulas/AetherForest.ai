@@ -10,13 +10,25 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
+import React, { useState, useEffect, useContext } from 'react';
+import {UserContext} from '@/app/components/context';
+import { getUser } from '@/auth';
+
+
+
 
 export default function LoginForm() {
 
+
+  const {user,addUser} = useContext(UserContext);
+  const [newusername, setUsernameLocal] = useState('');
+  const [newpassword, setPasswordLocal] = useState('');
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
-  
+  //const newrole = getUser(newusername).toString();
+
   return (
+
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
@@ -37,7 +49,14 @@ export default function LoginForm() {
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
+                onChange={(e) => {
+                  setUsernameLocal(e.target.value);                  
+                }}
+
+
+
                 required
+
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -56,8 +75,24 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
+                onChange={(e) => {
+                  setPasswordLocal(e.target.value);
+                  addUser(  {          
+                    role: 'public',
+                    email: newusername,
+                    password: newpassword}
+                  );
+                  console.log(user)
+                  
+                }
+
+                }
+                //    onChange={(e) =>  
+                //    signin({ password: setPassword(e.target.value) })}
                 required
+
                 minLength={6}
+
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -65,31 +100,50 @@ export default function LoginForm() {
         </div>
         <LoginButton />
         <div className="flex h-8 items-end space-x-1">
-        <div
-          className="flex h-8 items-end space-x-1"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {errorMessage && (
-            <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
-            </>
-          )}
-        </div>
+          <div
+            className="flex h-8 items-end space-x-1"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {errorMessage && (
+              <>
+                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </form>
+
   );
+
+
+  function LoginButton() {
+
+    const { pending } = useFormStatus();
+
+    return (
+
+      <Button  /* onClick={() => {
+
+        
+
+        addUser(  {          
+          role: 'new',
+          email: newusername,
+          password: newpassword}
+        );
+
+        console.log('Signin deets', newusername, newpassword);
+        console.log('Username and password after login:', user );
+      }}  */
+
+        className="mt-4 bg-green-500 w-full" aria-disabled={pending}>
+        Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+      </Button>
+    );
+  }
 }
 
-function LoginButton() {
 
-  const { pending } = useFormStatus();
-
-  return (
-    <Button className="mt-4 bg-green-500 w-full" aria-disabled={pending}>
-      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    </Button>
-  );
-}

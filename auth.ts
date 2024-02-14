@@ -5,12 +5,14 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import { useUser } from './app/login/user';
+import { useContext } from 'react';
+import { UserContext } from './app/components/context';
+//import { useUser, determineUserRole } from './app/login/user';
 
 
 
 
-async function getUser(email: string): Promise<User | undefined> {
+export async function getUser(email: string): Promise<User | undefined> {
   try {
 
     
@@ -26,18 +28,7 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-function determineUserRole(name: string){//: 'public' | 'consortium' | 'beneficiary' {
-  if (name === 'Public') {
-    return 'public';
-  } else if (name === 'Consortium') {
-    return 'consortium';
-  } else if (name === 'Beneficiaries') {
-    return 'beneficiary';
-  }
 
-  return 'public';
-
-}
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -49,36 +40,44 @@ export const { auth, signIn, signOut } = NextAuth({
 
       if (parsedCredentials.success) {
         const { email, password } = parsedCredentials.data;
-        const user = await getUser(email);
-        if (!user) return null;
+        const userdeets = await getUser(email);
+        if (!userdeets) return null;
       
 
         //const passwordsMatch = password===user.password;
-        const passwordsMatch = await bcrypt.compare(password, user.password);
+        const passwordsMatch = await bcrypt.compare(password, userdeets.password);
+        
 
         if (passwordsMatch){// return user;
 
+/*           const {addUser} = useContext(UserContext);
+          
+
+          addUser({
+            role: userdeets.name.toString(),
+            email: userdeets.email.toString(),
+            password: userdeets.password.toString()
+          }); */
+
         //const { dispatch } = useUser();
 
-        //const userQueryResult = await sql<User>`SELECT * FROM users WHERE email=${email}`;
 
-
-
-        // Ensure that the queryResult is not empty
-       // if (userQueryResult.rows && userQueryResult.rows.length > 0) {
-        //  const user = userQueryResult.rows[0];
-
-          const updatedUser = {
+   /*        const updatedUser = {
             ...user,
             role: determineUserRole(user.name.toString()),
           };
 
-          
-          //dispatch({ type: 'SET_USER', payload: updatedUser });
+          const { dispatch } = useUser();
+          dispatch({ type: 'SET_USER', payload: updatedUser });
 
-          console.log(updatedUser.toString())
-          return updatedUser;
-          //console.log(user.toString())
+
+      
+
+          console.log(updatedUser.toString()) 
+          return updatedUser;*/
+          console.log(userdeets)
+          return userdeets;
+          
 
         } 
 

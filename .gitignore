@@ -43,3 +43,6 @@ cache/console-history.txt
 
 #.vercel
 node_modules
+
+#.hardhat
+hardhat_accounts.txt

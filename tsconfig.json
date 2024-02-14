@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "app/lib/placeholder-data.js",
     "scripts/seed.js"
-, "app/dashboard/blockchain/page.js", "app/dashboard/carbon_credit_flow/page.js", "app/api/page.js" , "app/api/page.js"],
+, "app/dashboard/blockchain/page.js", "app/dashboard/carbon_credit_flow/page.js", "app/api/page.js" , "app/api/page.js", "app/components/context.tsx", "app/_app.tsx"],
   "exclude": ["node_modules"]
 }
