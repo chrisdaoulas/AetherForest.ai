@@ -1,3 +1,4 @@
+
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
@@ -50,15 +51,15 @@ export const { auth, signIn, signOut } = NextAuth({
 
         if (passwordsMatch){// return user;
 
-/*           const {addUser} = useContext(UserContext);
+  /*         const {addUser} = useContext(UserContext);
           
 
           addUser({
             role: userdeets.name.toString(),
             email: userdeets.email.toString(),
             password: userdeets.password.toString()
-          }); */
-
+          });
+ */
         //const { dispatch } = useUser();
 
 
@@ -75,6 +76,7 @@ export const { auth, signIn, signOut } = NextAuth({
 
           console.log(updatedUser.toString()) 
           return updatedUser;*/
+
           console.log(userdeets)
           return userdeets;
           

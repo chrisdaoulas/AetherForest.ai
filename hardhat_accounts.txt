@@ -11,8 +11,8 @@ Accounts
 WARNING: These accounts, and their private keys, are publicly known.     
 Any funds sent to them on Mainnet or any other live network WILL BE LOST.
 
-email: 'public@public.com'
-password: '123456'
+public@public.com
+123456
 
 consortium@amazonascoin.com
 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266

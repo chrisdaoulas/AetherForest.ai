@@ -24,6 +24,12 @@ export default function LoginForm() {
   const [newusername, setUsernameLocal] = useState('');
   const [newpassword, setPasswordLocal] = useState('');
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const role = 'consortium';
+/*    addUser(  {          
+    role: 'public',
+    email: newusername,
+    password: newpassword}
+  );  */
 
   //const newrole = getUser(newusername).toString();
 
@@ -50,10 +56,13 @@ export default function LoginForm() {
                 name="email"
                 placeholder="Enter your email address"
                 onChange={(e) => {
-                  setUsernameLocal(e.target.value);                  
+                  console.log('Existing user',user)
+                  setUsernameLocal(e.target.value);
+
+                  
                 }}
 
-
+                
 
                 required
 
@@ -76,22 +85,36 @@ export default function LoginForm() {
                 name="password"
                 placeholder="Enter password"
                 onChange={(e) => {
-                  setPasswordLocal(e.target.value);
-                  addUser(  {          
-                    role: 'public',
+                  const inputValue = e.target.value;
+                  setPasswordLocal(inputValue);
+              
+                  addUser({
+                    role: role,
                     email: newusername,
-                    password: newpassword}
-                  );
-                  console.log(user)
-                  
-                }
+                    password: inputValue
+                  });
+              
+                  console.log('New user', user);
+                }}
 
-                }
                 //    onChange={(e) =>  
                 //    signin({ password: setPassword(e.target.value) })}
                 required
 
                 minLength={6}
+
+                onPaste={(e) => {
+                  const inputValue = e.clipboardData.getData('text/plain');
+                  setPasswordLocal(inputValue);
+              
+                  addUser({
+                    role: role,
+                    email: newusername,
+                    password: inputValue
+                  });
+              
+                  console.log('New user', user);
+                }}
 
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -126,18 +149,15 @@ export default function LoginForm() {
     return (
 
       <Button  /* onClick={() => {
-
-        
-
         addUser(  {          
-          role: 'new',
+          role: 'public',
           email: newusername,
           password: newpassword}
         );
 
         console.log('Signin deets', newusername, newpassword);
         console.log('Username and password after login:', user );
-      }}  */
+      }}   */
 
         className="mt-4 bg-green-500 w-full" aria-disabled={pending}>
         Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />

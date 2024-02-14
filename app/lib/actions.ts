@@ -6,7 +6,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth'
-
+import { useContext } from 'react';
+import { UserContext } from '@/app/components/context';
 
 export async function authenticate(
   prevState: string | undefined,
@@ -14,6 +15,15 @@ export async function authenticate(
 ) {
   try {
     await signIn('credentials', formData);
+    const {addUser} = useContext(UserContext);
+          
+
+    addUser({
+      role: 'go',
+      email: formData.toString()[0],
+      password: formData.toString()[1]
+    });
+
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

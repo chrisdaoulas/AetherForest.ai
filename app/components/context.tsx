@@ -8,7 +8,8 @@ import { localStorageManager } from "@chakra-ui/react";
 
 export const UserContext = createContext({
   user: defaultUser,
-  addUser: (user: User) => { }
+  //addUser: (user: User) => { }
+  addUser: (user: User, callback?: (prevUser: User) => User) => { }
 
 })
 
@@ -24,6 +25,16 @@ export function Provider(props: any) {
     });
   };
 
+/*   function addUserHandler(newUser: User, callback?: (prevUser: User) => User) {
+    setUser((prevUser) => {
+      const updatedUser = { ...prevUser, ...newUser };
+      if (callback) {
+        return callback(updatedUser);
+      }
+      return updatedUser;
+    });
+  } */
+
 /*   const context = useMemo(() => {
     return { user, addUser: addUserHandler };
   }, [user, addUserHandler]);
@@ -34,9 +45,19 @@ export function Provider(props: any) {
     addUser: addUserHandler,
   };
 
-  function getInitialState() {
+ /*  function getInitialState() {
     const user = localStorage.getItem('user')
     return user ? JSON.parse(user) : []
+  } */
+  function getInitialState() {
+    if (typeof window !== 'undefined') {
+      // Check if the code is running in a browser environment
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : [];
+    } else {
+      // Handle the case when running on the server or in a non-browser environment
+      return [defaultUser];
+    }
   }
 
   useEffect(() => {
