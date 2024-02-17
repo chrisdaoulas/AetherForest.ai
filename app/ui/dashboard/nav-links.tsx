@@ -45,23 +45,28 @@ const links = [
 //export default function NavLinks() {
 const NavLinks: React.FC = () => {
 
-  //const { user } = useContext(UserContext);
+  
   //const { state } = useUser();
   
   //const { username, password, user, signin, } = useUser();
 
   //const { username, password } = signinData;
-  const { user } = useContext(UserContext);
+  const { user,addUser } = useContext(UserContext);
   //const role = getrole('public@public.com')//.then((response) => {console.log(response)});
 
-  const [role, setRole] = useState<string>('');
+   const [role, setRole] = useState<string>('');
 
   useEffect(() => {
     // Define an asynchronous function to fetch the role
     const fetchRole = async () => {
       try {
-        const role = await getrole('public@public.com');
+        const role = await getrole(user?.email);
         setRole(role);
+        addUser({
+          role:role,
+          email: user.email,
+          password: user.password
+        })
       } catch (error) {
         console.error('Error:', error);
       }
@@ -69,15 +74,15 @@ const NavLinks: React.FC = () => {
 
     // Call the asynchronous function
     fetchRole();
-  }, []); 
-    //const role: string = await setrole('public@public.com').then((r) => r);
+  }, []);  
 
 
-  console.log('User Role:', role)//.then((result) => {return result?.toString()}) ) //state.user?.role.toString())
+
+  console.log('User Role:', user?.role)
   
 
   const filteredLinks = links.filter((link) => {
-    return !(role === 'Public' && link.name === 'Transactions');
+    return !(user?.role === 'Public' && link.name === 'Transactions');
   });
 
   const pathname = usePathname();

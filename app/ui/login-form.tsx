@@ -21,14 +21,16 @@ import { getrole } from '@/app/lib/actions';
 
 
 
-export default function LoginForm() {
+//export default function LoginForm() {
+  const LoginForm: React.FC = () => {
 
 
   const {user,addUser} = useContext(UserContext);
   const [newusername, setUsernameLocal] = useState('');
   const [newpassword, setPasswordLocal] = useState('');
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
-  
+
+
 
 /*   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -79,12 +81,15 @@ export default function LoginForm() {
                 name="email"
                 placeholder="Enter your email address"
                 onChange={(e) => {
-                  console.log('Existing user',user)
-                  setUsernameLocal(e.target.value);
-
-                  
+                  const inputValue = e.target.value;
+                  setUsernameLocal(inputValue);
+                  console.log('Existing user',user)                  
                 }}
-
+                onPaste={(e) => {
+                  const inputValue = e.clipboardData.getData('text/plain');
+                  setUsernameLocal(inputValue);
+                  console.log('Existing user',user)                 
+                }}
                 
 
                 required
@@ -112,9 +117,9 @@ export default function LoginForm() {
                   setPasswordLocal(inputValue);
               
                    addUser({
-                    role:  getrole(newusername).toString(),
+                    role:  user.role,
                     email: newusername,
-                    password: inputValue
+                    password: newpassword
                   });                  
               
                   console.log('New user', user); 
@@ -130,12 +135,10 @@ export default function LoginForm() {
                   setPasswordLocal(inputValue);
               
                    addUser({
-                    role: getrole(newusername).then((result) => {return result?.toString()}),
+                    role: user.role,
                     email: newusername,
-                    password: inputValue
+                    password: newpassword
                   });
-                  
-                  
 
                   console.log('New user', user); 
                 }}
@@ -172,17 +175,7 @@ export default function LoginForm() {
 
     return (
 
-      <Button  /* onClick={() => {
-        addUser(  {          
-          role: 'public',
-          email: newusername,
-          password: newpassword}
-        );
-
-        console.log('Signin deets', newusername, newpassword);
-        console.log('Username and password after login:', user );
-      }}   */
-
+      <Button 
         className="mt-4 bg-green-500 w-full" aria-disabled={pending}>
         Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>
@@ -191,3 +184,4 @@ export default function LoginForm() {
 };
 
 
+export default LoginForm;
