@@ -21,6 +21,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import {UserContext} from '@/app/components/context';
 import Provider from '@/app/components/context';
+import { getrole } from '@/app/lib/actions';
 
 
 
@@ -51,13 +52,32 @@ const NavLinks: React.FC = () => {
 
   //const { username, password } = signinData;
   const { user } = useContext(UserContext);
+  //const role = getrole('public@public.com')//.then((response) => {console.log(response)});
+
+  const [role, setRole] = useState<string>('');
+
+  useEffect(() => {
+    // Define an asynchronous function to fetch the role
+    const fetchRole = async () => {
+      try {
+        const role = await getrole('public@public.com');
+        setRole(role);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    // Call the asynchronous function
+    fetchRole();
+  }, []); 
+    //const role: string = await setrole('public@public.com').then((r) => r);
 
 
-  console.log('User Role:', user.role ) //state.user?.role.toString())
-
+  console.log('User Role:', role)//.then((result) => {return result?.toString()}) ) //state.user?.role.toString())
+  
 
   const filteredLinks = links.filter((link) => {
-    return !(user?.role === 'public' && link.name === 'Transactions');
+    return !(role === 'Public' && link.name === 'Transactions');
   });
 
   const pathname = usePathname();

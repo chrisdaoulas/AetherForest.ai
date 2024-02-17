@@ -25,30 +25,12 @@ export function Provider(props: any) {
     });
   };
 
-/*   function addUserHandler(newUser: User, callback?: (prevUser: User) => User) {
-    setUser((prevUser) => {
-      const updatedUser = { ...prevUser, ...newUser };
-      if (callback) {
-        return callback(updatedUser);
-      }
-      return updatedUser;
-    });
-  } */
-
-/*   const context = useMemo(() => {
-    return { user, addUser: addUserHandler };
-  }, [user, addUserHandler]);
-
- */
   const context = {
     user,
     addUser: addUserHandler,
   };
 
- /*  function getInitialState() {
-    const user = localStorage.getItem('user')
-    return user ? JSON.parse(user) : []
-  } */
+
   function getInitialState() {
     if (typeof window !== 'undefined') {
       // Check if the code is running in a browser environment
@@ -81,52 +63,3 @@ export function Provider(props: any) {
 
 export default Provider;
 
-
-/* 'use client'
-import { useEffect, useReducer, createContext, useContext, useMemo } from "react";
-import { AppReducer, initialState } from "./AppReducer";
-
-
-
-const AppContext = createContext({
-  user: defaultUser,
-  setUser: (user: User) => {}
-});
-
-export function AppWrapper({ children }) {
-  const { state, dispatch } = useReducer(AppReducer, initialState);
-
-  const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]);
-
-
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("state"))) {
-
-      //checking if there already is a state in localstorage
-      //if yes, update the current state with the stored one
-      dispatch({
-        type: "init_stored",
-        value: JSON.parse(localStorage.getItem("state")),
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (state !== initialState) {
-
-      localStorage.setItem("state", JSON.stringify(state));
-
-      //create and/or set a new localstorage variable called "state"
-    }
-  }, [state]);
-
-  return (
-    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
-  );
-}
-
-export function useAppContext() {
-  return useContext(AppContext);
-} */

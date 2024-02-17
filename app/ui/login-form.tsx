@@ -1,5 +1,5 @@
+'use client'
 
-'use client';
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
@@ -8,11 +8,15 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useFormState, useFormStatus } from 'react-dom';
+import {  useFormState, useFormStatus } from 'react-dom';
+import useClient from 'react-dom/client'
 import { authenticate } from '@/app/lib/actions';
 import React, { useState, useEffect, useContext } from 'react';
 import {UserContext} from '@/app/components/context';
-import { getUser } from '@/auth';
+import { getrole } from '@/app/lib/actions';
+
+
+
 
 
 
@@ -24,14 +28,33 @@ export default function LoginForm() {
   const [newusername, setUsernameLocal] = useState('');
   const [newpassword, setPasswordLocal] = useState('');
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
-  const role = 'consortium';
-/*    addUser(  {          
-    role: 'public',
-    email: newusername,
-    password: newpassword}
-  );  */
+  
 
-  //const newrole = getUser(newusername).toString();
+/*   useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (newusername) {
+        try {
+          const userDeets = await getUser(newusername);
+          if (userDeets) {
+            setUsernameLocal(userDeets.email);
+            setPasswordLocal(userDeets.password);
+
+            addUser({
+              role: userDeets.name.toString(), // Update with the correct property for user role
+              email: userDeets.email.toString(),
+              password: userDeets.password.toString(),
+            });
+
+            console.log('Updated user details:', userDeets);
+          }
+        } catch (error) {
+          console.error('Error fetching user details:', error);
+        }
+      }
+    };
+
+    fetchUserDetails();
+  }, [newusername, addUser]); */
 
   return (
 
@@ -88,17 +111,16 @@ export default function LoginForm() {
                   const inputValue = e.target.value;
                   setPasswordLocal(inputValue);
               
-                  addUser({
-                    role: role,
+                   addUser({
+                    role:  getrole(newusername).toString(),
                     email: newusername,
                     password: inputValue
-                  });
+                  });                  
               
-                  console.log('New user', user);
+                  console.log('New user', user); 
                 }}
 
-                //    onChange={(e) =>  
-                //    signin({ password: setPassword(e.target.value) })}
+
                 required
 
                 minLength={6}
@@ -107,13 +129,15 @@ export default function LoginForm() {
                   const inputValue = e.clipboardData.getData('text/plain');
                   setPasswordLocal(inputValue);
               
-                  addUser({
-                    role: role,
+                   addUser({
+                    role: getrole(newusername).then((result) => {return result?.toString()}),
                     email: newusername,
                     password: inputValue
                   });
-              
-                  console.log('New user', user);
+                  
+                  
+
+                  console.log('New user', user); 
                 }}
 
               />
@@ -164,6 +188,6 @@ export default function LoginForm() {
       </Button>
     );
   }
-}
+};
 
 
