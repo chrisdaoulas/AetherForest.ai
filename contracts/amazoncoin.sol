@@ -63,11 +63,15 @@ contract CarbonChain {
         return true;
     }
 
+
+//The Transfer from refers to beneficiaries, and the allowance has to do with maximum allowed volume of transfers to avoid fraud and kickbacks
+
     function transferFrom(
         address from,
         address to,
         uint256 value
     ) external returns (bool) {
+
         require(from != address(0), "Invalid sender address");
         require(to != address(0), "Invalid recipient address");
         require(value > 0, "Invalid token amount");

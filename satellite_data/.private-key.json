@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ee-blockchain",
+  "private_key_id": "a57ef834ff337ed12764a7dc20e9c716a6f02eb1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDMSLhYFMJp8tSE\nSdqzyUQxm1Yyw2bMgx+jhXH/M2Lp7lGCVZdP5ZWSc4dI03tf4ORLiXsWV3ted7Tc\n5XpfzydaAz8faSfCCFdB7SHvos/IDwiNjqkj70UUErcIBv0QuyShntcFCVy1wupM\nBylc4wKz8W4fdBq7ZuQdsxHNSCgGrG53/YY7qlChWFu0tzoYDkRRU73cy/chIL8X\niYxVAF3wqS+nhR+ie+WmlDGfYwSH2k2k2hro3k2bWJRjt+giFx0A7lHC0LWT7sBk\nrr7zvOxaTidW8CH//9TEV0WXFNpkqGHmFcC3EzWg5p5gytKhgQY2j4dDehvV6kwx\nElMLLZc1AgMBAAECggEASbOo0pp2w9vIwYuVvIyOLmmRMVJfOcTK+uePx9dlxell\n/eRcaYZ2rrZApk0qc16Dbx9ESby5NU1x8spWGs/1rhuCwBXjsrToqk/gEQGH/nEy\nEERakKzoGsRfxaUj00/5eNgCUn5ctPUEK/bffPQoCvy9UtrEND18apyq/Qmd6z3P\n6D5g8ioCtb+UHKAQgj5vteG6G3YsJ/rG5oj24q8jXvNJOYsGM7Le2BcblAQ7XoWF\nXcVQwjxh1HxYCHlVW1BinvWHzHqW/JdNUZxpKxEzadCGBPBX7Cd1pJHusF7ZzHIZ\nU881xU4CEs87CroiUe5+N9KtzGuOQ8IlVTEgi8oUJwKBgQD8/kqCds8g9eCpyzSc\n5IfTYnnMCwGNgInkwnXOEtFnsp7O3si4XfLzU47Y5W2kdRH7wwWOVv0LkxSdMuxu\nOM6FZM0iUKU+E5x5bqZlhLpPGtba9zGEbw6ogYVQBN2TrtX/WmlqSXNFi7157Ays\nckVcHkx3nTzaUPNkB60Zv4trjwKBgQDOtjxPddoLmiQjh2eLhdU64upLJsC7YXJZ\nzRdHckWA0RNTIK5q6JoMJE1/BTKae4ZFTEefvnVvpeZhwJh7kPLSM70zQcpVFeY2\npUmXD7eoqjSAsNBFPp60nG3qIm/mWg2L3jUTremnse11vvRveNe9czn51lRETc//\nuR0u+mm++wKBgASSE4aH3vYZexWWNj0fY9TN0qV9DWohCFy5pqcyb9YPxA64t6ed\nCuaae9ovSuvNsaV6wH7x02CCJ70vTlYvcIu4ZnxYOKQGdq068oai/zquoXMTRDHA\nT+N7c40eiWJBplwWphDlgs+e1q19Nj1nUxl28qq2jILlM4B7IwV0EHDBAoGANzGr\nmt/x76UhvybZfASpMccDHjvjvGTBnr7HV3lom4O38DtKtxsSful2k9L0dxFCgeBj\nQ4EcZEpc4H8Hd/71BzFvdG89skhdpvutUZuNw4hm6nHLuqGEyN737ktxq4UiFtWn\nQHDwcaltqUHqjJUsrdZFhbM33uEUB8kKxM9ySt8CgYAyO5diY+131oHDoFr8CQMi\nVMd0/cx23kxzWwZ3lK4avr8un6xXqJruED1VLp7y/D2Z3i1y9DEPNxgDOH4bMaQY\nOEuh/sLxvQUDMBGwxfFucG0JMlsGKku2CnCOZV9UQHB/1bhArhVTe1xjeSSNpa49\nOkdADGP8nH5AJVrCMI0Nlg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "ee-blockchain@ee-blockchain.iam.gserviceaccount.com",
+  "client_id": "115206153080414367642",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ee-blockchain%40ee-blockchain.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

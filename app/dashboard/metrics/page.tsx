@@ -53,7 +53,7 @@ export default function Page() {
 
 
 
-            <iframe title="Metrics" width="800" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=34ca1de5-28df-47d0-bfcc-4fe0d32e78eb&autoAuth=true&embeddedDemo=true" frameborder="1" allowFullScreen="true"></iframe>
+            <iframe title="Metrics" width="800" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=34ca1de5-28df-47d0-bfcc-4fe0d32e78eb&autoAuth=true&embeddedDemo=true" frameborder="1" allowFullScreen={true}></iframe>
             {/* 
 
             <PowerBIEmbed

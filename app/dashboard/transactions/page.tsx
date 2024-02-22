@@ -6,14 +6,15 @@ import { lusitana } from '@/app/ui/fonts';
 import Web3 from 'web3';
 import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
 import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
-import React from 'react';
-import { UserProvider} from '@/app/login/user';
+import React, { useContext } from 'react';
+import { UserContext} from '@/app/components/context';
 
 
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const contractAddress = process.env.NEXT_PUBLIC_HARDHAT; 
+
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
 
@@ -21,23 +22,25 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
   //Alerts
   
   export default function Page(){
-    
+  
+  //User Context
+  const {user} = useContext(UserContext);
   
 
   //state variables
-  const [inputAddress, setInputAddress] = React.useState<any>(null); //for receiver address any state
-  const [inputCredits, setInputCredits] = React.useState<any>(null); //for credits to be sent any state
-  const [inputCID, setInputCID] = React.useState<any>(null); //for CID associated to file: to change address any state
-  const [inputAccountBalance, setAccountBalance] = React.useState<any>(null); //for credits to be sent any state
+  const [inputAddress, setInputAddress] = React.useState<any>(''); //for receiver address any state
+  const [inputCredits, setInputCredits] = React.useState<any>(''); //for credits to be sent any state
+  const [inputCID, setInputCID] = React.useState<any>(''); //for CID associated to file: to change address any state
+  const [inputAccountBalance, setAccountBalance] = React.useState<any>(''); //for credits to be sent any state
   const [refresh, setRefresh] = React.useState<boolean>(true);
-  const[balValue,setBalvalue]=React.useState<any>(null);
-  const [inputAccount, setInputAccount] = React.useState<any>(null); //for receiver address for allowance
-  const [inputAllowance, setInputAllowance] = React.useState<any>(null); //for receiver address any state
-  const [inputOffsets, setInputOffsets] = React.useState<any>(null);
+  const[balValue,setBalvalue]=React.useState<any>('');
+  const [inputAccount, setInputAccount] = React.useState<any>(''); //for receiver address for allowance
+  const [inputAllowance, setInputAllowance] = React.useState<any>(''); //for receiver address any state
+  const [inputOffsets, setInputOffsets] = React.useState<any>('');
   const [showSuccessNotification, setShowSuccessNotification] = React.useState<boolean>(false);
-  const [inputBuyTokens, setInputBuyTokens] = React.useState<any>(null);
-  const [inputSellTokens, setInputSellTokens] = React.useState<any>(null);
-  const[offValue,setOffValue]=React.useState<any>(null);
+  const [inputBuyTokens, setInputBuyTokens] = React.useState<any>('');
+  const [inputSellTokens, setInputSellTokens] = React.useState<any>('');
+  const[offValue,setOffValue]=React.useState<any>(''  );
   
  
   const [inputAlerts, setInputAlerts] = React.useState<any>(null);
@@ -265,6 +268,8 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
               
             <Box h='30px' />
 
+        {user?.role === 'Consortium' && (
+          <>
             <Text className={`${lusitana.className} text-1xl`}>Approve Allowance of Accounts</Text>
             <HStack w='full'>
             <Input
@@ -288,8 +293,11 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
               
               <ColoredLine color="grey" />
               <Box h='30px' />
+              </>
+        )}
               
-              
+        {user?.role != 'Beneficiaries' && (        
+          <>
             <Text className={`${lusitana.className} text-1xl`}>Claim Carbon Offsets</Text>
             <Input
               type='text'
@@ -305,6 +313,9 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
 
 
               <Box h='30px' />
+                 
+        
+
             <Text className={`${lusitana.className} text-1xl`}>Buy Tokens</Text>
             <Input
               type='text'
@@ -319,6 +330,8 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
               <ColoredLine color="grey" />
               
             <Box h='30px' />
+            </>  
+            )}
 
               {showSuccessNotification && <SuccessNotification />}
               

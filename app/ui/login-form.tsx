@@ -32,32 +32,6 @@ import { getrole } from '@/app/lib/actions';
 
 
 
-/*   useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (newusername) {
-        try {
-          const userDeets = await getUser(newusername);
-          if (userDeets) {
-            setUsernameLocal(userDeets.email);
-            setPasswordLocal(userDeets.password);
-
-            addUser({
-              role: userDeets.name.toString(), // Update with the correct property for user role
-              email: userDeets.email.toString(),
-              password: userDeets.password.toString(),
-            });
-
-            console.log('Updated user details:', userDeets);
-          }
-        } catch (error) {
-          console.error('Error fetching user details:', error);
-        }
-      }
-    };
-
-    fetchUserDetails();
-  }, [newusername, addUser]); */
-
   return (
 
     <form action={dispatch} className="space-y-3">

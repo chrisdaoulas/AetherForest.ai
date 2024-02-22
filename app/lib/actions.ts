@@ -5,10 +5,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
-
 import { AuthError } from 'next-auth'
-import { useContext } from 'react';
-import { UserContext } from '@/app/components/context';
 import type { User } from '@/app/lib/definitions';
 
 //const {user,addUser} = useContext(UserContext);
@@ -17,43 +14,18 @@ import type { User } from '@/app/lib/definitions';
 export async function getrole(username: string) {
   if (username) {
     try {
-      const userDeets =  await sql<User>`SELECT * FROM users WHERE email=${username}`;
-      
-      //const role = await userDeets.rows[0].name//.rows[0].name;
-      //const role: string = userDeets.rows[0]?.name || '';
+      const userDeets = await sql<User>`SELECT * FROM users WHERE email=${username}`;
       const role: string = userDeets.rows[0]?.name ?? 'Public';
 
+      console.log('Updated user role:', role, ', type:', typeof role);
+      return role;
 
-      //const roleJson = await role.toString();
-      
-
-     // if (userDeets) {
-
-        console.log('Updated user role:', role, ', type:', typeof role);
-        //[].push.apply([], role);
-        //console.log.apply(console, role);
-        return role;
-     // }
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
   }
 };
 
-/* export async function  setrole(username: string): Promise<string> {
-  return sql<User>`SELECT * FROM users WHERE email=${username}`
-    .then((userDeets) => {
-      const role = userDeets.rows[0]?.name || '';
-      console.log('Updated user role:', role);
-      return role;
-    })
-    .catch((error) => {
-      console.error('Error fetching user details:', error);
-      // Return a default value or handle other scenarios as needed
-      return '';
-    });
-}
- */
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,

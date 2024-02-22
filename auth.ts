@@ -15,11 +15,7 @@ import { UserContext } from './app/components/context';
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
-
-    
-
     const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
-
     return user.rows[0];
   }
 
@@ -29,12 +25,13 @@ export async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-
-
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [Credentials({
     async authorize(credentials) {
+
+
+
       const parsedCredentials = z
         .object({ email: z.string().email(), password: z.string() })
         .safeParse(credentials);
@@ -49,43 +46,21 @@ export const { auth, signIn, signOut } = NextAuth({
         const passwordsMatch = await bcrypt.compare(password, userdeets.password);
         
 
-        if (passwordsMatch){// return user;
+        if (passwordsMatch){
 
-  /*         const {addUser} = useContext(UserContext);
-          
-
-          addUser({
-            role: userdeets.name.toString(),
-            email: userdeets.email.toString(),
-            password: userdeets.password.toString()
-          });
- */
-        //const { dispatch } = useUser();
-
-
-   /*        const updatedUser = {
-            ...user,
-            role: determineUserRole(user.name.toString()),
-          };
-
-          const { dispatch } = useUser();
-          dispatch({ type: 'SET_USER', payload: updatedUser });
-
-
-      
-
-          console.log(updatedUser.toString()) 
-          return updatedUser;*/
 
           console.log(userdeets)
           return userdeets;
-          
+         //const { id, ...userWithoutId } = userdeets;
+         //console.log(userWithoutId);
+         //return userWithoutId;
 
         } 
 
       }
-
-        console.log('Invalid credentials');
+        const credentialsSchema = z.object({ email: z.string().email(), password: z.string() });
+        
+        console.log('Invalid credentials according to the schema:',credentialsSchema);
         return null;
       },
   }),

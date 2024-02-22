@@ -16,7 +16,7 @@ export default function SideNav() {
         href="/"
       >
         <div className="w-32 text-white md:w-50">
-          <Image src={Amzlogo} width={150} height={150} objectFit="cover" alt='AmazonCoin Logo'/>
+          <Image src={Amzlogo} width={150} height={150} priority alt='AmazonCoin Logo'/>
         </div>
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">

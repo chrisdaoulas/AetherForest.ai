@@ -19,6 +19,12 @@ const users = [
     email: 'beneficiaries@amazonascoin.com',
     password: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
   },
+  {
+    id: '440544b2-4001-4271-9855-fec4b6a6442a',
+    name: 'Beneficieries_Enterprises',
+    email: 'enterprises@amazonascoin.com',
+    password: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
+  },
 ];
 /* 
 const customers = [
