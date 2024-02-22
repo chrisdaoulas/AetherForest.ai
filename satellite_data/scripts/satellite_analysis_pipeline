@@ -446,33 +446,37 @@ classified2023_10m = classified2023.reproject(**{
 })
 
 
+kayapo2015assetId = str('projects/ee-blockchain/assets/classified2015_10m_'+str(datetime.now()))[:68].replace(':','-').replace(' ','_')
+kayapo2015description= str('classified2015_10m_'+str(datetime.now()))[:38].replace(':','-').replace(' ','_')
+kayapo2023assetId = str('projects/ee-blockchain/assets/classified2023_10m_'+str(datetime.now()))[:68].replace(':','-').replace(' ','_')
+kayapo2023description= str('classified2023_10m_'+str(datetime.now()))[:38].replace(':','-').replace(' ','_')
 
 ee.batch.Export.image.toAsset(**{
   "image": classified2015_10m,
-  "description": 'classified2015_10m',
-  "assetId":str('projects/ee-blockchain/assets/classified2015_10m_'+str(datetime.now()))[:68].replace(':','-').replace(' ','_'),
+  "description": kayapo2015description,
+  "assetId":kayapo2015assetId,
   "scale":10,
   "crs": 'EPSG:32721',
   "region": kayapo,
   "maxPixels": 1e13
 }).start()
 
-time.sleep(900)
+time.sleep(1200)
 
 ee.batch.Export.image.toAsset(**{
   "image": classified2023_10m,
-  "description": 'classified2023_10m',
-  "assetId":str('projects/ee-blockchain/assets/classified2023_10m_'+str(datetime.now()))[:68].replace(':','-').replace(' ','_'),
+  "description": kayapo2023description,
+  "assetId":kayapo2023assetId,
   "scale":10,
   "crs": 'EPSG:32721',
   "region": kayapo,
   "maxPixels": 1e13
 }).start()
 
-time.sleep(900)
+time.sleep(1200)
 
-classified2015_10m = ee.Image('projects/ee-blockchain/assets/classified2015_10m1')
-classified2023_10m = ee.Image('projects/ee-blockchain/assets/classified2023_10m1')
+classified2015_10m = ee.Image(kayapo2015description)
+classified2023_10m = ee.Image(kayapo2023description)
 
 
 # Export images to local folder
