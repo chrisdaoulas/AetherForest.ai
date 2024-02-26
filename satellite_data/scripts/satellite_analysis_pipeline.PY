@@ -26,7 +26,6 @@ os.chdir(os.getcwd()+'\\satellite_data\\scripts')
 import folium
 from SQL_database import *
 from IPFS import *
-import shutil
 
 
 
@@ -604,9 +603,9 @@ ee.batch.Export.image.toDrive(**{
 time = str(date.today().strftime("%d/%m/%Y"))
 #netresult =12.975276442867195
 
-path_to_dir = str(os.path.dirname(os.getcwd())+'\\toipfs\\')
-output_filename  = str('kayapo_'+ time).replace('/','_')
-shutil.make_archive(output_filename, 'zip', 'C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\toipfs\\')
+path_to_dir = os.getcwd()+'\\toipfs'
+output_filename  = 'latest'
+shutil.make_archive(output_filename, 'zip', path_to_dir)
 
 
 totable = [[net, time, upload_ipfs_pinata('latest.zip')]]
