@@ -46,3 +46,10 @@ node_modules
 
 #.hardhat
 hardhat_accounts.txt
+
+# GEE
+satellite_data/secret.json
+satellite_data/secret.txt
+satellite_data/pinata_api.txt
+satellite_data/mycreds.txt
+

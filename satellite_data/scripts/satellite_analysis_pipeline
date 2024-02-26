@@ -461,7 +461,7 @@ ee.batch.Export.image.toAsset(**{
   "maxPixels": 1e13
 }).start()
 
-time.sleep(1200)
+time.sleep(900)
 
 ee.batch.Export.image.toAsset(**{
   "image": classified2023_10m,
@@ -473,16 +473,16 @@ ee.batch.Export.image.toAsset(**{
   "maxPixels": 1e13
 }).start()
 
-time.sleep(1200)
+time.sleep(1500)
 
-classified2015_10m = ee.Image(kayapo2015description)
-classified2023_10m = ee.Image(kayapo2023description)
+classified2015_10m = ee.Image(kayapo2015assetId)
+classified2023_10m = ee.Image(kayapo2023assetId)
 
 
 # Export images to local folder
 filename1 = os.path.join(os.getcwd()+'\\toipfs\\', 'landsat.tif')
 filename2 = os.path.join(os.getcwd()+'\\toipfs\\', 'sentinel.tif')
-#geemap.ee_export_image(classified2023_10m.visualize(**{'bands': ['B4','B3','B2'],'min': 0.0, 'max': 0.3,'palette':['00FFFF', '0000FF']}), filename=filename, scale=90, region=kayapo, file_per_band=False)
+#geemap.ee_export_image(classified2023_10m.visualize(**{'bands': ['B4','B3','B2'],'min': 0.0, 'max': 0.3,'palette':['00FFFF', '0000FF']}), filename=filename2, scale=90, region=kayapo, file_per_band=False)
 
 try:
     geemap.ee_export_image(classified2023_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=filename1, scale=90, region=kayapo, file_per_band=False)
@@ -492,15 +492,6 @@ except:
     geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=filename2, scale=90, region=kayapo, file_per_band=False)
 
 
-
-
-#print('Forest Classification 2015 10m scale: ', classified2015_10m.projection().nominalScale())
-#print('Forest Classification 2023 10m scale: ', classified2023_10m.projection().nominalScale())
-
-
-#load images back as new layers
-#Map.addLayer(classified2015_10m, {min:0,max:1,'palette': palette},'Forest Classification 2015 10m')
-#Map.addLayer(classified2023_10m, {min:0,max:1,'palette': palette},'Forest Classification 2023 10m')
 
 """Compute the difference between two classification maps and add it as new layer, then net forest loss and gain"""
 
