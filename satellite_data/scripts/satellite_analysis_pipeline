@@ -553,12 +553,12 @@ with open(os.path.dirname(os.getcwd())+'\\toipfs\\data.txt', 'w') as file:
 
 #### DOWNLOAD LOCAL COPIES/ IPFS####
 # Export images to local folder
-filename1 = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'landsat.tif')
-filename2 = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'sentinel.tif')
+landsat = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'landsat.tif')
+sentinel = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'sentinel.tif')
 
 #geemap.ee_export_image(classified2023_10m.visualize(**{'bands': ['B4','B3','B2'],'min': 0.0, 'max': 0.3,'palette':['00FFFF', '0000FF']}), filename=filename, scale=90, region=kayapo, file_per_band=False)
-geemap.ee_export_image(classified2023_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=filename1, scale=90, region=kayapo, file_per_band=False)
-geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=filename2, scale=90, region=kayapo, file_per_band=False)
+geemap.ee_export_image(classified2023_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=landsat, scale=90, region=kayapo, file_per_band=False)
+geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=sentinel, scale=100, region=kayapo, file_per_band=False)
 
 
 
@@ -606,11 +606,17 @@ time = str(date.today().strftime("%d/%m/%Y"))
 
 path_to_dir = str(os.path.dirname(os.getcwd())+'\\toipfs\\')
 output_filename  = str('kayapo_'+ time).replace('/','_')
-shutil.make_archive(output_filename, 'zip', 'C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\toipfs\\')
+
+os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
+shutil.make_archive(output_filename, 'zip')
 
 
-totable = [[net, time, upload_ipfs_pinata('latest.zip')]]
-totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash']) 
+pinata = output_filename+'.zip'
+totable = [[net, time, upload_ipfs_pinata(pinata),'Kayapo']]
+totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
+
+
+os.chdir(os.path.dirname(os.getcwd()))
 
 ### ALSO ADD new entry as row to sql and generate only if the genesis table doesn't exist already
 

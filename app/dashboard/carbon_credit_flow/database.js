@@ -8,7 +8,7 @@ app.use(cors());
 
 //npx kill-port 3001
 app.get('/', (req, res) => {
-  const dbPath = './defrate.db';
+  const dbPath = './satellite_data/defrate.db';
   const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READONLY);
   const query = 'SELECT * FROM Deforestation_Rate';
 

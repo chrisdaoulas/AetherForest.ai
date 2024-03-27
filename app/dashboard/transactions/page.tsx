@@ -216,7 +216,7 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
             <Spacer />
             <Spacer />
             <h1 className={`${lusitana.className} text-3xl`}>AmazonCoin Carbon Market Tools</h1>
-            <h1 className={`${lusitana.className} text-2xl`}>strongStakeholders served: Consortium, Beneficiaries</h1>
+            <h1 className={`${lusitana.className} text-2xl`}>Stakeholders served: Consortium, Beneficiaries</h1>
             
             <Spacer />
             <Spacer />
