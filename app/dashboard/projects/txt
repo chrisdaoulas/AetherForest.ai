@@ -3,20 +3,119 @@ import React from 'react';
 import Image from 'next/image';
 import kayapo from '@/public/kayapo.jpg';
 import yanomami from '@/public/yanomami.jpg';
+/*import yanomami from '@/public/yanomami.jpg';*/
 import { lusitana } from '@/app/ui/fonts';
 import brazil from '@/public/brazil.svg';
 import Link from 'next/link';
+import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
+import { useMemo, useState  } from 'react';
+import { useLoadScript, GoogleMap, MarkerF,PolygonF } from '@react-google-maps/api';
+
 
 export default function Page() {
+
+  
+  const [selectedRegion, setSelectedRegion] = useState(null);
+
+  const handleMapClick = (event) => {
+    const { lat, lng } = event.latLng;
+
+    // Get the latitude and longitude of the clicked point
+    console.log('Latitude:', lat(), 'Longitude:', lng());
+
+    // Logic to determine the region based on the clicked point
+    // For example, check if the clicked point falls within a specific boundary
+    // You can use Google Maps Geometry library for such calculations
+    // Once determined, update the selectedRegion state
+    // setSelectedRegion(region);
+  };
+
+  const handleLoadKML = () => {
+    // Load KML file based on the selectedRegion
+    // You can use the selectedRegion data to fetch the appropriate KML file
+    // Once loaded, display the KML layer on the map
+  };
+
+  const libraries = useMemo(() => ['places'], []);
+
+  const mapCenter = useMemo(
+      () => ({ lat: 2.14767, lng: -63 }),
+      []
+  );
+
+
+
+
+
+  const { isLoaded } = useLoadScript({
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY, //"AIzaSyDmOnsV-JmnpIjilgkqzghEFOYTJAvFKKw",
+      libraries: libraries as any,
+  });
+
+  const mapOptions = useMemo<google.maps.MapOptions>(
+      () => ({
+      disableDefaultUI: false,
+      clickableIcons: true,
+      scrollwheel: true,
+      mapTypeId: isLoaded? google.maps.MapTypeId.HYBRID: undefined,
+      labels: true,
+      styles: isLoaded? [
+          {
+            featureType: 'all',
+            elementType: 'labels',
+            stylers: [{ visibility: 'on' }],
+          },
+        ]
+      : undefined,
+     
+
+      }),
+      [isLoaded]
+  ); 
+
+  if (!isLoaded) {
+      
+      return <p>Loading...</p>;
+  }
+
+  const loadKmlLayer = (map) => {
+      const kmlUrl = "https://gateway.pinata.cloud/ipfs/QmXQDaAk6RkmDWuefL6H4EGJp9F9hpoRq6BkfqWaR75XPm";
+      const kmlLayer = new window.google.maps.KmlLayer({
+        url: kmlUrl,
+        map:map,
+        suppressInfoWindows: false,  
+        preserveViewport: true 
+        
+
+      });
+  
+      kmlLayer.addListener('click', (event) => {
+          
+        console.log('KML Layer clicked', event);
+      });
+
+      kmlLayer.set('options', {
+          preserveViewport: true,
+          suppressInfoWindows: true,
+          clickable: false,
+          zIndex: 1,
+          strokeColor: '#00FF00', // Green color
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#00FF00', // Green color
+          fillOpacity: 0.35,
+        });
+    };
+  
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} text-3xl`}>AmazoniaCoin PES Projects</h1>
       <div className="flex w-full mt-5 mb-2 justify-between">
-        <div className="w-1/2 mt-6">
+        <div className="w-1/3 mt-6">
           <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
             <div className="text-justify" style={{ textAlign: 'left', maxWidth: '350px', margin: 'auto' }}>
-              <Image src={kayapo} alt="Kayapo Project" style={{ width: '100%', borderRadius: '8px 8px 0 0' }} />
-              <div className="text-justify" style={{ padding: '20px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
+              <Image src={kayapo} alt="Kayapo Project" style={{ width: '95%', borderRadius: '8px 8px 0 0' }} />
+              <div className="text-justify" style={{ padding: '32px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
                 <h2 className={`${lusitana.className} text-2xl items-full`} ><strong>Kayapo Project</strong></h2>
                 <p className={`${lusitana.className} text-1xl mt-5 mb-2`}>
                   <span className={`${lusitana.className} text-1xl mt-5 mb-2`} role="img" aria-label="Brazil Flag">
@@ -36,11 +135,12 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="w-1/2 mt-6">
+        <div className="flex w-full mt-0 mb-2 justify-between">
+        <div className="w-1/3 mt-6">
           <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
             <div className="text-justify" style={{ textAlign: 'left', maxWidth: '350px', margin: 'auto' }}>
-              <Image src={yanomami} alt="Yanomami Project" style={{ width: '100%', borderRadius: '8px 8px 0 0' }} />
-              <div className="text-justify" style={{ padding: '20px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
+              <Image src={yanomami} alt="Yanomami Project" style={{ width: '110%', borderRadius: '8px 8px 0 0' }} />
+              <div className="text-justify" style={{ padding: '30px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
                 <h2 className={`${lusitana.className} text-2xl items-full`} ><strong>Yanomami Project</strong></h2>
                 <p className={`${lusitana.className} text-1xl mt-5 mb-2`}>
                   <span className={`${lusitana.className} text-1xl mt-5 mb-2`} role="img" aria-label="Brazil Flag">
@@ -49,7 +149,7 @@ export default function Page() {
                   Brazil
                 </p>
                 <p className={`${lusitana.className} text-1xl mt-5 mb-2`}>
-                  The Yanomami indigenous people safeguard over 9 million hectares (22 million acres) of the Amazon Rainforest, an expanse equivalent to Portugal. With a commitment to their traditional way of life, they resist large-scale deforestation, protecting their territory—a biodiversity haven. The ~8,000 Yanomami preserve an area akin to Portugal or South Korea, primarily composed of primary forest with patches of savannah on Brazilian shield bedrock. This territory fosters diverse species like white-lipped peccary, tapir, giant armadillo, giant otter, giant anteater, jaguar, hyacinth macaw, harpy eagle, white-whiskered spider monkey, and saki monkey, facing threats elsewhere.
+                The Yanomami tribe, inhabits an area of around 9.6 million hectares of pristine rainforest in the Amazon basin. Their efforts in protecting this vast territory are significant, given that the Amazon rainforest serves as the planet's largest carbon sink, sequestering an estimated 2.2 billion metric tons of CO2 annually. The Yanomami's resistance against illegal activities such as logging and mining has helped to preserve biodiversity, with their land containing an estimated 12% of the world's plant and animal species. Moreover, their advocacy has led to the establishment of protected areas and legal recognition of indigenous land rights, contributing to the conservation of vital ecosystems.
                 </p>
                 <Link href="./projects/yanomami">
                   <button className={`${lusitana.className} mt-5 mb-2 flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600`} type="button">
@@ -62,128 +162,58 @@ export default function Page() {
         </div>
       </div>
     </div>
+    <Spacer h="40px" />
+    <h1 className={`${lusitana.className} text-2xl mt-10` } style={{  margin:  "10px"}} >User Selected Area of Interest</h1>
+
+    <GoogleMap
+            options={mapOptions}
+            zoom={8}
+            center={mapCenter}
+            mapTypeId={google.maps.MapTypeId.SATELLITE}
+            mapContainerStyle={{ width: '100%', height: '500px', margin: "auto" }}
+            onLoad={(map) => {
+                
+                loadKmlLayer(map)
+                console.log('Map Loaded')
+                
+                }}
+            onClick={handleMapClick}
+                >
+
+            <MarkerF
+                position={mapCenter}
+                onLoad={() => console.log('Marker Loaded')}  
+            />
+        </GoogleMap>
+
+        <Box h='30px'/>
+        <Text className={`${lusitana.className} text-1xl`}>Please select Lattitude, Longitude and time range</Text>                
+
+        <HStack w='md'>
+              <Input
+              type='text'
+              size='md'
+              placeholder='Latitude'
+              />
+              <Input
+              type='text'
+              size='md'
+              placeholder='Longitude'
+              />     
+              <Input
+              type='text'
+              size='md'
+              placeholder='Time Start'
+              />                     
+              <Input
+              type='text'
+              size='md'
+              placeholder='Time Finish'
+              />                           
+              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{  margin:  "10px"}}  bg='green.200'>Define AOI</Button>
+            
+            </HStack>
+    </div>
   );
 };
-
-
-'use client'
-import React from 'react';
-import Image from 'next/image';
-import kayapo from '@/public/kayapo.jpg'
-import { lusitana } from '@/app/ui/fonts';
-import brazil from '@/public/brazil.svg';
-import Link from 'react-router-dom';
-
-
- export default function Page() {
-  return (
-    <div className="w-full ">
-    <h1 className={`${lusitana.className} text-3xl `}>AmazoniaCoin PES Projects</h1>
-    <div className="flex w-full mt-5 mb-2 items-center justify-between">
-  
-    <div className="mt-6 flow-root">
-
-      <div className="inline-block min-w-full align-middle">
- 
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-
-    <div className=" text-justify "  style={{ textAlign: 'left', maxWidth: '350px', margin: 'auto' }}>
-      <Image src={kayapo} alt="Kayapo Project" style={{ width: '100%', borderRadius: '8px 8px 0 0' }} />
-
-      <div className=" text-justify "  style={{ padding: '20px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
-        <h2 className={`${lusitana.className} text-2xl  items-full`} ><strong>Kayapo Project</strong></h2>
-        <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          <span className={`${lusitana.className} text-1xl mt-5 mb-2  `} role="img" aria-label="Brazil Flag">
-          <Image className='mt-5 mb-2' src={brazil} alt="Kayapo Project" style={{ width: '11%', borderRadius: '0px 0px 0 0' }} />
-          </span>{' '}
-           Brazil
-        </p>
-
-        
-        <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          
-            The Kayapo indigenous people safeguard over 9 million hectares (22 million acres) of the Amazon Rainforest, an expanse equivalent to Portugal. With a commitment to their traditional way of life, they resist large-scale deforestation, protecting their territory—a biodiversity haven. The ~8,000 Kayapó preserve an area akin to Portugal or South Korea, primarily composed of primary forest with patches of savannah on Brazilian shield bedrock. This territory fosters diverse species like white-lipped peccary, tapir, giant armadillo, giant otter, giant anteater, jaguar, hyacinth macaw, harpy eagle, white-whiskered spider monkey, and saki monkey, facing threats elsewhere.
-        </p>
-
-
-        <a href ="./projects/kayapo">
-        <button className={"`${lusitana.className} mt-5 mb-2 flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"} type="button"
-        
-                >
-                Learn More
-            </button>
-        </a>
-      </div>
-    </div>
-
-    <div className=" text-justify "  style={{ textAlign: 'left', maxWidth: '350px', margin: 'auto' }}>
-      <Image src={kayapo} alt="Yanomami Project" style={{ width: '100%', borderRadius: '8px 8px 0 0' }} />
-
-      <div className=" text-justify "  style={{ padding: '20px', background: '#fff', borderRadius: '0 0 8px 8px' }}>
-        <h2 className={`${lusitana.className} text-2xl  items-full`} ><strong>Yanomami Project</strong></h2>
-        <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          <span className={`${lusitana.className} text-1xl mt-5 mb-2  `} role="img" aria-label="Brazil Flag">
-          <Image className='mt-5 mb-2' src={brazil} alt="Kayapo Project" style={{ width: '11%', borderRadius: '0px 0px 0 0' }} />
-          </span>{' '}
-           Brazil
-        </p>
-
-        
-        <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          
-            The Kayapo indigenous people safeguard over 9 million hectares (22 million acres) of the Amazon Rainforest, an expanse equivalent to Portugal. With a commitment to their traditional way of life, they resist large-scale deforestation, protecting their territory—a biodiversity haven. The ~8,000 Kayapó preserve an area akin to Portugal or South Korea, primarily composed of primary forest with patches of savannah on Brazilian shield bedrock. This territory fosters diverse species like white-lipped peccary, tapir, giant armadillo, giant otter, giant anteater, jaguar, hyacinth macaw, harpy eagle, white-whiskered spider monkey, and saki monkey, facing threats elsewhere.
-        </p>
-
-
-        <a href ="./projects/kayapo">
-        <button className={"`${lusitana.className} mt-5 mb-2 flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"} type="button"
-        
-                >
-                Learn More
-            </button>
-        </a>
-      </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-      );
-}; 
-
-/* const KayapoProject = () => {
-    // Replace 'your_image_source' with the actual path or URL to your image
-    //const imagePath = '/public/kayapo.jpg';
-  
-    return (
-      <div>
-        <Image src={kayapo} width={500} height={500} alt="Kayapo Project" className="hidden md:block" />
-        <div>
-          <h2>Kayapo Project 🇧🇷 Brazil</h2>
-          <p>
-            <strong>Description</strong>
-          </p>
-          <p>
-            The Kayapo indigenous people protect more than 9 million hectares (22 million acres) of Amazon Rainforest
-            (roughly the size of Portugal). They continue to live within their traditional culture. They do not engage in
-            large scale deforestation and fight to protect their territory, one of the world's richest ecosystems, from the
-            ravages of the outside world.
-          </p>
-          <p>
-            The area protected by the ~8,000 Kayapó is roughly equal in size to Portugal or South Korea. This area is
-            comprised mostly of primary forest interspersed with a few patches of naturally occurring savanna growing on
-            Brazilian shield bedrock. Kayapo territory is a biodiversity paradise providing sufficient size habitat for
-            sensitive species which are threatened or extirpated in other areas including; white-lipped peccary, tapir,
-            giant armadillo, giant otter, giant anteater, jaguar, hyacinth macaw, harpy eagle, white whiskered spider monkey,
-            and saki monkey.
-          </p>
-        </div>
-      </div>
-    );
-  };
-  
-  export default KayapoProject;
-
- */
-

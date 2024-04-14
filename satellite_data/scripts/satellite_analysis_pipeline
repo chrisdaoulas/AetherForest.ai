@@ -474,7 +474,7 @@ ee.batch.Export.image.toAsset(**{
   "maxPixels": 1e13
 }).start()
 
-time.sleep(1500)
+time.sleep(1800)
 
 classified2015_10m = ee.Image(kayapo2015assetId)
 classified2023_10m = ee.Image(kayapo2023assetId)
