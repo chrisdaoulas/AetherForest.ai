@@ -43,7 +43,8 @@ const Home = () => {
           <tr>
             <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>Time</strong></th> 
             <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>Rate of Deforestation</strong></th> 
-            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>CID</strong></th> 
+            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>CID</strong></th>
+            <th scope="col" className="px-4 py-5 font-medium  sm:pl-6"> <strong>Project</strong></th>  
           
             
           </tr>
@@ -54,6 +55,7 @@ const Home = () => {
               <td className="whitespace-nowrap py-3 pl-6 pr-3">{row.Time}</td>
               <td className="whitespace-nowrap px-3 py-3">{row.Rate_of_Deforestation}</td>
               <td className="whitespace-nowrap px-3 py-3">{row.File_Hash}</td>
+              <td className="whitespace-nowrap px-3 py-3">{row.Project}</td>
             </tr>
           ))} 
             
