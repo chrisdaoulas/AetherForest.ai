@@ -590,27 +590,27 @@ geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette'
 # Get list of files in 'gee_images' foldersub_file_list = drive.ListFile({'q': "'"+file['id']+"' in parents and trashed=false"}).GetList()
 
 # Export images to drive 
-ee.batch.Export.image.toDrive(**{
-  "image": classified2015_10m,
-  "description": 'classified2015_10m',
-  #assetId:'projects/ee-blockchain/classified2015_10m',
-  "scale":10,
-  "crs": 'EPSG:32721',
-  "region": kayapo,
-  "maxPixels": 1e13,
-  "folder": "gee-images"
-}).start()
+# ee.batch.Export.image.toDrive(**{
+#   "image": classified2015_10m,
+#   "description": 'classified2015_10m',
+#   #assetId:'projects/ee-blockchain/classified2015_10m',
+#   "scale":10,
+#   "crs": 'EPSG:32721',
+#   "region": kayapo,
+#   "maxPixels": 1e13,
+#   "folder": "gee-images"
+# }).start()
 
-ee.batch.Export.image.toDrive(**{
-  "image": classified2023_10m,
-  "description": 'classified2023_10m',
-  #assetId:'projects/ee-blockchain/classified2023_10m',
-  "scale":10,
-  "crs": 'EPSG:32721',
-  "region": kayapo,
-  "maxPixels": 1e13,
-  "folder": "gee-images"
-}).start()
+# ee.batch.Export.image.toDrive(**{
+#   "image": classified2023_10m,
+#   "description": 'classified2023_10m',
+#   #assetId:'projects/ee-blockchain/classified2023_10m',
+#   "scale":10,
+#   "crs": 'EPSG:32721',
+#   "region": kayapo,
+#   "maxPixels": 1e13,
+#   "folder": "gee-images"
+# }).start()
 
 
 
