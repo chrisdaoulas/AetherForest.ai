@@ -25,6 +25,7 @@ os.chdir(os.getcwd()+'\\satellite_data\\scripts')
 
 import folium
 from SQL_database import *
+from utils_sat import *
 from IPFS import *
 import shutil
 
@@ -634,6 +635,7 @@ totable = [[net, time, upload_ipfs_pinata(pinata),'Kayapo']]
 print("Data Uploaded to IPFS")     
 totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
 
+delete_files(os.getcwd())
 
 os.chdir(os.path.dirname(os.getcwd()))
 

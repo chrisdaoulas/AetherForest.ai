@@ -36,6 +36,7 @@ const links = [
   //{ name: 'Invoices', href: '/dashboard/invoices', icon: WalletIcon },
   { name: 'Carbon Credits', href: '/dashboard/carbon_credit_flow', icon: TrophyIcon },
   { name: 'Metrics', href: '/dashboard/metrics', icon: CalculatorIcon },
+  { name: 'User AOI', href: '/dashboard/user_aoi', icon: WalletIcon },
   { name: 'Documentation', href: '/dashboard/documents', icon: DocumentIcon },
 
 ];

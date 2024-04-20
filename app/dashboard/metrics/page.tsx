@@ -6,7 +6,7 @@ import { lusitana } from '@/app/ui/fonts';
 
 export default function Page() {
     return (
-        <div className="w-full " style={{ position: 'relative' }}>
+        <div className="w-left " style={{ position: 'relative' }}>
 
             <div className=" text-justify ">
                 <h2 className={`${lusitana.className} text-3xl  items-full`} >Carbon Credit Market Metrics</h2>
@@ -14,11 +14,11 @@ export default function Page() {
 
             <div
                 style={{
-                    position: 'absolute',
-                    top: 30,
-                    left: 0,
-                    width: '100%',
-                    height: '8.5%',
+                    position: 'fixed',
+                    top: 80,
+                    left: 200,
+                    width: '80%',
+                    height: '4.5%',
                     backgroundColor: 'white',
                     opacity: 1, // Adjust the opacity as needed          
                     zIndex: 2, // Ensure the overlay is above the Power BI component
@@ -27,11 +27,11 @@ export default function Page() {
 
             <div
                 style={{
-                    position: 'absolute',
+                    position: 'fixed',
                     bottom: 0,
-                    left: 0,
+                    left: 170,
                     width: '100%',
-                    height: '8.5%',
+                    height: '2%',
                     backgroundColor: 'white',
                     opacity: 1, // Adjust the opacity as needed          
                     zIndex: 2, // Ensure the overlay is above the Power BI component
@@ -39,21 +39,21 @@ export default function Page() {
             ></div>
 
             <div
-                style={{
-                    position: 'absolute',
-                    top: 51,
-                    left: 0,
-                    width: '2%',
-                    height: '8.5%',
-                    backgroundColor: 'white',
-                    opacity: 1, // Adjust the opacity as needed          
-                    zIndex: 2, // Ensure the overlay is above the Power BI component
-                }}
+                // style={{
+                //     position: 'absolute',
+                //     top: 51,
+                //     left: 0,
+                //     width: '2%',
+                //     height: '8.5%',
+                //     backgroundColor: 'white',
+                //     opacity: 1, // Adjust the opacity as needed          
+                //     zIndex: 2, // Ensure the overlay is above the Power BI component
+                // }}
             ></div>
 
 
 
-            <iframe title="Metrics" width="1200" height="800" src="https://app.powerbi.com/reportEmbed?reportId=80f5a702-169d-426f-b834-adca7cdd8827&autoAuth=true&ctid=30a5145e-75bd-4212-bb02-8ff9c0ea4ae9" frameBorder="0" allowFullScreen={true}></iframe>
+            <iframe title="Metrics" width="1290" height="680" src="https://app.powerbi.com/reportEmbed?reportId=604f2ea2-9dcf-4740-866c-1b3c2f1b3be3&autoAuth=true&ctid=30a5145e-75bd-4212-bb02-8ff9c0ea4ae9" frameBorder="0" allowFullScreen={true} style={{ position: 'absolute', top: '80%', left: '-5%' }} ></iframe>
             {/* 
 
             <PowerBIEmbed

@@ -19,6 +19,8 @@ Original file is located at
 import ee
 import os
 import time
+import geemap
+
 import pandas as pd
 from datetime import date
 from datetime import datetime
@@ -31,12 +33,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 os.chdir(os.getcwd()+'\\satellite_data\\scripts')
 
 import folium
+from utils_sat import *
 from SQL_database import *
 from IPFS import *
 import shutil
-
-
-
 
 
 import json
@@ -51,9 +51,6 @@ def sataellite_analysis(project,time_start,time_end):
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
     credentials = ee.ServiceAccountCredentials(service_account, private_key_path)
     ee.Initialize(credentials, project='ee-blockchain')
-
-
-
 
 # Authenticate to the Google Drive of the Service Account
     gauth = GoogleAuth()
@@ -83,27 +80,25 @@ def sataellite_analysis(project,time_start,time_end):
     drive = GoogleDrive(gauth)
     
     
-    
-    
     # Define the URL format used for Earth Engine generated map tiles.
     EE_TILES = 'https://earthengine.googleapis.com/map/{mapid}/{{z}}/{{x}}/{{y}}?token={token}'
     
 
     shape = gpd.read_file(os.path.dirname(os.getcwd())+"\\{project}\\{project}.shp")   
-    js = json.loads(shape.to_json()) 
-    {project}= ee.Geometry(ee.FeatureCollection(js).geometry())
+    js = json.loads(shape.to_json())
+    
+    project_geom = f"{project}"
+    globals()[project_geom]= ee.Geometry(ee.FeatureCollection(js).geometry())
     
     """Define the forested and non forested samples"""
     
-    shape1 = gpd.read_file(os.path.dirname(os.getcwd())+"\\{project}\\{project}_forest_shp.shp")
+    shape1 = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}_forest_shp.shp")
     js = json.loads(shape1.to_json())
     forest = ee.FeatureCollection(js)
     
-    shape2 = gpd.read_file(os.path.dirname(os.getcwd())+"\\{project}\\{project}_non_forest_shp.shp")
+    shape2 = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}_non_forest_shp.shp")
     js = json.loads(shape2.to_json())
     non_forest = ee.FeatureCollection(js)
-    
-    
     
     # Define the visualization parameters.
     vizParams = {
@@ -113,7 +108,6 @@ def sataellite_analysis(project,time_start,time_end):
       'gamma': [0.95, 1.1, 1]
     }
     
-
     
     ##Scaling and NDVI filters
     
@@ -128,16 +122,16 @@ def sataellite_analysis(project,time_start,time_end):
     
     ##LANDSAT
     
-    landsat2015 = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2').filterDate(time_start,time_end).filterBounds({project}).filter(ee.Filter.lt('CLOUD_COVER',10)).aside(print).map(ndviLS).map(applyScaleFactors).median().clip({project})
+    landsat2015 = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2').filterDate(time_start,time_end).filterBounds(globals()[project_geom]).filter(ee.Filter.lt('CLOUD_COVER',10)).aside(print).map(ndviLS).map(applyScaleFactors).median().clip(globals()[project_geom])
     
     
     bandsLandsat = ['SR_B2','SR_B3','SR_B4','SR_B5','NDVI']
     
-    shape1 = gpd.read_file(os.path.dirname(os.getcwd())+"\\{project}\\{project}_forest_shp.shp")
+    shape1 = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}_forest_shp.shp")
     js = json.loads(shape1.to_json())
     forest = ee.FeatureCollection(js)
     
-    shape2 = gpd.read_file(os.path.dirname(os.getcwd())+"\\{project}\\{project}_non_forest_shp.shp")
+    shape2 = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}_non_forest_shp.shp")
     js = json.loads(shape2.to_json())
     non_forest = ee.FeatureCollection(js)
     
@@ -162,11 +156,12 @@ def sataellite_analysis(project,time_start,time_end):
     #80/20 training/test split
     threshold = 0.8
     
+    """Non Forest"""
     trainNonForestLandsat = sampledNonForestLandsat.randomColumn('random').filter(ee.Filter.lte('random',threshold))
     testNonForestLandsat = sampledNonForestLandsat.randomColumn('random').filter(ee.Filter.gt('random',threshold))
     
     
-    
+    """Forest"""
     trainForestLandsat = sampledForestLandsat.randomColumn('random').filter(ee.Filter.lte('random',threshold))
     testForestLandsat = sampledForestLandsat.randomColumn('random').filter(ee.Filter.gt('random',threshold))
     
@@ -204,7 +199,7 @@ def sataellite_analysis(project,time_start,time_end):
     imageCollection = ee.ImageCollection("projects/sat-io/open-datasets/landcover/ESRI_Global-LULC_10m_TS").mosaic().clip(landsat2015.geometry())
     
     
-    refPoints_2015 = ee.FeatureCollection('users/vyordanov/Amazon/Amazon2015_refPoints').filterBounds({project})
+    refPoints_2015 = ee.FeatureCollection('users/vyordanov/Amazon/Amazon2015_refPoints').filterBounds(globals()[project_geom])
     
 
     def func_oqa(feat):
@@ -254,13 +249,13 @@ def sataellite_analysis(project,time_start,time_end):
     
     sentinel2023 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED') \
                 .filterDate(time_end, str(date.today())) \
-                .filterBounds({project}) \
+                .filterBounds(globals()[project_geom]) \
                 .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',10)) \
                 .aside(print) \
                 .map(maskS2cloud) \
                 .map(ndviSE) \
                 .median() \
-                .clip({project});
+                .clip(globals()[project_geom]);
     
     visParSentinel = {
       'min': 0.0,
@@ -327,7 +322,7 @@ def sataellite_analysis(project,time_start,time_end):
     Load the satellite imagery (replace with your own image collection), then load, classify the external dataset, get confusion matrix to see missclassified labels, then compute accuracy and model test performance
     """
     
-    refPoints_2023 = ee.FeatureCollection('users/vyordanov/Amazon/Amazon2015_refPoints').filterBounds({project})
+    refPoints_2023 = ee.FeatureCollection('users/vyordanov/Amazon/Amazon2015_refPoints').filterBounds(globals()[project_geom])
 
     def func_dkj(feat):
       return ee.Feature(feat.geometry(),{'landcover': feat.get('land_cover')})
@@ -369,19 +364,25 @@ def sataellite_analysis(project,time_start,time_end):
       'scale':10
     })
     now= str(datetime.now())
-    {project}2015assetId = str('projects/ee-blockchain/assets/classified2015_10m_'+now)[:68].replace(':','-').replace(' ','_')
-    {project}2015description= str('classified2015_10m_'+now)[:38].replace(':','-').replace(' ','_')
-    {project}2023assetId = str('projects/ee-blockchain/assets/classified2023_10m_'+now)[:68].replace(':','-').replace(' ','_')
-    {project}2023description= str('classified2023_10m_'+now)[:38].replace(':','-').replace(' ','_')
+    
+    assetId_2015 = f"{project}2015assetId"
+    description_2015 = f"{project}2015description"
+    assetId_2023 = f"{project}2023assetId"
+    description_2023 = f"{project}2023description"
+
+    globals()[assetId_2015] = str('projects/ee-blockchain/assets/classified2015_10m_'+now)[:68].replace(':','-').replace(' ','_')
+    globals()[description_2015] = str('classified2015_10m_'+now)[:38].replace(':','-').replace(' ','_')
+    globals()[assetId_2023] = str('projects/ee-blockchain/assets/classified2023_10m_'+now)[:68].replace(':','-').replace(' ','_')
+    globals()[description_2015]= str('classified2023_10m_'+now)[:38].replace(':','-').replace(' ','_')
     
     print("Calculating start date Classification")
     ee.batch.Export.image.toAsset(**{
       "image": classified2015_10m,
-      "description": {project}2015description,
-      "assetId":{project}2015assetId,
+      "description": globals()[description_2015],
+      "assetId":globals()[assetId_2015],
       "scale":10,
       "crs": 'EPSG:32721',
-      "region": {project},
+      "region": globals()[project_geom],
       "maxPixels": 1e13
     }).start()
     
@@ -389,19 +390,19 @@ def sataellite_analysis(project,time_start,time_end):
     print("Calculating end date Classification")
     ee.batch.Export.image.toAsset(**{
       "image": classified2023_10m,
-      "description": {project}2023description,
-      "assetId":{project}2023assetId,
+      "description": globals()[description_2023],
+      "assetId":globals()[assetId_2023],
       "scale":10,
       "crs": 'EPSG:32721',
-      "region": {project},
+      "region": globals()[project_geom],
       "maxPixels": 1e13
     }).start()
     
     time.sleep(1800)
     
     print("Image Classification complete")
-    classified2015_10m = ee.Image({project}2015assetId)
-    classified2023_10m = ee.Image({project}2023assetId)
+    classified2015_10m = ee.Image(globals()[assetId_2015])
+    classified2023_10m = ee.Image(globals()[assetId_2023])
     
     
     """Compute the difference between two classification maps and add it as new layer, then net forest loss and gain"""
@@ -422,7 +423,8 @@ def sataellite_analysis(project,time_start,time_end):
 
     
     #compute and print AOI in km2
-    {project}km2 = {project}.area().divide(1000000)
+    project_km2 = f"{project}km2"
+    globals()[project_km2] = globals()[project_geom].area().divide(1000000)
     
     #compute and print the area of the forest loss and gain
     areaLoss = forest_loss.multiply(ee.Image.pixelArea().divide(1000000))
@@ -430,7 +432,7 @@ def sataellite_analysis(project,time_start,time_end):
     
     statsLoss = areaLoss.reduceRegion(**{
       'reducer': ee.Reducer.sum(),
-      'geometry': {project},
+      'geometry': globals()[project_geom],
       'scale': 10,
       'maxPixels': 1e13,
       'tileScale':16
@@ -443,7 +445,7 @@ def sataellite_analysis(project,time_start,time_end):
     
     statsGain = areaGain.reduceRegion(**{
       'reducer': ee.Reducer.sum(),
-      'geometry': {project},
+      'geometry': globals()[project_geom],
       'scale': 10,
       'maxPixels': 1e13,
       'tileScale':16
@@ -457,10 +459,10 @@ def sataellite_analysis(project,time_start,time_end):
     Finally, compute and print the relative area of the foreset loss and forest gain
     in relation to total area of AOI"""
     
-    relLoss = statsLoss.divide({project}km2)
+    relLoss = statsLoss.divide(globals()[project_km2])
 
     
-    relGain = statsGain.divide({project}km2)
+    relGain = statsGain.divide(globals()[project_km2])
 
     net=relLoss.getInfo()*100 -relGain.getInfo()*100
     
@@ -479,9 +481,8 @@ def sataellite_analysis(project,time_start,time_end):
     landsat = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'landsat.tif')
     sentinel = os.path.join(os.path.dirname(os.getcwd())+'\\toipfs\\', 'sentinel.tif')
     
-    import geemap
-    geemap.ee_export_image(classified2023_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=landsat, scale=90, region={project}, file_per_band=False)
-    geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=sentinel, scale=100, region={project}, file_per_band=False)
+    geemap.ee_export_image(classified2023_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=landsat, scale=90, region=globals()[project_geom], file_per_band=False)
+    geemap.ee_export_image(classified2015_10m.visualize(**{'min':0,'max':1,'palette': palette}), filename=sentinel, scale=100, region=globals()[project_geom], file_per_band=False)
     
     
     
@@ -489,10 +490,9 @@ def sataellite_analysis(project,time_start,time_end):
     ee.batch.Export.image.toDrive(**{
       "image": classified2015_10m,
       "description": 'classified2015_10m',
-      #assetId:'projects/ee-blockchain/classified2015_10m',
       "scale":10,
       "crs": 'EPSG:32721',
-      "region": {project},
+      "region": globals()[project_geom],
       "maxPixels": 1e13,
       "folder": "gee-images"
     }).start()
@@ -500,22 +500,19 @@ def sataellite_analysis(project,time_start,time_end):
     ee.batch.Export.image.toDrive(**{
       "image": classified2023_10m,
       "description": 'classified2023_10m',
-      #assetId:'projects/ee-blockchain/classified2023_10m',
       "scale":10,
       "crs": 'EPSG:32721',
-      "region": {project},
+      "region": globals()[project_geom],
       "maxPixels": 1e13,
       "folder": "gee-images"
     }).start()
     
+
     
-    
-    
-    
-    time = str(date.today().strftime("%d/%m/%Y"))
+    today = str(date.today().strftime("%d/%m/%Y"))
     
     path_to_dir = str(os.path.dirname(os.getcwd())+'\\toipfs\\')
-    output_filename  = str('{project}_'+ time).replace('/','_')
+    output_filename  = str(f"{project}_"+ today).replace('/','_')
     
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
     shutil.make_archive(output_filename, 'zip')
@@ -524,11 +521,13 @@ def sataellite_analysis(project,time_start,time_end):
     pinata = output_filename+'.zip'
     
     #Add project reference as well
-    totable = [[net, time, upload_ipfs_pinata(pinata),'{project}']]
+    totable = [[net, today, upload_ipfs_pinata(pinata),f"{project}"]]
     
     print("Data Uploaded to IPFS")     
     totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
     
+    
+    delete_files(os.getcwd())
     
     os.chdir(os.path.dirname(os.getcwd()))
     
