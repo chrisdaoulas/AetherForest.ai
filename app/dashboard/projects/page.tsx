@@ -166,7 +166,7 @@ export default function Page() {
   
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} text-3xl`}>AmazoniaCoin PES Projects</h1>
+      <h1 className={`${lusitana.className} text-3xl`}>AetherForest.ai PES Projects</h1>
       <div className="flex w-full mt-5 mb-2 justify-between">
         <div className="w-1/3 mt-6">
           <div className="rounded-lg bg-gray-50 p-2 md:pt-0">

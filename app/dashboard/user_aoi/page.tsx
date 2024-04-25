@@ -1,9 +1,11 @@
 'use client'
 import React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 
 import { lusitana } from '@/app/ui/fonts';
+import shpwrite from '@mapbox/shp-write';
 
 import { HStack, Text, Button, Input, Box, Spacer } from '@chakra-ui/react';
 import { useState,useMemo  } from 'react';
@@ -27,11 +29,15 @@ export default function Page() {
   // };
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [project, setProject] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [mapCenter, setMapCenter] = useState({ lat: 2.14767, lng: -63 });
   const [latitude, setLatitude] = useState(mapCenter.lat);
   const [longitude, setLongitude] = useState(mapCenter.lng);
+  const [calculation, setCalculation] = useState('');
+  const [responseTableData, setResponseTableData] = useState('');
+
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
@@ -61,7 +67,7 @@ export default function Page() {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'user_selected_area.kml';
+    a.download = project+ '.kml';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -98,6 +104,100 @@ export default function Page() {
 
     return kmlContent;
 };
+
+// const handleDownloadShapefile = () => {
+//     if (polygonCoordinates.length === 0) return;
+
+//     const shapefileBuffer = generateShapefile(polygonCoordinates);
+//     const blob = new Blob([shapefileBuffer], { type: 'application/zip' });
+//     const url = URL.createObjectURL(blob);
+
+//     const a = document.createElement('a');
+//     a.href = url;
+//     a.download = project + '.zip';
+//     document.body.appendChild(a);
+//     a.click();
+//     document.body.removeChild(a);
+//     URL.revokeObjectURL(url);
+// };
+
+// const generateShapefile = (coordinates) => {
+//     // Ensure coordinates array is not empty
+//     if (coordinates.length === 0) {
+//         throw new Error("Coordinates array is empty");
+//     }
+
+//     // Generate features for the shapefile
+//     const features = [{
+//         type: 'Feature',
+//         properties: {},
+//         geometry: {
+//             type: 'Polygon',
+//             coordinates: [coordinates.map(coord => [coord.lng, coord.lat])]
+//         }
+//     }];
+
+//     // Generate Shapefile buffer
+//     const buffer = shpwrite.zip(features);
+
+//     // Return the Shapefile buffer
+//     return buffer;
+// };
+
+// const handleCalculateDeforestationRate = () => {
+//     // Perform any necessary data validation...
+//     // Assuming you have the KML content stored in a variable named kmlContent
+    
+//     //const kmlContent = generateKML(polygonCoordinates);
+//     const startdate = startDate
+//     axios.post('/utils_sat.py', { startdate })
+//       .then(response => {
+//         // Handle the response from the server...
+//         console.log(response.data);
+//       })
+//       .catch(error => {
+//         // Handle any errors...
+//         console.error('Error:', error);
+//       });
+//   };
+//   async function handleCalculateDeforestationRate() {
+//     const response = await fetch('http://localhost:8000/api/calculate_four_months_before/', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ date: startDate })
+//     });
+
+//     const data = await response.json();
+//     setCalculation(data.calculation);
+// }
+
+const handleCalculateDeforestationRate = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/calculate_four_months_before/calculate/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ date: startDate })
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    setCalculation(data.calculation);
+    setResponseTableData(data); // Set the response data to be displayed in the table
+
+    console.log(data); // Log the response data to the console
+    
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
   const handleLatitudeChange = (event) => {
     const { value } = event.target;
@@ -159,6 +259,30 @@ export default function Page() {
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
+  const ResponseTable = ({ responseData }) => {
+    return (
+      <div>
+        <h2 className={`${lusitana.className} text-2xl ` } style={{  margin:  "10px", marginLeft: "0px" }} >Response Data</h2>       
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#f0f0f0',textAlign: 'left',  }}>Field</th>
+              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#f0f0f0', textAlign: 'left',  }}>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(responseData).map(([key, value]) => (
+              <tr key={key}>
+                <td className={`${lusitana.className} text-1xl `}  style={{ padding: '10px' }}>{key}</td>
+                <td className={`${lusitana.className} text-1xl `}  style={{ padding: '10px' }}>{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   
   return (
     <div className="w-full">
@@ -172,7 +296,7 @@ export default function Page() {
     <GoogleMap
         mapContainerStyle={mapContainerStyle}
         mapTypeId={google.maps.MapTypeId.SATELLITE}
-        options={mapOptions}        
+        options={mapOptions}           
         zoom={8}
         center={mapCenter}
         onClick={handleMapClick}
@@ -196,12 +320,13 @@ export default function Page() {
         <Text className={`${lusitana.className} text-1xl mb-2` } style={{  margin:  "0px", marginLeft: "0px" }}>Please select Latitude, Longitude and time range</Text>                
 
         <HStack w='md'>
- <Input
+        <Input
           type='number'
           size='md'
           placeholder='Latitude'
           value={latitude}
           onChange={handleLatitudeChange}
+          style={{ width: '90px' }}
         />
         <Input
           type='number'
@@ -209,24 +334,23 @@ export default function Page() {
           placeholder='Longitude'
           value={longitude}
           onChange={handleLongitudeChange}
+          style={{ width: '90px' }}
         />
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => {
-              // Check if the selected date is after the current end date
-              if (date > endDate) {
-                // If the selected date is after the current end date, update the end date
-                setEndDate(date);
-              }
-              // Update the start date regardless
-              setStartDate(date);
-            }}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            placeholderText="Time Start"
-            dateFormat="dd/MM/yyyy"
-          />
+        <DatePicker
+        selected={startDate}
+        onChange={(date) => {
+            // Check if the selected date is after the current end date
+            if (date.getFullYear() >= 2014) {
+            // If the selected date is after 2014, update the start date
+            setStartDate(date);
+            }
+        }}
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        placeholderText="Time Start"
+        dateFormat="yyyy/MM/dd"
+        />
           <DatePicker
             selected={endDate}
             onChange={(date) => {
@@ -244,18 +368,28 @@ export default function Page() {
             endDate={endDate}
             minDate={startDate} // Ensures that the user can't select a date before the start date
             placeholderText="Time End"
-            dateFormat="dd/MM/yyyy"
-          />                      
+            dateFormat="yyyy/MM/dd"
+          />
+
+                <Input
+                type='text' // Use lowercase 'text' for text input
+                size='md'
+                placeholder='Project Identifier'
+                value={project} // Assuming 'project' is the variable to save the input text
+                onChange={(event) => setProject(event.target.value)} // Update the 'project' variable as the user types
+                />                      
               <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              type="button" style={{  margin:  "0px"}}  bg='green.200' onClick={handleDownloadKML} >Define AOI</Button>
+              type="button" style={{  margin:  "0px", flex: 1}}  bg='green.200' onClick={handleDownloadKML} >Define AOI</Button>
 
               <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              type="button" style={{  margin:  "0px"}}  bg='green.200' onClick={handleClear} >Calculate Deforestation Rate</Button>
+              type="button" style={{  margin:  "0px", flex: 1}}  bg='green.200' onClick={handleCalculateDeforestationRate} >Calculate Deforestation Rate</Button>
 
               <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              type="button" style={{  margin:  "0px"}}  bg='green.200' onClick={handleClear} >Clear</Button>
+              type="button" style={{  margin:  "0px", flex: 1}}  bg='green.200' onClick={handleClear} >Clear</Button>
             
             </HStack>
+            <Spacer height="30px" />
+            {responseTableData && <ResponseTable responseData={responseTableData} />}
     </div>
   );
 };
