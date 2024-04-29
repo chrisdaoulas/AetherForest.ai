@@ -3,7 +3,20 @@ import geopandas as gpd
 from datetime import datetime, timedelta
 import fiona
 import pandas as pd
+import inspect
 from shapely.geometry import Point
+
+
+
+def read_python_file(filename):
+    with open(filename, 'r') as f:
+        return f.read()
+    
+
+def save_python_file(contents, filename):
+    with open(filename, 'w') as f:
+        f.write(contents)    
+
 
 
 def delete_files(directory):
@@ -70,3 +83,5 @@ def eight_months_before(date_string):
     eight_months_ago = date_obj - timedelta(days=8*30)  # Assuming 30 days per month
     
     return eight_months_ago.strftime('%Y-%m-%d')
+
+

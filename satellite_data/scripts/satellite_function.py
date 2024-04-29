@@ -48,6 +48,8 @@ import os
 
 def satellite_analysis(project):
     
+    file_contents = read_python_file(os.getcwd()+"//satellite_function.py")
+    print(file_contents)
     
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
@@ -121,8 +123,7 @@ def satellite_analysis(project):
     ##LANDSAT
     
     landsat2015 = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2').filterDate('2015-05-01','2015-08-30').filterBounds(globals()[project_geom]).filter(ee.Filter.lt('CLOUD_COVER',10)).aside(print).map(ndviLS).map(applyScaleFactors).median().clip(globals()[project_geom])
-    
-    
+  
     bandsLandsat = ['SR_B2','SR_B3','SR_B4','SR_B5','NDVI']
     
     shape1 = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}_forest_shp.shp")
@@ -163,6 +164,8 @@ def satellite_analysis(project):
     trainForestLandsat = sampledForestLandsat.randomColumn('random').filter(ee.Filter.lte('random',threshold))
     testForestLandsat = sampledForestLandsat.randomColumn('random').filter(ee.Filter.gt('random',threshold))
     
+    
+    """Merge Forest and Non Forest"""
     trainLandsat = trainForestLandsat.merge(trainNonForestLandsat)
     testLandsat = testForestLandsat.merge(testNonForestLandsat)
     
@@ -180,12 +183,10 @@ def satellite_analysis(project):
     """Get a confusion matrix and compute the accuracy of the model performance"""
 
     """Predicted values applied on landsat2015 population corresponding Test forest and non-forest samples"""
-    
+
     testingLandsat = testLandsat.classify(classifier2015)
     
     testAccuracyLandsat = testingLandsat.errorMatrix('landcover','classification')
-    
-
 
     
     classified2015= landsat2015.select(bandsLandsat).classify(classifier2015)
@@ -517,6 +518,9 @@ def satellite_analysis(project):
     output_filename  = str(f"{project}_"+ today).replace('/','_')
     
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
+    
+    save_python_file(file_contents, 'current_script_version.py')
+    
     shutil.make_archive(output_filename, 'zip')
     
     

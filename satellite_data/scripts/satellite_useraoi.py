@@ -33,8 +33,8 @@ import os
 #def satellite_analysis_uaoi(kml,project, time_start,time_end):
 def satellite_analysis_uaoi(project, time_start,time_end):
     
-
-    
+    file_contents = read_python_file(os.getcwd()+"//satellite_function.py")
+        
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
     credentials = ee.ServiceAccountCredentials(service_account, private_key_path)
@@ -503,6 +503,8 @@ def satellite_analysis_uaoi(project, time_start,time_end):
     output_filename  = str(f"{project}_"+ today).replace('/','_')
     
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
+    save_python_file(file_contents, 'current_script_version.py')
+
     shutil.make_archive(output_filename, 'zip')
     
     
@@ -560,4 +562,4 @@ time_start = '2015-01-16'
 time_end = '2024-04-16'
 #satellite_analysis_uaoi('Kayapo','2015-01-16','2024-04-16')
 #satellite_analysis_uaoi('Yanomami','2015-01-16','2024-04-16')
-satellite_analysis_uaoi('uaoi','2015-01-16','2024-04-16')
+#satellite_analysis_uaoi('uaoi','2015-01-16','2024-04-16')
