@@ -290,7 +290,7 @@ const handleCalculateDeforestationRate = async () => {
 
 
     
-    <h1 className={`${lusitana.className} text-1xl mt-5 mb-4` } style={{  margin:  `10px`, marginLeft: `0px` }} >To utilize our deforestation monitoring tool, begin by defining your area of interest by clicking points on the map to create a polygon boundary, representing the region for monitoring. Next, select the start and end dates to specify the monitoring period. Clicking the "Define AOI" button generates a KML file containing the defined area and time range. Import this file into GIS software to analyze deforestation rates. Regularly monitor changes and take action to mitigate deforestation. For further assistance, contact our support team.</h1>
+    <h1 className={`${lusitana.className} text-1xl mt-5 mb-4` } style={{  margin:  `10px`, marginLeft: `0px` }} >To utilize our deforestation monitoring tool, begin by defining your area of interest by clicking points on the map to create a polygon boundary, representing the region for monitoring. Next, select the start and end dates to specify the monitoring period. Clicking the `Define AOI` button generates a KML file containing the defined area and time range. Import this file into GIS software to analyze deforestation rates. Regularly monitor changes and take action to mitigate deforestation. For further assistance, contact our support team.</h1>
 
     <Spacer height="10px" />
     <GoogleMap
