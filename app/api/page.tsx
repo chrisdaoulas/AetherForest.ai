@@ -47,7 +47,7 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map((row, index) => (
+          {items.map((row: { Time: string, Rate_of_Deforestation: number, File_Hash: string }, index) => (
             <tr key={index}>
               <td>{row.Time}</td>
               <td>{row.Rate_of_Deforestation}</td>
