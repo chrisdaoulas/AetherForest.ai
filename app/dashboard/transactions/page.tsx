@@ -11,7 +11,7 @@ import { UserContext} from '@/app/components/context';
 
 
 
-//var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+//var web3 = new Web3(new Web3.providers.HttpProvider('http://localh:ost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const contractAddress = process.env.NEXT_PUBLIC_HARDHAT; 
 

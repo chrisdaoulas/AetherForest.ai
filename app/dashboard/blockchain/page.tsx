@@ -4,7 +4,7 @@
 import { format,fromUnixTime } from 'date-fns';
 
 import { useEffect, useState} from 'react';
-import {Web3} from 'web3';
+import {EventLog, Web3} from 'web3';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
@@ -30,7 +30,7 @@ const MyComponent = ({
 }) => {  
   
   const web3 = new Web3('http://localhost:8545');
-  const queryParam = searchParams?.query || '';
+  const queryParam = searchParams.query || '';
   //const currentPage = Number(searchParams.page) || 1;
   
   const [events, setEvents] = useState<event[]>([]);
@@ -44,17 +44,17 @@ const MyComponent = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  interface event {
-    name: any;
-    data: {
-      blockNumber: number;
-      // Add other properties as needed based on your event structure
-      // For example, you can use the 'raw' property to access all event data
-      raw: any;
-    };
-    number: any;
-  }
-
+    interface event {
+      event: any;//
+      name: any;
+      data: {
+        blockNumber: string | EventLog; //number;
+        // Add other properties as needed based on your event structure
+        // For example, you can use the 'raw' property to access all event data
+        raw: any;
+      };
+      number: any;
+    }
 
 
   useEffect(() => {
@@ -76,11 +76,15 @@ const MyComponent = ({
     // Subscribe to all events
     allEvents.forEach((event) => {
    
+    // setEvents((prevEvents) => {
+    //   setPrevEvents(prevEvents);
+    //  return  [{ name: event.event, date: event.timestamp, data: event, number: event.blockNumber }, ...prevEvents]
+    // }
     setEvents((prevEvents) => {
-      setPrevEvents(prevEvents);
-     return  [{ name: event.event, date: event.timestamp, data: event, number: event.blockNumber }, ...prevEvents]
+      // Assuming 'event' contains the relevant data
+      return [{ name: event.event, date: event.timestamp, data: event, number: event.blockNumber }, ...prevEvents];
     }
-        
+
         //[{ name: event.event, date: event.date, data: event, number: event.blockNumber }, ...prevEvents]
     
         );
