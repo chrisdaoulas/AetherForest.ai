@@ -91,19 +91,19 @@ export default function Page() {
           <h3 className={`${lusitana.className} text-1xl mt-5 mb-2  `}><strong>Description</strong></h3>
           <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
 
-          The Yanomami tribe, numbering approximately 35,000 individuals, occupies an extensive territory spanning approximately 9.6 million hectares within the Amazon basin, straddling the borders of Brazil and Venezuela. Their ancestral lands encompass some of the most biodiverse and ecologically rich areas of the Amazon rainforest. This region serves as a critical habitat for countless plant and animal species, including rare and endangered ones. The Yanomami's deep understanding of their environment, acquired through centuries of living in harmony with nature, enables them to act as effective stewards of the land.          </p>
+          The Yanomami tribe, numbering approximately 35,000 individuals, occupies an extensive territory spanning approximately 9.6 million hectares within the Amazon basin, straddling the borders of Brazil and Venezuela. Their ancestral lands encompass some of the most biodiverse and ecologically rich areas of the Amazon rainforest. This region serves as a critical habitat for countless plant and animal species, including rare and endangered ones. The Yanomami`s deep understanding of their environment, acquired through centuries of living in harmony with nature, enables them to act as effective stewards of the land.          </p>
   
           <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          Their efforts in protecting this vast territory hold immense significance in the global fight against climate change. The Amazon rainforest, often referred to as the "lungs of the planet," plays a crucial role in regulating the Earth's climate by absorbing carbon dioxide from the atmosphere. It is estimated that the Amazon absorbs approximately 2.2 billion metric tons of CO2 annually, mitigating the impacts of greenhouse gas emissions and helping to stabilize the global climate.
+          Their efforts in protecting this vast territory hold immense significance in the global fight against climate change. The Amazon rainforest, often referred to as the `lungs of the planet`, plays a crucial role in regulating the Earth`s climate by absorbing carbon dioxide from the atmosphere. It is estimated that the Amazon absorbs approximately 2.2 billion metric tons of CO2 annually, mitigating the impacts of greenhouse gas emissions and helping to stabilize the global climate.
 
           </p>
 
         <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          The Yanomami's resistance against external threats such as illegal logging, mining, and land encroachment has been instrumental in preserving the integrity of their ancestral territory. By actively opposing these destructive activities, the Yanomami protect not only their own way of life but also safeguard vital ecosystems and biodiversity. Their efforts have contributed to maintaining the Amazon rainforest as a stronghold of biodiversity, with their land containing an estimated 12% of the world's plant and animal species.
+          The Yanomami`s resistance against external threats such as illegal logging, mining, and land encroachment has been instrumental in preserving the integrity of their ancestral territory. By actively opposing these destructive activities, the Yanomami protect not only their own way of life but also safeguard vital ecosystems and biodiversity. Their efforts have contributed to maintaining the Amazon rainforest as a stronghold of biodiversity, with their land containing an estimated 12% of the world`s plant and animal species.
           </p>
 
           <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-          Furthermore, the Yanomami's advocacy has led to significant strides in the recognition of indigenous land rights and the establishment of protected areas. Their activism on local, national, and international levels has raised awareness about the importance of indigenous land tenure for the conservation of the Amazon and the mitigation of climate change. Through their resilience, determination, and deep-rooted connection to the land, the Yanomami tribe serves as a powerful force in the ongoing efforts to protect the Amazon rainforest and combat the existential threat of climate change on a global scale.          </p>
+          Furthermore, the Yanomami`s advocacy has led to significant strides in the recognition of indigenous land rights and the establishment of protected areas. Their activism on local, national, and international levels has raised awareness about the importance of indigenous land tenure for the conservation of the Amazon and the mitigation of climate change. Through their resilience, determination, and deep-rooted connection to the land, the Yanomami tribe serves as a powerful force in the ongoing efforts to protect the Amazon rainforest and combat the existential threat of climate change on a global scale.          </p>
 
           
 
@@ -112,7 +112,7 @@ export default function Page() {
           <section className={`${lusitana.className} text-1xl mt-5 mb-2 `} >
             
             
-            <p className='mb-5'>AmazoniaCoin plays a crucial role in supporting the Payment for Ecosystem Services (PES) Yanomami project by leveraging blockchain technology and creating a carbon credit market. Here's how AmazoniaCoin contributes to the success of the project, by safeguarding the sustainability and protection of the Yanomami indigenous people's territory:</p>
+            <p className='mb-5'>AmazoniaCoin plays a crucial role in supporting the Payment for Ecosystem Services (PES) Yanomami project by leveraging blockchain technology and creating a carbon credit market. Here`s how AmazoniaCoin contributes to the success of the project, by safeguarding the sustainability and protection of the Yanomami indigenous people`s territory:</p>
   
             
             
@@ -135,7 +135,7 @@ export default function Page() {
 
               <p className='mb-2'><strong>4. Native Token Backing</strong></p>
               <ul >
-                <li className='mb-5'>AmazoniaCoin's native token backed by carbon credits serves as the currency within the blockchain-based carbon credit market. Each token represents a quantifiable amount of carbon offset redeemed by sponsors funding ecosystem projects with the Yanomami as beneficiaries, allowing for a standardized and tradable unit that can be exchanged on the market.</li>
+                <li className='mb-5'>AmazoniaCoin`s native token backed by carbon credits serves as the currency within the blockchain-based carbon credit market. Each token represents a quantifiable amount of carbon offset redeemed by sponsors funding ecosystem projects with the Yanomami as beneficiaries, allowing for a standardized and tradable unit that can be exchanged on the market.</li>
               </ul>
 
               <p className='mb-2'><strong>5. Simulated Voluntary Carbon Market</strong></p>
@@ -145,7 +145,7 @@ export default function Page() {
 
               <p className='mb-2'><strong>6. Funds Allocation to Local Communities</strong></p>
               <ul >
-                <li className='mb-5'>As part of the Payment for Ecosystem Services scheme, AmazoniaCoin ensures that funds from the sale of carbon credits are allocated to the local communities, specifically the Yanomami people. The disbursement of funds is contingent on the communities' performance in providing contracted environmental services, such as preventing deforestation within their protected territory.</li>
+                <li className='mb-5'>As part of the Payment for Ecosystem Services scheme, AmazoniaCoin ensures that funds from the sale of carbon credits are allocated to the local communities, specifically the Yanomami people. The disbursement of funds is contingent on the communities` performance in providing contracted environmental services, such as preventing deforestation within their protected territory.</li>
               </ul>
 
               

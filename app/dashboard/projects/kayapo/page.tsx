@@ -90,7 +90,7 @@ export default function Page() {
   
           <h3 className={`${lusitana.className} text-1xl mt-5 mb-2  `}><strong>Description</strong></h3>
           <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
-            The Kayapo indigenous people protect more than 9 million hectares (22 million acres) of Amazon Rainforest (roughly the size of Portugal). They continue to live within their traditional culture. They do not engage in large-scale deforestation and fight to protect their territory, one of the world's richest ecosystems, from the ravages of the outside world.
+            The Kayapo indigenous people protect more than 9 million hectares (22 million acres) of Amazon Rainforest (roughly the size of Portugal). They continue to live within their traditional culture. They do not engage in large-scale deforestation and fight to protect their territory, one of the world`s richest ecosystems, from the ravages of the outside world.
           </p>
   
           <p className={`${lusitana.className} text-1xl mt-5 mb-2  `}>
@@ -100,7 +100,7 @@ export default function Page() {
           <section className={`${lusitana.className} text-1xl mt-5 mb-2 `} >
             
             
-            <p className='mb-5'>AmazoniaCoin plays a crucial role in supporting the Payment for Ecosystem Services (PES) Kayapo project by leveraging blockchain technology and creating a carbon credit market. Here's how AmazoniaCoin contributes to the success of the project, by safeguarding the sustainability and protection of the Kayapo indigenous people's territory:</p>
+            <p className='mb-5'>AmazoniaCoin plays a crucial role in supporting the Payment for Ecosystem Services (PES) Kayapo project by leveraging blockchain technology and creating a carbon credit market. Here`s how AmazoniaCoin contributes to the success of the project, by safeguarding the sustainability and protection of the Kayapo indigenous people`s territory:</p>
   
             
             
@@ -123,7 +123,7 @@ export default function Page() {
 
               <p className='mb-2'><strong>4. Native Token Backing</strong></p>
               <ul >
-                <li className='mb-5'>AmazoniaCoin's native token backed by carbon credits serves as the currency within the blockchain-based carbon credit market. Each token represents a quantifiable amount of carbon offset redeemed by sponsors funding ecosystem projects with the Kayapo as beneficiaries, allowing for a standardized and tradable unit that can be exchanged on the market.</li>
+                <li className='mb-5'>AmazoniaCoin`s native token backed by carbon credits serves as the currency within the blockchain-based carbon credit market. Each token represents a quantifiable amount of carbon offset redeemed by sponsors funding ecosystem projects with the Kayapo as beneficiaries, allowing for a standardized and tradable unit that can be exchanged on the market.</li>
               </ul>
 
               <p className='mb-2'><strong>5. Simulated Voluntary Carbon Market</strong></p>
@@ -133,7 +133,7 @@ export default function Page() {
 
               <p className='mb-2'><strong>6. Funds Allocation to Local Communities</strong></p>
               <ul >
-                <li className='mb-5'>As part of the Payment for Ecosystem Services scheme, AmazoniaCoin ensures that funds from the sale of carbon credits are allocated to the local communities, specifically the Kayapo people. The disbursement of funds is contingent on the communities' performance in providing contracted environmental services, such as preventing deforestation within their protected territory.</li>
+                <li className='mb-5'>As part of the Payment for Ecosystem Services scheme, AmazoniaCoin ensures that funds from the sale of carbon credits are allocated to the local communities, specifically the Kayapo people. The disbursement of funds is contingent on the communities` performance in providing contracted environmental services, such as preventing deforestation within their protected territory.</li>
               </ul>
 
               
