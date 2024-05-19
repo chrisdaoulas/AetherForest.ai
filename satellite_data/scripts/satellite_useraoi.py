@@ -504,6 +504,7 @@ def satellite_analysis_uaoi(project, time_start,time_end):
     
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
     save_python_file(file_contents, 'current_script_version.py')
+    get_latest_commit_id()
 
     shutil.make_archive(output_filename, 'zip')
     

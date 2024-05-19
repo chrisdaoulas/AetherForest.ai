@@ -49,7 +49,6 @@ import os
 def satellite_analysis(project):
     
     file_contents = read_python_file(os.getcwd()+"//satellite_function.py")
-    print(file_contents)
     
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
@@ -520,6 +519,7 @@ def satellite_analysis(project):
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
     
     save_python_file(file_contents, 'current_script_version.py')
+    get_latest_commit_id()
     
     shutil.make_archive(output_filename, 'zip')
     

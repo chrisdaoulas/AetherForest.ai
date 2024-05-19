@@ -12,8 +12,8 @@ import { UserContext} from '@/app/components/context';
 
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localh:ost:7545'));
-var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-const contractAddress = process.env.NEXT_PUBLIC_HARDHAT; 
+var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545/'));//http://localhost:8545'));
+const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.env.NEXT_PUBLIC_HARDHAT; 
 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
@@ -32,8 +32,10 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
   const [inputCredits, setInputCredits] = React.useState<any>(''); //for credits to be sent any state
   const [inputCID, setInputCID] = React.useState<any>(''); //for CID associated to file: to change address any state
   const [inputAccountBalance, setAccountBalance] = React.useState<any>(''); //for credits to be sent any state
+  const [inputAccountOffsetsBalance, setAccountOffsetsBalance] = React.useState<any>(''); //for credits to be sent any state
   const [refresh, setRefresh] = React.useState<boolean>(true);
   const[balValue,setBalvalue]=React.useState<any>('');
+  const[balOffsValue,setBalOffsvalue]=React.useState<any>('');
   const [inputAccount, setInputAccount] = React.useState<any>(''); //for receiver address for allowance
   const [inputAllowance, setInputAllowance] = React.useState<any>(''); //for receiver address any state
   const [inputOffsets, setInputOffsets] = React.useState<any>('');
@@ -65,6 +67,7 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
   const handleInputChangeCredits = (e:any) => setInputCredits(e.currentTarget.value);
   const handleInputChangeCID = (e:any) => setInputCID(e.currentTarget.value);
   const handleInputAccountBalance = (e:any) => setAccountBalance(e.currentTarget.value);
+  const handleInputAccountOffsets = (e:any) => setAccountOffsetsBalance(e.currentTarget.value);
   const handleInputAccount = (e:any) => setInputAccount(e.currentTarget.value);
   const handleInputAllowance = (e:any) => setInputAllowance(e.currentTarget.value);
   const handleInputOffsets = (e:any) => setInputOffsets(e.currentTarget.value);
@@ -91,10 +94,10 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
 
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
-    await contract.methods.transfer(inputAddress,inputCredits ,inputCID).send({from: addressAccount});
+    await contract.methods.transfer(inputAddress, inputCredits , inputCID).send({from: addressAccount});
     //await contract.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
     //await CarbonChain.transfer(inputAddress,inputCredits,inputCID, {from: addressAccount});
-
+    console.log(contractAddress);
     setInputAddress('');
     setInputCredits('');
     setInputCID('');
@@ -121,6 +124,23 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
     setRefresh(true);
     
     setBalvalue(balvalue);
+    
+  
+  };
+
+  const handleOffsetsBalance = async () => {
+ 
+    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const accounts = await web3.eth.getAccounts();
+    const addressAccount = accounts[0];
+    const balance = await contract.methods.carbonOffs(inputAccountOffsetsBalance).call({from: addressAccount}).then();
+    const balOffsValue = balance.toString()
+    console.log('Offsets Balance: ',balance.toString());
+    console.log('Offsets Balance Checked')
+    setAccountOffsetsBalance('');
+    setRefresh(true);
+    
+    setBalOffsvalue(balOffsValue);
     
   
   };
@@ -152,7 +172,7 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.claimCarbonOffsets(inputOffsets).send({from:addressAccount}).then();
-    const carbonOffsets = await contract.methods.carbonOffs().call({from:addressAccount}).then();;
+    const carbonOffsets = await contract.methods.carbonOffs(addressAccount).call({from:addressAccount}).then();;
     console.log('Offsets Claimed')
     setInputOffsets('');
     setRefresh(true);
@@ -252,7 +272,10 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
             
             </HStack>
             <ColoredLine color="grey" />
+            
+            
             <Box h='30px' />
+            
             <Text className={`${lusitana.className} text-1xl`}>Inquire balance of Accounts</Text>
             <Input
               type='text'
@@ -267,6 +290,21 @@ const contractAddress = process.env.NEXT_PUBLIC_HARDHAT;
               <ColoredLine color="grey" />
               
             <Box h='30px' />
+
+            <Text className={`${lusitana.className} text-1xl`}>Inquire Carbon Offsets of Accounts</Text>
+            <Input
+              type='text'
+              size='md'
+              placeholder='Account Carbon Offsets'
+              onChange={handleInputAccountOffsets}
+              value={inputAccountOffsetsBalance}
+              />
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleOffsetsBalance} bg='green.200'>OFFSETS</Button>
+              <Text className={`${lusitana.className} text-0.5x0.5`}>Carbon Offsets: {balOffsValue}</Text>
+              <ColoredLine color="grey" />
+
+              <Box h='30px' />
 
         {user?.role === 'Consortium' && (
           <>

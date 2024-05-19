@@ -38,8 +38,8 @@ contract CarbonChain {
         return tokenBalance[account];
     }
 
-    function carbonOffs() external view returns (uint256) {
-        return carbonOffsets[msg.sender];
+    function carbonOffs(address account) external view returns (uint256) {
+        return carbonOffsets[account];
     }
 
     function transfer(address to, uint256 value, string memory cid) external returns (bool) {
@@ -89,8 +89,9 @@ contract CarbonChain {
     function buyTokens(uint256 numberOfTokens) external payable {
         require(msg.value == numberOfTokens * tokenPrice, "Incorrect amount of Ether sent");
         require(numberOfTokens > 0, "Invalid token amount");
-
-        uint256 tokensToTransfer = numberOfTokens * 10**uint256(decimals);
+	
+	uint256 tokensToTransfer = numberOfTokens;
+        //uint256 tokensToTransfer = numberOfTokens * 10**uint256(decimals);
         require(tokenBalance[address(this)] >= tokensToTransfer, "Insufficient token balance");
 
         tokenBalance[address(this)] -= tokensToTransfer;
@@ -103,7 +104,8 @@ contract CarbonChain {
         require(numberOfTokens > 0, "Invalid token amount");
         require(tokenBalance[msg.sender] >= numberOfTokens, "Insufficient balance");
 
-        uint256 tokensToTransfer = numberOfTokens * 10**uint256(decimals);
+	uint256 tokensToTransfer = numberOfTokens;
+	//uint256 tokensToTransfer = numberOfTokens * 10**uint256(decimals);
 
         tokenBalance[msg.sender] -= tokensToTransfer;
         tokenBalance[address(this)] += tokensToTransfer;

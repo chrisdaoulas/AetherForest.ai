@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\contracts\\amazoncoin.sol": {
-      "lastModificationDate": 1708181433833,
-      "contentHash": "cf0c39d4fcb6576eb802e744ab47c28f",
+      "lastModificationDate": 1714749180821,
+      "contentHash": "749a0f3c31fe20ea39f475f9d1194c0a",
       "sourceName": "contracts/amazoncoin.sol",
       "solcConfig": {
         "version": "0.8.19",

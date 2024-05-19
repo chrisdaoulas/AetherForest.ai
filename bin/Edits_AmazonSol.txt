@@ -1,0 +1,14 @@
+    function balanceOfo(address account) external view returns (uint256) {
+        return tokenBalance[account];
+    }
+
+    function balanceOfs() external view returns (uint256) {
+        return tokenBalance[msg.sender];
+    }
+
+    function carbonOffs() external view returns (uint256) {
+        return carbonOffsets[msg.sender];
+    }
+
+    function carbonOffo(address account) external view returns (uint256) {
+        return carbonOffsets[account];

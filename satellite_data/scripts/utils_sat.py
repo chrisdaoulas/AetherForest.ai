@@ -5,6 +5,8 @@ import fiona
 import pandas as pd
 import inspect
 from shapely.geometry import Point
+import requests
+import hashlib
 
 
 
@@ -83,5 +85,21 @@ def eight_months_before(date_string):
     eight_months_ago = date_obj - timedelta(days=8*30)  # Assuming 30 days per month
     
     return eight_months_ago.strftime('%Y-%m-%d')
+
+
+
+def get_latest_commit_id():
+    url = f"https://api.github.com/repos/chrisdaoulas/AmazoniaCoin/commits"
+    response = requests.get(url)
+    if response.status_code == 200:
+        # Extracting commit ID from the response
+        latest_commit_id = response.json()[0]['sha']
+        sha256_hash = hashlib.sha256(latest_commit_id.encode()).hexdigest()
+        with open("latest_commit_sha256.txt", 'w') as file:
+            file.write(sha256_hash)        
+    else:
+        print(f"Error: Failed to fetch commits (status code: {response.status_code})")
+        return None
+
 
 

@@ -64,7 +64,7 @@ const MyComponent = ({
 
     // Replace 'CarbonChain' with your contract ABI and address
      
-    const contractAddress = process.env.NEXT_PUBLIC_HARDHAT
+    const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.env.NEXT_PUBLIC_HARDHAT
     const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
     
     // Get all events from the contract ABI
