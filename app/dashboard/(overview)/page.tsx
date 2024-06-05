@@ -12,19 +12,19 @@ export default function Home() {
       
         
          <Head>
-            <title className={`${lusitana.className} text-3xl `}>AmazonasCoin - Blockchain for Sustainable Governance</title>
+            <title className={`${lusitana.className} text-3xl `}>AetherForest.ai - Blockchain for Sustainable Governance</title>
           <meta charSet="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </Head>  
         
-          <h1 className={`${lusitana.className} text-3xl   items-full `}style={{  margin:  "10px"}} >Welcome to AmazonasCoin</h1>
+          <h1 className={`${lusitana.className} text-3xl   items-full `}style={{  margin:  "10px"}} >Welcome to AetherForest.ai and AmazonasCoin</h1>
           <h2 className={`${lusitana.className} text-2xl  items-full`} style={{  margin:  "10px"}}>An Open Permissioned ReFi Carbon Market Blockchain Template</h2>
 
 
         <section className={`${lusitana.className} text-1xl  `} style={{  margin:  "10px"}}  >
             
           <h2 className='mt-10 mb-2'><strong>Unlocking the Potential of Public Permissioned Blockchains for Sustainable Governance</strong></h2>
-          <p className='mb-10'>AmazonasCoin introduces a groundbreaking initiative in the realm of blockchain technology, specifically tailored for public permissioned blockchains. Our mission is to harness the power of decentralization to enhance public administration, especially in regions with lower trust environments. By integrating Open Data and FAIR principles — promoting systems that are Findable, Accessible, Interoperable, and Reusable — AmazonasCoin aims to usher in a new era of transparency, accountability, and collaboration in government processes.</p>
+          <p className='mb-10'>AetherForest.ai introduces a groundbreaking initiative in the realm of blockchain technology, specifically tailored for public permissioned blockchains. Our mission is to harness the power of decentralization to enhance public administration, especially in regions with lower trust environments. By integrating Open Data and FAIR principles — promoting systems that are Findable, Accessible, Interoperable, and Reusable — AetherForest.ai and its native token, AmazonasCoin, aim to usher in a new era of transparency, accountability, and collaboration in government processes.</p>
 
           
           <h3 className='mb-2' ><strong>Key Features and Benefits</strong></h3>
@@ -50,7 +50,7 @@ export default function Home() {
         </section>
   
         <section className={`${lusitana.className} text-1xl `} style={{  margin:  "10px"}}>
-          <h2 className='mb-2'><strong>The AmazonChain Carbon Market Dapp</strong></h2>
+          <h2 className='mb-2'><strong>The AetherForest.ai Carbon Market Dapp</strong></h2>
           <p className='mb-5'>In a pioneering effort to apply public permissioned blockchain technology, we present the AmazonChain Carbon Market Dapp. This initiative focuses on a case study addressing deforestation in the Amazon rainforest, a shared concern across multiple countries. In regions where government oversight of land rights enforcement is limited, AmazonChain steps in as a transparent and sustainable solution.</p>
   
           <h3 className='mb-2'><strong>Project Highlights</strong></h3>
@@ -71,7 +71,7 @@ export default function Home() {
   
         <footer className={`${lusitana.className} text-1xl `} style={{  margin:  "10px"}}>
           <p className='mb-2'><strong>Join Us in Building a Sustainable Future!</strong></p>
-          <p className='mb-2'>AmazonasCoin invites you to be part of this transformative journey towards sustainable governance. By leveraging blockchain technology, we envision a future where accountability, transparency, collaboration, and environmental stewardship go hand in hand.</p>
+          <p className='mb-2'>AetherForest.ai and AmazonasCoin invite you to be part of this transformative journey towards sustainable governance. By leveraging blockchain technology, we envision a future where accountability, transparency, collaboration, and environmental stewardship go hand in hand.</p>
           <p>Explore AmazonasCoin and contribute to a world where blockchain empowers positive change.</p>
         </footer>
       </div>

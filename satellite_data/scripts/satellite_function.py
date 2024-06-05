@@ -330,7 +330,7 @@ def satellite_analysis(project):
     sampleRefPointsSentinel2023 = classified2023.select('classification').sampleRegions(**{
       'collection': refPoints_2023,
       'properties': ['landcover'],
-      'scale': 10
+      'scale': 30
     })
     
     refAccuracySentinel = sampleRefPointsSentinel2023.errorMatrix('landcover','classification')
@@ -376,39 +376,67 @@ def satellite_analysis(project):
     
     
     print("Calculating end date Classification")
-    ee.batch.Export.image.toAsset(**{
+    task1 = ee.batch.Export.image.toAsset(**{
       "image": classified2023_10m,
       "description": globals()[description_2023],
       "assetId":globals()[assetId_2023],
-      "scale":10,
+      "scale":30,
       "crs": 'EPSG:32721',
       "region": globals()[project_geom],
-      "maxPixels": 1e10,
-    }).start()
+      "maxPixels": 1e9,
+    })
     
-    time.sleep(1800)
+    task1.start()
+    
+    
+    
+    #time.sleep(1800)
     
     print("Calculating start date Classification")
-    ee.batch.Export.image.toAsset(**{
+    task2 = ee.batch.Export.image.toAsset(**{
       "image": classified2015_10m,
       "description": globals()[description_2015],
       "assetId":globals()[assetId_2015],
-      "scale":10,
+      "scale":30,
       "crs": 'EPSG:32721',
       "region": globals()[project_geom],
-      "maxPixels": 1e10,
-    }).start()
+      "maxPixels": 1e9,
+    })
     
-    time.sleep(900)
+    task2.start()
+    
+    while True:
+        status1 = task1.status()
+        state1 = status1['state']
+
+        status2 = task2.status()
+        state2 = status2['state']
+
+        
+        if state1 in ['COMPLETED', 'FAILED', 'CANCELLED'] and state2 in ['COMPLETED', 'FAILED', 'CANCELLED']:
+            print(f"Task {task1} and {task2} status: {state1},{state2}")
+            break
+
+        time.sleep(60)
+    
+    #check_task_status(task1, interval=60)
+    #check_task_status(task2, interval=60)
+
+    
+    #time.sleep(900)
    
 
     
     print("Image Classification complete")
     
+    ee.Reset()
+    ee.Initialize(credentials, project='ee-blockchain')
+    
     classified2015_10m = ee.Image(globals()[assetId_2015])
     classified2023_10m = ee.Image(globals()[assetId_2023])
     
     
+
     """Compute the difference between two classification maps and add it as new layer, then net forest loss and gain"""
     
     diff = classified2015_10m.subtract(classified2023_10m)
@@ -437,8 +465,8 @@ def satellite_analysis(project):
     statsLoss = areaLoss.reduceRegion(**{
       'reducer': ee.Reducer.sum(),
       'geometry': globals()[project_geom],
-      'scale': 10,
-      'maxPixels': 1e13,
+      'scale': 30,
+      'maxPixels': 1e9, #previously 1e13
       'tileScale':16
     }).getNumber('classification')
     
@@ -450,8 +478,8 @@ def satellite_analysis(project):
     statsGain = areaGain.reduceRegion(**{
       'reducer': ee.Reducer.sum(),
       'geometry': globals()[project_geom],
-      'scale': 10,
-      'maxPixels': 1e13,
+      'scale': 30,#10,
+      'maxPixels': 1e9,#1e10, #previously 1e13
       'tileScale':16
     }).getNumber('classification')
     
@@ -464,11 +492,18 @@ def satellite_analysis(project):
     in relation to total area of AOI"""
     
     relLoss = statsLoss.divide(globals()[project_km2])
+    relLossinfo = relLoss.getInfo()*100
+    print("Calculation of Real Loss complete")
+
+    time.sleep(100)
 
     
     relGain = statsGain.divide(globals()[project_km2])
+    relGaininfo = relGain.getInfo()*100
+    
+    print("Calculation of Real Gain complete")
 
-    net=relLoss.getInfo()*100 -relGain.getInfo()*100
+    net = relLossinfo - relGaininfo
     
     print("Calculation Net Result Complete complete")
     
@@ -530,6 +565,7 @@ def satellite_analysis(project):
     totable = [[net, today, upload_ipfs_pinata(pinata),f"{project}"]]
     
     print("Data Uploaded to IPFS")     
+    
     totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
     
     
@@ -571,5 +607,5 @@ def satellite_analysis(project):
           print("SQL Table Unique Values Ensured")
     
 
-project = 'Yanomami'
-satellite_analysis('Yanomami')
+project = 'Kayapo'
+satellite_analysis(project)

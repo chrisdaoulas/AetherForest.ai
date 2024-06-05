@@ -8,7 +8,7 @@ import {EventLog, Web3} from 'web3';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
+import AmazonasCoinJSON from '@/src/artifacts/contracts/amazoncoin.sol/AmazonasCoin.json';
 
 
 
@@ -62,10 +62,10 @@ const MyComponent = ({
     // Connect to the local Ethereum node
     
 
-    // Replace 'CarbonChain' with your contract ABI and address
+    // Replace 'AmazonasCoinJSON' with your contract ABI and address
      
-    const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.env.NEXT_PUBLIC_HARDHAT
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.env.NEXT_PUBLIC_HARDHAT
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     
     // Get all events from the contract ABI
     const allEvents = await contract.getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' });

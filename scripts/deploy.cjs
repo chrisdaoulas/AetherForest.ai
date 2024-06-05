@@ -5,17 +5,27 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 
+
+
 const hre = require("hardhat");
+
+
 
 async function main() {
 
-	theContract = await hre.ethers.getContractFactory("CarbonChain");
+
+	theContract = await hre.ethers.getContractFactory("AmazonasCoin");
+
+
+
+
 	await hre.ethers.getSigners();
-	carbon = await theContract.deploy('AmazoniaCoin', 'AMZ', 1,1000000,1);
+
+	carbon = await theContract.deploy('AmazonasCoin', 'AMZ', 1,1000000,1);
         //await carbon.deployed();
 
 
-	console.log("AmazoniaCoin deployed to:", carbon.target);
+	console.log("AmazonasCoin deployed to:", carbon.address);
 }
   
 	

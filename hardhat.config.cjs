@@ -1,7 +1,7 @@
+//require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-ethers");
 
-require("@nomicfoundation/hardhat-toolbox");
 
-//@type import('hardhat/config').HardhatUserConfig
 
 module.exports = {
 

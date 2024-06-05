@@ -5,15 +5,15 @@ import { lusitana } from '@/app/ui/fonts';
 
 import Web3 from 'web3';
 import { VStack, HStack, Heading, Text, Button, Input, Box, Spacer, Spinner, chakra } from '@chakra-ui/react';
-import CarbonChainJSON from '@/src/artifacts/contracts/amazoncoin.sol/CarbonChain.json';
+import AmazonasCoinJSON from '@/src/artifacts/contracts/amazoncoin.sol/AmazonasCoin.json';
 import React, { useContext } from 'react';
 import { UserContext} from '@/app/components/context';
 
 
 
-//var web3 = new Web3(new Web3.providers.HttpProvider('http://localh:ost:7545'));
+//var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545/'));//http://localhost:8545'));
-const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.env.NEXT_PUBLIC_HARDHAT; 
+const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.env.NEXT_PUBLIC_HARDHAT; 
 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');
@@ -89,7 +89,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
     //const CarbonChain =  theContract.deploy();
 
     
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     //contract.deploy();
 
     const accounts = await web3.eth.getAccounts();
@@ -113,7 +113,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
 
   const handleBalance = async () => {
  
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     const balance = await contract.methods.balanceOf(inputAccountBalance).call({from: addressAccount}).then();
@@ -130,7 +130,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
 
   const handleOffsetsBalance = async () => {
  
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     const balance = await contract.methods.carbonOffs(inputAccountOffsetsBalance).call({from: addressAccount}).then();
@@ -147,7 +147,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
 
   const handleAllowance = async () => {
 
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.approve(inputAccount,inputAllowance).send({from: addressAccount}).then();
@@ -168,7 +168,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
 
   const handleOffsets = async () => {
 
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[0];
     await contract.methods.claimCarbonOffsets(inputOffsets).send({from:addressAccount}).then();
@@ -190,10 +190,10 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
 
   const handleBuyTokens = async () => {
  
-    const contract = new web3.eth.Contract(CarbonChainJSON.abi, contractAddress);
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     const accounts = await web3.eth.getAccounts();
     const addressAccount = accounts[1];
-    await contract.methods.buyTokens(inputBuyTokens).send({from: addressAccount}).then();
+    await contract.methods.buyTokens(inputBuyTokens).send({from: addressAccount, value: inputBuyTokens, gasLimit: 300000}).then();
     console.log('Tokens Bought')
     setInputBuyTokens('');
     setRefresh(true);
@@ -225,7 +225,7 @@ const contractAddress = "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"//process.en
       <div className="flex w-full items-center justify-between">
         <Head>
           <title>AmazonCoin</title>
-          <meta name="description" content="CarbonChain." />
+          <meta name="description" content="AmazonasCoin." />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <HStack w='full'>

@@ -7,6 +7,10 @@ import inspect
 from shapely.geometry import Point
 import requests
 import hashlib
+import ee
+import time
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
 
 
 
@@ -103,3 +107,54 @@ def get_latest_commit_id():
 
 
 
+def check_task_status(task, interval=60):
+    """
+    Check the status of a Google Earth Engine task at regular intervals.
+
+    Parameters:
+    task (str): The GEE task.
+    interval (int): The time interval (in seconds) between status checks. Default is 60 seconds.
+    """
+
+
+    while True:
+        status = task.status()
+        state = status['state']
+
+        if state in ['COMPLETED', 'FAILED', 'CANCELLED']:
+            print(f"Task {task}[:38] status: {state}")
+            break
+
+        time.sleep(interval)
+        
+
+def geelogin():
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\scripts")
+
+    service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
+    private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
+    credentials = ee.ServiceAccountCredentials(service_account, private_key_path)
+    ee.Initialize(credentials, project='ee-blockchain')
+
+# Authenticate to the Google Drive of the Service Account
+    gauth = GoogleAuth()
+    gauth.LoadClientConfigFile(os.path.dirname(os.getcwd())+'\\secret.json')            
+    gauth.LoadCredentialsFile(os.path.dirname(os.getcwd())+'\\mycreds.txt')
+    
+    if gauth.credentials is None:
+        # Authenticate if they're not there
+        gauth.settings.update({'get_refresh_token': True})
+        gauth.LocalWebserverAuth()
+    elif gauth.access_token_expired:
+        # Refresh them if expired
+    
+        gauth.Refresh()
+    else:
+        # Initialize the saved creds
+        #gauth.Authorize()
+        gauth.LocalWebserverAuth()
+    # Save the current credentials to a file
+    gauth.SaveCredentialsFile(os.path.dirname(os.getcwd())+'\\mycreds.txt')
+    drive = GoogleDrive(gauth)        
+
+    
