@@ -185,7 +185,7 @@ const renderPaginationButtons = () => {
                  address, data, topics, returnValues, event, signature, raw
                     returnValues keys: 0 1 2 _ _length_ _from to value */
 
-                  <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+                  <tr key={index} className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"> 
 
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">{event['data']['blockNumber'].toString()}</td>            
 
@@ -196,6 +196,9 @@ const renderPaginationButtons = () => {
                       {event['name']=='CID' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
                       {event['name']=='Approval' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
                       {event['name']=='Transfer' && format(fromUnixTime(Number(events[startIndex+index-1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
+                      {event['name']=='TokensPurchased' && format(fromUnixTime(Number(events[startIndex+index-1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
+                      {event['name']=='TokensSold' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
+
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3">
@@ -203,12 +206,19 @@ const renderPaginationButtons = () => {
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
                       {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
                       {event['name']=='CID' && events[startIndex+index+1]['data']['returnValues'][0].toString()}
+                      {event['name']=='Transfer' && events[startIndex+index+1]['data']['returnValues'][0].toString()}
+                      {event['name']=='TokensSold' && event['data']['returnValues'][0].toString()}
+                      {event['name']=='TokensPurchased' && event['data']['returnValues'][0].toString()}                      
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3"> 
                       <strong>{event['data']['returnValues'][1]}</strong>
                       <strong>{event['name']=='Transfer' && event['data']['returnValues'][1].toString}</strong>
-                      <strong>{event['name']=='CID' && events[index+1]['data']['returnValues'][1].toString()}</strong>
+                      <strong>{event['name']=='CID' && events[index+1]['data']['returnValues'][0].toString()}</strong>
+                      <strong>{event['name']=='TokensPurchased' && events[index]['data']['returnValues'][0].toString()}</strong>
+                      <strong>{event['name']=='TokensSold' && events[index+1]['data']['returnValues'][0].toString()}</strong>                      
+
+
                     </td>
                     
                     <td className="whitespace-nowrap px-3 py-3">
@@ -216,6 +226,8 @@ const renderPaginationButtons = () => {
                       {event['name']=='Approval' && event['data']['returnValues'][2].toString().concat(" AMZ")}
                       {event['name']=='CID' && event['data']['returnValues']['cid']}
                       {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
+                      {event['name']=='TokensSold' && event['data']['returnValues'][1].toString().concat(" AMZ")}                      
+                      {event['name']=='TokensPurchased' && events[index+1]['data']['returnValues'][1].toString().concat(" AMZ")}                      
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>

@@ -205,6 +205,23 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
   
   };
 
+  const handleSellTokens = async () => {
+ 
+    const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
+    const accounts = await web3.eth.getAccounts();
+    const addressAccount = accounts[1];
+    await contract.methods.sellTokens(inputSellTokens).send({from: addressAccount, gasLimit: 300000}).then();
+    console.log('Tokens Sold')
+    setInputSellTokens('');
+    setRefresh(true);
+  
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 5000);
+    setInputAlerts('Tokens Successfully Sold');
+  
+  };
+
   // React useEffect Hook
   //triggers changes when the component mounts or when the dependencies change
 
@@ -364,6 +381,20 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
               />
              <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{margin:"10px"}} onClick={handleBuyTokens} bg='green.200'>BUY</Button>
+              
+              <ColoredLine color="grey" />
+              
+            <Box h='30px' />
+            <Text className={`${lusitana.className} text-1xl`}>Sell Tokens</Text>
+            <Input
+              type='text'
+              size='md'
+              placeholder='Number of Tokens'
+              onChange={handleInputSellTokens}
+              value={inputSellTokens}
+              />
+             <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              type="button" style={{margin:"10px"}} onClick={handleSellTokens} bg='green.200'>SELL</Button>
               
               <ColoredLine color="grey" />
               
