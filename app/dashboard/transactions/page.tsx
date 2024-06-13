@@ -260,7 +260,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
             <Spacer />
 
             <Box h='30px'/>
-            <Text className={`${lusitana.className} text-1xl`}>Transfer Triggered AmazonCoin Carbon Credits</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Transfer Triggered AmazonCoin Carbon Credits</strong></Text>
             
             <HStack w='md'>
               <Input
@@ -293,7 +293,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
             
             <Box h='30px' />
             
-            <Text className={`${lusitana.className} text-1xl`}>Inquire balance of Accounts</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Inquire balance of Accounts</strong></Text>
             <Input
               type='text'
               size='md'
@@ -308,7 +308,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
               
             <Box h='30px' />
 
-            <Text className={`${lusitana.className} text-1xl`}>Inquire Carbon Offsets of Accounts</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Inquire Carbon Offsets of Accounts</strong></Text>
             <Input
               type='text'
               size='md'
@@ -325,7 +325,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
 
         {user?.role === 'Consortium' && (
           <>
-            <Text className={`${lusitana.className} text-1xl`}>Approve Allowance of Accounts</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Approve Allowance of Accounts</strong></Text>
             <HStack w='full'>
             <Input
               type='text'
@@ -353,7 +353,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
               
         {user?.role != 'Beneficiaries' && (        
           <>
-            <Text className={`${lusitana.className} text-1xl`}>Claim Carbon Offsets</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Claim Carbon Offset</strong>s</Text>
             <Input
               type='text'
               size='md'
@@ -371,7 +371,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
                  
         
 
-            <Text className={`${lusitana.className} text-1xl`}>Buy Tokens</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Buy Tokens</strong></Text>
             <Input
               type='text'
               size='md'
@@ -385,7 +385,7 @@ const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.en
               <ColoredLine color="grey" />
               
             <Box h='30px' />
-            <Text className={`${lusitana.className} text-1xl`}>Sell Tokens</Text>
+            <Text className={`${lusitana.className} text-1xl`}><strong>Sell Tokens</strong></Text>
             <Input
               type='text'
               size='md'

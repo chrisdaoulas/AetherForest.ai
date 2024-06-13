@@ -24,7 +24,6 @@ urlpatterns = [
 
     path('utils/', include('utils.urls')),
 
-
     path('api/', include((router.urls, 'core_api'), namespace='core_api')),
 
 

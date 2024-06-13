@@ -175,12 +175,19 @@ export default function Page() {
 
 const handleCalculateDeforestationRate = async () => {
   try {
-    const response = await fetch('http://localhost:8000/api/calculate_four_months_before/calculate/', {
+
+    const formData = new FormData();
+    formData.append('project', project);
+
+    const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ date: startDate })
+      //body: JSON.stringify({ date: startDate })
+      body: formData
+      //body: JSON.stringify({ project: project })
+
     });
 
     if (!response.ok) {
@@ -371,13 +378,15 @@ const handleCalculateDeforestationRate = async () => {
             dateFormat="yyyy/MM/dd"
           />
 
-                <Input
-                type='text' // Use lowercase 'text' for text input
-                size='md'
-                placeholder='Project Identifier'
-                value={project} // Assuming 'project' is the variable to save the input text
-                onChange={(event) => setProject(event.target.value)} // Update the 'project' variable as the user types
-                />                      
+                <select
+                    size='md'
+                    value={project} // Assuming 'project' is the variable to save the selected value
+                    onChange={(event) => setProject(event.target.value)} // Update the 'project' variable as the user selects an option
+                    >
+                    <option value="" disabled>Project</option>
+                    <option value="Kayapo">Kayapo</option>
+                    <option value="Yanomami">Yanomami</option>
+                  </select>                      
               <Button className="flex h-10 items-center rounded-lg bg-green-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               type="button" style={{  margin:  "0px", flex: 1}}  bg='green.200' onClick={handleDownloadKML} >Define AOI</Button>
 
