@@ -37,6 +37,7 @@ export default function Page() {
   const [longitude, setLongitude] = useState(mapCenter.lng);
   const [calculation, setCalculation] = useState('');
   const [responseTableData, setResponseTableData] = useState('');
+  const [isLoading, setIsLoading] = useState('');
 
 
   const { isLoaded, loadError } = useLoadScript({
@@ -174,16 +175,20 @@ export default function Page() {
 // }
 
 const handleCalculateDeforestationRate = async () => {
+  
   try {
+
+    setIsLoading(true); // Set loading state to true
+    console.log("Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes");
 
     const formData = new FormData();
     formData.append('project', project);
 
     const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+//      headers: {
+  //      'Content-Type': 'application/json'
+    //  },
       //body: JSON.stringify({ date: startDate })
       body: formData
       //body: JSON.stringify({ project: project })
@@ -195,7 +200,7 @@ const handleCalculateDeforestationRate = async () => {
     }
 
     const data = await response.json();
-    setCalculation(data.calculation);
+    setCalculation(data.data);//.calculation);
     setResponseTableData(data); // Set the response data to be displayed in the table
 
     console.log(data); // Log the response data to the console
@@ -203,6 +208,8 @@ const handleCalculateDeforestationRate = async () => {
 
   } catch (error) {
     console.error('Error:', error);
+  } finally {
+    setIsLoading(false); // Set loading state to false after fetch completes
   }
 }
 
@@ -269,7 +276,10 @@ const handleCalculateDeforestationRate = async () => {
   const ResponseTable = ({ responseData }) => {
     return (
       <div>
+
+
         <h2 className={`${lusitana.className} text-2xl ` } style={{  margin:  "10px", marginLeft: "0px" }} >Response Data</h2>       
+
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
@@ -286,6 +296,7 @@ const handleCalculateDeforestationRate = async () => {
             ))}
           </tbody>
         </table>
+
       </div>
     );
   };
@@ -324,7 +335,7 @@ const handleCalculateDeforestationRate = async () => {
       </GoogleMap>
 
         <Box h='30px'/>
-        <Text className={`${lusitana.className} text-1xl mb-2` } style={{  margin:  "0px", marginLeft: "0px" }}>Please select Latitude, Longitude and time range</Text>                
+        <Text className={`${lusitana.className} text-1xl mb-2` } style={{  margin:  "0px", marginLeft: "0px" }}><strong>Please select Latitude, Longitude and time range</strong></Text>                
 
         <HStack w='md'>
         <Input
@@ -398,7 +409,17 @@ const handleCalculateDeforestationRate = async () => {
             
             </HStack>
             <Spacer height="30px" />
-            {responseTableData && <ResponseTable responseData={responseTableData} />}
+            {isLoading && (
+        <p style={{ color: 'green' }}>Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes</p>
+      )}
+            {!isLoading && responseTableData && (
+        <ResponseTable responseData={responseTableData} />
+      )}
+
+{!isLoading && !responseTableData && (
+        <p style={{ color: 'green' }}>No data available</p>
+      )}
+
     </div>
   );
 };

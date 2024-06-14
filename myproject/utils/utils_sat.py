@@ -38,13 +38,14 @@ def delete_files(directory):
 
 
 #source: https://africansurveyors.net/converting-kml-files-to-shapefiles-using-python-a-step-by-step-guide/
+
 def kml2shape(kml):
     
     #kml = 'uaoi.kml'
     #gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
     fiona.drvsupport.supported_drivers['KML'] = 'rw'
 
-    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\Yanomami")
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\shapefiles\\")
     
     
     
