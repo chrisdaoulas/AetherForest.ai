@@ -601,4 +601,4 @@ def satellite_analysis(project):
       else:
           print("SQL Table Unique Values Ensured")
 
-    return net
+    return data

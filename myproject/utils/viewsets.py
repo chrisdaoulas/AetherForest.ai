@@ -53,7 +53,7 @@ class CalculateFourMonthsBeforeViewSet(viewsets.ViewSet):
         return Response({'Calculated date 4 months before': calculation})
 
 
-# Focus on viewsets.py not views.py
+# Focus on viewsets.py not views.py, for REST APIs
 class CalculateDeforestationRateViewSet(viewsets.ViewSet):
     @method_decorator(csrf_exempt)
     @action(detail=False, methods=['post'])
@@ -64,18 +64,13 @@ class CalculateDeforestationRateViewSet(viewsets.ViewSet):
             logger.error("Missing project parameter")
             return Response({'error': 'Missing project'}, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            # Call the satellite_analysis function and get the result
-            result = satellite_analysis(project)
-            
-            if isinstance(result, JsonResponse):
-                return Response(result.json(), status=result.status_code)
-            else:
-                logger.error("Unexpected response type from satellite_analysis")
-                return Response({'error': 'Unexpected response from satellite_analysis'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger.error(f"Error in satellite_analysis: {e}")
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+         # Call the satellite_analysis function and get the result
+        result = satellite_analysis(project)
+        return Response({'Calculated Deforestation Rate': result})
+
+
+
 
 
 # Register the ViewSets with a router

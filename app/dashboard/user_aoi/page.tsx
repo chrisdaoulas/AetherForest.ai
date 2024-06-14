@@ -200,7 +200,7 @@ const handleCalculateDeforestationRate = async () => {
     }
 
     const data = await response.json();
-    setCalculation(data.data);//.calculation);
+    setCalculation(data.result);//.calculation);
     setResponseTableData(data); // Set the response data to be displayed in the table
 
     console.log(data); // Log the response data to the console
