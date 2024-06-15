@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useEffect }  from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -36,7 +36,11 @@ export default function Page() {
   const [latitude, setLatitude] = useState(mapCenter.lat);
   const [longitude, setLongitude] = useState(mapCenter.lng);
   const [calculation, setCalculation] = useState('');
-  const [responseTableData, setResponseTableData] = useState('');
+  const [responseTableData, setResponseTableData] = useState(() => {
+    // Retrieve the response data from localStorage if available
+    const savedData = localStorage.getItem('responseTableData');
+    return savedData ? JSON.parse(savedData) : '';
+  });
   const [isLoading, setIsLoading] = useState('');
 
 
@@ -44,6 +48,22 @@ export default function Page() {
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     libraries: libraries as any,
   });
+
+  useEffect(() => {
+    // Retrieve the response data from localStorage if available
+    const savedData = localStorage.getItem('responseTableData');
+    if (savedData) {
+      setResponseTableData(JSON.parse(savedData));
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (responseTableData) {
+      localStorage.setItem('responseTableData', JSON.stringify(responseTableData));
+    }
+  }, [responseTableData]);
+
 
   const handleMapClick = (event) => {
     setPolygonCoordinates((prevCoordinates) => [
@@ -301,7 +321,8 @@ const handleCalculateDeforestationRate = async () => {
     );
   };
 
-  
+
+
   return (
     <div className="w-full">
       <h1 className={`${lusitana.className} text-3xl mb-4`}>User Selected Area of Interest</h1>

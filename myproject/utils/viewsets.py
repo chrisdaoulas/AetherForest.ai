@@ -7,6 +7,8 @@ from datetime import datetime
 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+
 
 import ee
 import os
@@ -67,7 +69,16 @@ class CalculateDeforestationRateViewSet(viewsets.ViewSet):
 
          # Call the satellite_analysis function and get the result
         result = satellite_analysis(project)
-        return Response({'Calculated Deforestation Rate': result})
+
+        response_data = {
+	    'Project': result[0],
+            'Net Deforestation Rate': result[1],
+            'Statistical Loss': result[2] ,
+            'Statistical Gain': result[3] ,
+	    'IPFS CID': result[4]
+        }
+
+        return Response(response_data)
 
 
 

@@ -414,12 +414,6 @@ def satellite_analysis(project):
 
         time.sleep(60)
     
-    #check_task_status(task1, interval=60)
-    #check_task_status(task2, interval=60)
-
-    
-    #time.sleep(900)
-   
 
     
     print("Image Classification complete")
@@ -554,10 +548,12 @@ def satellite_analysis(project):
     shutil.make_archive(output_filename, 'zip')
     
     
-    pinata = output_filename+'.zip'
+    pinata_filename = output_filename+'.zip'
+    pinata = upload_ipfs_pinata(pinata_filename)
+	
     
     #Add project reference as well
-    totable = [[net, today, upload_ipfs_pinata(pinata),f"{project}"]]
+    totable = [[net, today, pinata,f"{project}"]]
     
     print("Data Uploaded to IPFS")     
     
@@ -600,5 +596,9 @@ def satellite_analysis(project):
           print("SQL Table Duplicate Removed")
       else:
           print("SQL Table Unique Values Ensured")
+    
 
-    return data
+    
+    front = [project, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(pinata)]
+
+    return front
