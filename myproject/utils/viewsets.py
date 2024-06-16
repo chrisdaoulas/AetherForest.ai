@@ -65,7 +65,6 @@ class CalculateDeforestationRateViewSet(viewsets.ViewSet):
         if not project:
             logger.error("Missing project parameter")
             return Response({'error': 'Missing project'}, status=status.HTTP_400_BAD_REQUEST)
-        
 
          # Call the satellite_analysis function and get the result
         result = satellite_analysis(project)

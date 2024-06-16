@@ -71,11 +71,11 @@ abi = json.loads(
 
 
 # set up connection
-w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
+w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
 chain_id = 1337
-my_address = "0xA74e8AdEB4DeeDbBFd07d5526C161A5216c1B72d"
+my_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
 #private_key = os.getenv("PRIVATE_KEY")
-private_key = "0x7d0884f26cfeab10b18881db20877821db1eb1e3a0ec59f15ab007a95d4e5db1"
+private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 
 w3.eth.defaultAccount = w3.eth.accounts[0]
  
@@ -83,13 +83,13 @@ w3.eth.defaultAccount = w3.eth.accounts[0]
 #to set the "from" for every transaction call)
  
 # Path to the compiled contract JSON file
-compiled_contract_path = 'build/contracts/CarbonChain.json'
+compiled_contract_path = 'C:/Users/cdaou/OneDrive/Documents/MSBDGA/Github/AmazoniaCoin/src/artifacts/contracts/amazoncoin.sol/AmazonasCoin.json'
  
 # Deployed contract address (see `migrate` command output: 
 # `contract address`)
 # Do Not Copy from here, contract address will be different 
 # for different contracts.
-deployed_contract_address = '0xc76736aeB40a1C39f1C2BA381bc121aab8016F6C'
+deployed_contract_address = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
  
 # load contract info as JSON
 with open(compiled_contract_path) as file:

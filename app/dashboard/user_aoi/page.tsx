@@ -202,7 +202,15 @@ const handleCalculateDeforestationRate = async () => {
     console.log("Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes");
 
     const formData = new FormData();
-    formData.append('project', project);
+
+
+    // Generate KML content from selected map polygons
+    if (polygonCoordinates.length > 0) {
+      const kmlContent = generateKML(polygonCoordinates);
+      formData.append('project', kmlContent);
+    } else {
+      formData.append('project', project);
+    }
 
     const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
       method: 'POST',
@@ -269,6 +277,23 @@ const handleCalculateDeforestationRate = async () => {
       setMapCenter((prevCenter) => ({ ...prevCenter, lng: numericValue })); // Update lng instead of lat
     }
   };
+
+  const handleProjectChange = (event) => {
+    const selectedProject = event.target.value;
+    setProject(selectedProject);
+
+    // Set the latitude and longitude based on the selected project
+    if (selectedProject === 'Yanomami') {
+      setLatitude(2.14767);
+      setLongitude(-63);
+      setMapCenter({ lat: 2.14767, lng: -63 });
+    } else if (selectedProject === 'Kayapo') {
+      setLatitude(-7.731462);
+      setLongitude(-51.987736);
+      setMapCenter({ lat: -7.731462, lng: -51.987736 });
+    }
+  };
+  
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
     disableDefaultUI: false,
@@ -298,13 +323,13 @@ const handleCalculateDeforestationRate = async () => {
       <div>
 
 
-        <h2 className={`${lusitana.className} text-2xl ` } style={{  margin:  "10px", marginLeft: "0px" }} >Response Data</h2>       
+        <h2 className={`${lusitana.className} text-2xl ` } style={{  margin:  "10px", marginLeft: "0px" }} >AOI Satellite Analysis Results</h2>       
 
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#f0f0f0',textAlign: 'left',  }}>Field</th>
-              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#f0f0f0', textAlign: 'left',  }}>Value</th>
+              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#38A169',textAlign: 'left', color: "white"  }}>Field</th>
+              <th className={`${lusitana.className} text-1xl `} style={{ padding: '10px', backgroundColor: '#38A169', textAlign: 'left',  color: "white"}}>Value</th>
             </tr>
           </thead>
           <tbody>
@@ -413,9 +438,10 @@ const handleCalculateDeforestationRate = async () => {
                 <select
                     size='md'
                     value={project} // Assuming 'project' is the variable to save the selected value
-                    onChange={(event) => setProject(event.target.value)} // Update the 'project' variable as the user selects an option
+                    //onChange={(event) => setProject(event.target.value)} // Update the 'project' variable as the user selects an option
+                    onChange={handleProjectChange}
                     >
-                    <option value="" disabled>Project</option>
+                    <option value="" disabled>Select Project</option>
                     <option value="Kayapo">Kayapo</option>
                     <option value="Yanomami">Yanomami</option>
                   </select>                      

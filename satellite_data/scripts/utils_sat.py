@@ -12,6 +12,12 @@ import time
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 
+import sqlite3
+from eth_utils import address
+from web3 import Web3
+from solcx import compile_standard, install_solc
+from dotenv import load_dotenv
+import json
 
 
 def read_python_file(filename):
@@ -157,4 +163,65 @@ def geelogin():
     gauth.SaveCredentialsFile(os.path.dirname(os.getcwd())+'\\mycreds.txt')
     drive = GoogleDrive(gauth)        
 
+
+def deploy_smartcontract(w3,chain_id, private_key, my_address):
+    
+
+    
+    w3.eth.defaultAccount = w3.eth.accounts[0]
+     
+    # Setting the default account (so we don't need 
+    #to set the "from" for every transaction call)
+     
+    # Path to the compiled contract JSON file
+    compiled_contract_path = 'C:/Users/cdaou/OneDrive/Documents/MSBDGA/Github/AmazoniaCoin/src/artifacts/contracts/amazoncoin.sol/AmazonasCoin.json'
+     
+    # Deployed contract address (see `migrate` command output: 
+    # `contract address`)
+    # Do Not Copy from here, contract address will be different 
+    # for different contracts.
+    deployed_contract_address = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+     
+    # load contract info as JSON
+    with open(compiled_contract_path) as file:
+        contract_json = json.load(file)  
+         
+        # fetch contract's abi - necessary to call its functions
+        contract_abi = contract_json['abi']
+        
+        contract_bytecode = contract_json["bytecode"]
+     
+    # Fetching deployed contract reference
+    amazoncoin = w3.eth.contract(address = deployed_contract_address, abi = contract_abi, bytecode=contract_bytecode)
+    
+    return amazoncoin
+
+
+def transfercarbon(to_address,value_to_transfer,cid):
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    my_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+
+    chain_id = 1337
+    private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+    amazoncoin = deploy_smartcontract(w3,chain_id,private_key,my_address)
+
+   
+    nonce = w3.eth.get_transaction_count(my_address)
+    adjusted_gas_price = 2 + w3.eth.gas_price  # Adjust this value as needed
+    
+    transaction = amazoncoin.functions.transfer(to_address, value_to_transfer,cid).build_transaction({
+        "chainId": chain_id,    
+         "gas":2000000,
+        "gasPrice": adjusted_gas_price, 
+        "from": my_address, 
+        "nonce": nonce
+    })
+    
+    
+    signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+    return tx_receipt
     

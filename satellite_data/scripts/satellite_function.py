@@ -606,6 +606,24 @@ def satellite_analysis(project):
       else:
           print("SQL Table Unique Values Ensured")
     
+    #2. Define Avoided Deforestation and carbon credits
+
+    deforestationavoided = result_df.iloc[n_rows-1,0]-result_df.iloc[n_rows-2,0]
+
+    if deforestationavoided<0:
+        carboncredits = abs(20*deforestationavoided) #10 credits per 1% of avoided deforestation
+    else:
+        carboncredits=10
+        
+
+    cid = result_df.iloc[n_rows-1,2] 
+    
+    to_address = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+
+    value_to_transfer = int(carboncredits)  # Adjust the value as needed
+
+    transfercarbon(to_address, value_to_transfer,cid)
+
 
 project = 'Kayapo'
 satellite_analysis(project)

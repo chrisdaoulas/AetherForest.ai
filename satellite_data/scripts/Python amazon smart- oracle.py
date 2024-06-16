@@ -7,6 +7,10 @@ Created on Thu Dec  7 06:12:08 2023
 
 
 """
+import os
+
+os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\scripts")
+
 from SQL_database import *
 
 #1. Query the SQL database
@@ -27,19 +31,20 @@ n_rows=len(result_df)
 deforestationavoided = result_df.iloc[n_rows-1,0]-result_df.iloc[n_rows-2,0]
 
 if deforestationavoided<0:
-    carboncredits = abs(10*deforestationavoided) #10 credits per 1% of avoided deforestation
+    carboncredits = abs(20*deforestationavoided) #10 credits per 1% of avoided deforestation
 else:
-    carboncredits=0
+    carboncredits=10
     
 carboncredits = 10
 
 cid = result_df.iloc[n_rows-1,2] 
+
 #3. Call smart contract
 
 #amazoncoin2 = w3.eth.contract(address=contract_address, abi=abi)
 amazoncoin2 = w3.eth.contract(address=deployed_contract_address, abi=contract_abi)
 
-to_address = "0xF6B30d6D06A23e7eb4db9C45092315aD1b7F3Af5"
+to_address = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
 
 value_to_transfer = int(carboncredits)  # Adjust the value as needed
 
