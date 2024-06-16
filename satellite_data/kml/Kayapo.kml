@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<name>User Selected Area</name>
+<Placemark>
+<Polygon>
+<outerBoundaryIs>
+<LinearRing>
+<coordinates>
+-52.47443053710317,-7.382953713527567
+-51.44720885741567,-7.366610543814552
+-51.50763366210317,-8.09599830496285
+-51.97455260741567,-8.172128916775948
+-52.47443053710317,-7.382953713527567
+-52.47443053710317,-7.382953713527567
+</coordinates>
+</LinearRing>
+</outerBoundaryIs>
+</Polygon>
+</Placemark>
+</Document>
+</kml>

@@ -23,12 +23,13 @@ export default function Page() {
     margin: 'auto',
   };
   
-  // const center = {
-  //   lat: 2.14767,
-  //   lng: -63,
-  // };
+
 
   const [polygonCoordinates, setPolygonCoordinates] = useState([]);
+
+  const [kmlLayer, setkmlLayer] = useState<google.maps.KmlLayer | null>(null);
+  const [kmlBounds, setkmlBounds] = useState<google.maps.LatLngBounds | null>(null);
+  
   const [project, setProject] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -36,11 +37,13 @@ export default function Page() {
   const [latitude, setLatitude] = useState(mapCenter.lat);
   const [longitude, setLongitude] = useState(mapCenter.lng);
   const [calculation, setCalculation] = useState('');
+
   const [responseTableData, setResponseTableData] = useState(() => {
     // Retrieve the response data from localStorage if available
-    const savedData = localStorage.getItem('responseTableData');
+  const savedData = localStorage.getItem('responseTableData');
     return savedData ? JSON.parse(savedData) : '';
   });
+
   const [isLoading, setIsLoading] = useState('');
   const [mapInstance, setMapInstance] = useState(''); // State variable to store the map instance
   const [showNotification, setshowNotification] = React.useState<boolean>(false);
@@ -67,15 +70,21 @@ export default function Page() {
     }
   }, [responseTableData]);
 
+
   useEffect(() => {
     if (project) {
       if (project === 'Kayapo') {
+        handleClear()
         loadKmlLayerKayapo(mapInstance);
       } else if (project === 'Yanomami') {
+        handleClear()
         loadKmlLayerYanomami(mapInstance);
       }
     }
   }, [project]);
+  
+
+  
 
   function Notification() {
     return (
@@ -88,7 +97,7 @@ export default function Page() {
     );
   }
 
-  const handleMapClick = (event) => {
+/*   const handleMapClick = (event) => {
     setPolygonCoordinates((prevCoordinates) => [
       ...prevCoordinates,
       {
@@ -96,6 +105,91 @@ export default function Page() {
         lng: event.latLng.lng(),
       },
     ]);
+  }; */
+
+
+  const handleMapClick = (event) => {
+    const clickCoordinates = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    };
+  
+    // Check if the clicked coordinates are within the bounds of the KML layer
+    if (kmlBounds && kmlBounds.contains(new google.maps.LatLng(clickCoordinates.lat, clickCoordinates.lng))) {
+      setPolygonCoordinates((prevCoordinates) => [
+        ...prevCoordinates,
+        clickCoordinates,
+      ]);
+    } else {
+      // Notify the user that the point is outside the KML layer bounds
+      alert('You can only create polygons within the bounds of the KML layer.');
+    }
+  };
+  
+  const loadKmlLayerKayapo = (mapInstance) => {
+    const kmlUrl = "https://drive.google.com/uc?export=download&id=1N-ixnCzi4r0RWSro3OXz20ZUzGLWL_DS";
+  
+    const kmlLayer = new window.google.maps.KmlLayer({
+      url: kmlUrl,
+      map: mapInstance,
+      suppressInfoWindows: false,
+      preserveViewport: true,
+      zIndex: 0, // Lower zIndex to be below polygons
+    });
+  
+    setkmlLayer(kmlLayer);
+  
+    kmlLayer.set('options', {
+      preserveViewport: true,
+      suppressInfoWindows: true,
+      clickable: true,
+      zIndex: 0,
+      strokeColor: '#00FF00', // Green color
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#00FF00', // Green color
+      fillOpacity: 0.35,
+    });
+  
+    // Extract the boundaries of the KML layer
+    google.maps.event.addListenerOnce(kmlLayer, 'defaultviewport_changed', () => {
+      const bounds = kmlLayer.getDefaultViewport();
+      setkmlBounds(bounds);
+    });
+  };
+  
+
+
+  const loadKmlLayerYanomami = (mapInstance) => {
+    const kmlUrl = "https://gateway.pinata.cloud/ipfs/QmXQDaAk6RkmDWuefL6H4EGJp9F9hpoRq6BkfqWaR75XPm";
+    const kmlLayer = new window.google.maps.KmlLayer({
+      url: kmlUrl,
+      map:mapInstance,
+      suppressInfoWindows: false,  
+      preserveViewport: true,
+      zIndex: 0, // Lower zIndex to be below polygons
+
+    });
+    setkmlLayer(kmlLayer);
+
+    kmlLayer.set('options', {
+        preserveViewport: true,
+        suppressInfoWindows: true,
+        clickable: false,
+        zIndex: 0,
+        strokeColor: '#00FF00', // Green color
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#00FF00', // Green color
+        fillOpacity: 0.35,
+      });
+    
+    
+      // Extract the boundaries of the KML layer
+      google.maps.event.addListenerOnce(kmlLayer, 'defaultviewport_changed', () => {
+        const bounds = kmlLayer.getDefaultViewport();
+        setkmlBounds(bounds);
+      });
   };
 
   const handleClear = () => {
@@ -169,26 +263,34 @@ const handleCalculateDeforestationRate = async () => {
     console.log("Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes");
 
     const formData = new FormData();
-
+    let response;
 
     // Generate KML content from selected map polygons
     if (polygonCoordinates.length > 0) {
       const kmlContent = generateKML(polygonCoordinates);
-      formData.append('project', kmlContent);
+      const kmlBlob = new Blob([kmlContent], { type: 'text/xml' });
+      formData.append('project', kmlBlob, `${project}.kml`);
+            
+      const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate_project_aoi/calculate/', {
+        method: 'POST',
+        body: formData
+      });      
     } else {
       formData.append('project', project);
+      const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate_project/calculate/', {
+        method: 'POST',
+        body: formData
+      });
     }
 
-    const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
+/*     const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
       method: 'POST',
 //      headers: {
   //      'Content-Type': 'application/json'
     //  },
       //body: JSON.stringify({ date: startDate })
       body: formData
-      //body: JSON.stringify({ project: project })
-
-    });
+    }); */
 
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -245,63 +347,7 @@ const handleCalculateDeforestationRate = async () => {
     }
   };
 
-  const loadKmlLayerKayapo = (map) => {
-    const kmlUrl = "https://drive.google.com/uc?id=16c_-xJIaRtq31VMGgckB3rlbkxuV7S8t";
-    const kmlLayer = new window.google.maps.KmlLayer({
-      url: kmlUrl,
-      map:map,
-      suppressInfoWindows: false,  
-      preserveViewport: true 
-      
-
-    });
-
-    kmlLayer.addListener('click', (event) => {
-        
-      console.log('Kayapo KML Layer clicked', event);
-    });
-
-    kmlLayer.set('options', {
-        preserveViewport: true,
-        suppressInfoWindows: true,
-        clickable: false,
-        zIndex: 1,
-        strokeColor: '#00FF00', // Green color
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#00FF00', // Green color
-        fillOpacity: 0.35,
-      });
-  };
-
-  const loadKmlLayerYanomami = (map) => {
-    const kmlUrl = "https://gateway.pinata.cloud/ipfs/QmXQDaAk6RkmDWuefL6H4EGJp9F9hpoRq6BkfqWaR75XPm";
-    const kmlLayer = new window.google.maps.KmlLayer({
-      url: kmlUrl,
-      map:map,
-      suppressInfoWindows: false,  
-      preserveViewport: true 
-      
-
-    });
-
-    kmlLayer.addListener('click', (event) => {
-        
-      console.log('Yanomami KML Layer clicked', event);
-    });
-
-    kmlLayer.set('options', {
-        preserveViewport: true,
-        suppressInfoWindows: true,
-        clickable: false,
-        zIndex: 1,
-        strokeColor: '#00FF00', // Green color
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#00FF00', // Green color
-        fillOpacity: 0.35,
-      });
-  };
+  
 
   const handleProjectChange = (event) => {
     const selectedProject = event.target.value;
@@ -393,7 +439,8 @@ const handleCalculateDeforestationRate = async () => {
         onLoad={map => setMapInstance(map)} // Get the map instance
 
       >
-        {polygonCoordinates.length > 0 && (
+        {polygonCoordinates.length > 0 && 
+(
           <Polygon
             paths={polygonCoordinates}
             options={{
@@ -402,6 +449,7 @@ const handleCalculateDeforestationRate = async () => {
               strokeColor: '#00FF00',
               strokeOpacity: 0.8,
               strokeWeight: 2,
+
             }}
           />
         )}

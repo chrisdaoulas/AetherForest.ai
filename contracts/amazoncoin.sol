@@ -18,6 +18,7 @@ contract AmazonasCoin {
     event TokensPurchased(address indexed buyer, uint256 amount, uint256 timestamp);
     event TokensSold(address indexed seller, uint256 amount, uint256 timestamp);
     event CarbonOffsetsClaimed(address indexed account, uint256 amount, uint256 timestamp);
+    event PublicDeforestationAnalysis(string cid, string project, uint256 timestamp);
 
     constructor(
         string memory tokenName,
@@ -53,6 +54,13 @@ contract AmazonasCoin {
         emit Transfer(msg.sender, to, value);
 	emit CID(cid, block.timestamp);
         return true;
+    }
+
+    function deforestation_analysis(string memory cid, string memory project) external returns (bool) {
+
+ 	emit PublicDeforestationAnalysis(cid, project, block.timestamp);
+        return true;
+
     }
 
     function approve(address spender, uint256 value) external returns (bool) {

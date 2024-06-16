@@ -52,33 +52,30 @@ export default function Page() {
     }
 
     const loadKmlLayer = (map) => {
-        const kmlUrl = "https://drive.google.com/uc?id=16c_-xJIaRtq31VMGgckB3rlbkxuV7S8t";
-        const kmlLayer = new window.google.maps.KmlLayer({
+      const kmlUrl = "https://drive.google.com/uc?id=16c_-xJIaRtq31VMGgckB3rlbkxuV7S8t";
+      const kmlLayer = new window.google.maps.KmlLayer({
           url: kmlUrl,
-          map:map,
-          suppressInfoWindows: false,  
-          preserveViewport: true 
-          
-
-        });
-    
-        kmlLayer.addListener('click', (event) => {
-            
+          map: map,
+          suppressInfoWindows: false,
+          preserveViewport: true,
+      });
+  
+      kmlLayer.addListener('click', (event) => {
           console.log('KML Layer clicked', event);
-        });
-
-        kmlLayer.set('options', {
-            preserveViewport: true,
-            suppressInfoWindows: true,
-            clickable: false,
-            zIndex: 1,
-            strokeColor: '#00FF00', // Green color
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#00FF00', // Green color
-            fillOpacity: 0.35,
-          });
-      };
+      });
+  
+      kmlLayer.setOptions({
+          preserveViewport: true,
+          suppressInfoWindows: true,
+          clickable: false,
+          zIndex: 0,
+          strokeColor: '#00FF00', // Green color
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#00FF00', // Green color
+          fillOpacity: 0.35,
+      });
+  };
     
     
     return (

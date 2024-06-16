@@ -2,7 +2,7 @@ from rest_framework import routers, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from utils.utils_sat import four_months_before
-from utils.satellite_analysis import satellite_analysis
+from utils.satellite_analysis import satellite_analysis, satellite_analysis_aoi
 from datetime import datetime
 
 from django.views.decorators.csrf import csrf_exempt
@@ -28,7 +28,7 @@ from django.http import JsonResponse
 
 
 import folium
-from utils.utils_sat import four_months_before, read_python_file, save_python_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin
+from utils.utils_sat import four_months_before, read_python_file, save_python_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin, deploy_smartcontract, transfercarbon, deforestation_analysis
 from utils.SQL_database import pd_to_sqlDB, row_to_sql, sql_query_to_pd, remove_last_sql
 from utils.IPFS import upload_ipfs_pinata
 import shutil
@@ -56,7 +56,7 @@ class CalculateFourMonthsBeforeViewSet(viewsets.ViewSet):
 
 
 # Focus on viewsets.py not views.py, for REST APIs
-class CalculateDeforestationRateViewSet(viewsets.ViewSet):
+class CalculateDeforestationRateProjectViewSet(viewsets.ViewSet):
     @method_decorator(csrf_exempt)
     @action(detail=False, methods=['post'])
     def calculate(self, request):
@@ -80,13 +80,43 @@ class CalculateDeforestationRateViewSet(viewsets.ViewSet):
         return Response(response_data)
 
 
+class CalculateDeforestationRateAoiViewSet(viewsets.ViewSet):
+
+    @method_decorator(csrf_exempt)
+    @action(detail=False, methods=['post'])
+
+    def calculate(self, request):
+
+        project = request.FILES.get('project')
+        logger.debug(f"Received KML file: {project}")
+
+        if not project:
+            logger.error("Missing project parameter")
+            return Response({'error': 'No KML file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+       file_path = default_storage.save(f'C:/Users/cdaou/OneDrive/Documents/MSBDGA/Github/AmazoniaCoin/satellite_data/kml/{project}', ContentFile(project.read()))
+
+
+         # Call the satellite_analysis function and get the result
+        result = satellite_analysis_aoi(project)
+
+        response_data = {
+	    'Project': result[0],
+            'Net Deforestation Rate': result[1],
+            'Statistical Loss': result[2] ,
+            'Statistical Gain': result[3] ,
+	    'IPFS CID': result[4]
+        }
+
+        return Response(response_data)
 
 
 
 # Register the ViewSets with a router
 router = routers.SimpleRouter()
 router.register(r'calculate_four_months_before', CalculateFourMonthsBeforeViewSet, basename="calculate_four_months_before")
-router.register(r'calculate_deforestation_rate', CalculateDeforestationRateViewSet, basename="calculate_deforestation_rate")
+router.register(r'calculate_deforestation_rate_project', CalculateDeforestationRateProjectViewSet, basename="calculate_deforestation_rate_project")
+router.register(r'calculate_deforestation_rate_aoi', CalculateDeforestationRateAoiViewSet, basename="calculate_deforestation_rate_aoi")
 
 
 # Define the urlpatterns for the router

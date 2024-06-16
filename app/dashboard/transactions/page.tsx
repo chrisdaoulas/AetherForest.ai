@@ -13,7 +13,7 @@ import { UserContext} from '@/app/components/context';
 
 //var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545/'));//http://localhost:8545'));
-const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.env.NEXT_PUBLIC_HARDHAT; 
+const contractAddress = "0xc5a5C42992dECbae36851359345FE25997F5C42d"//process.env.NEXT_PUBLIC_HARDHAT; 
 
 //const web3 = new Web3('ws://localhost:7545');
 //var Contract = require('web3-eth-contract');

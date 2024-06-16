@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Sun Jun 16 15:53:07 2024
+
+@author: cdaou
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Tue Apr 16 15:13:52 2024
 
 @author: cdaou
@@ -46,9 +53,9 @@ import geopandas as gpd
 import os
 
 
-def satellite_analysis(project):
+def satellite_analysis_aoi(kml):
     
-    file_contents = read_python_file(os.getcwd()+"//satellite_function.py")
+    file_contents = read_python_file(os.getcwd()+"//satellite_aoi_final.py")
     
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
@@ -81,12 +88,20 @@ def satellite_analysis(project):
     EE_TILES = 'https://earthengine.googleapis.com/map/{mapid}/{{z}}/{{x}}/{{y}}?token={token}'
     
 
-    #shape = gpd.read_file(os.path.dirname(os.getcwd())+f"\\{project}\\{project}.shp")   
-    shape = gpd.read_file(os.path.join(os.path.dirname(os.getcwd()), project, f"{project}.shp"))
+    kml2shape(kml)
+    
+    project = kml[:-4]
+    project = ''.join([char for char in project if char.isalpha()])
+    
+    shape = gpd.read_file(os.path.join(f"{project}.shp"))
 
     js = json.loads(shape.to_json())
     
+    
+    delete_files(os.getcwd())
+    
     project_geom = f"{project}"
+    
     globals()[project_geom]= ee.Geometry(ee.FeatureCollection(js).geometry())
     
     """Define the forested and non forested samples"""
@@ -554,6 +569,7 @@ def satellite_analysis(project):
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
     
     save_file(file_contents, 'current_script_version.py')
+    save_file(kml, '{project}_aoi_{now}.kml')
     get_latest_commit_id()
     
     shutil.make_archive(output_filename, 'zip')
@@ -561,69 +577,19 @@ def satellite_analysis(project):
     
     pinata = output_filename+'.zip'
     
-    #Add project reference as well
-    totable = [[net, today, upload_ipfs_pinata(pinata),f"{project}"]]
-    
-    print("Data Uploaded to IPFS")     
-    
-    totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
+    cid = upload_ipfs_pinata(pinata)
     
     
+    print("Data Uploaded to IPFS")  
+    
+
     delete_files(os.getcwd())
     
-    os.chdir(os.path.dirname(os.getcwd()))
-    
-    
-    try:
-        pd_to_sqlDB(totable,table_name='Deforestation_Rate',db_name='defrate.db')
-    except:
-        row_to_sql(totable, table_name='Deforestation_Rate',db_name='defrate.db')
-    
-    print("Deforestation metadata Data Uploaded to SQL")     
+    # Publish Event on the Blockchain
     
 
-    
-    # Step 3: Write the SQL query in a string variable
-    sql_query_string = """
-        SELECT * FROM Deforestation_Rate
-    
-    """
-    
-    # Step 4: Exectue the SQL query
-    result_df = sql_query_to_pd(sql_query_string, db_name='defrate.db')
-    result_df
-    
-    
-    # Step 5: Check time duplicates
-    n_rows=len(result_df)
-    
-    if n_rows>1:
-      timecheck = result_df.iloc[n_rows-1,1]== result_df.iloc[n_rows-2,1]
-    
-      if timecheck==True:
-          remove_last_sql(table_name='Deforestation_Rate',db_name='defrate.db')
-          print("SQL Table Duplicate Removed")
-      else:
-          print("SQL Table Unique Values Ensured")
-    
-    #2. Define Avoided Deforestation and carbon credits
-
-    deforestationavoided = result_df.iloc[n_rows-1,0]-result_df.iloc[n_rows-2,0]
-
-    if deforestationavoided<0:
-        carboncredits = abs(20*deforestationavoided) #10 credits per 1% of avoided deforestation
-    else:
-        carboncredits=10
-        
-
-    cid = result_df.iloc[n_rows-1,2] 
-    
-    to_address = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-
-    value_to_transfer = int(carboncredits)  # Adjust the value as needed
-
-    transfercarbon(to_address, value_to_transfer,cid)
+    deforestation_analysis(cid, project)
 
 
-project = 'Kayapo'
-satellite_analysis(project)
+kml = 'Kayapo.kml'
+satellite_analysis_aoi(kml)

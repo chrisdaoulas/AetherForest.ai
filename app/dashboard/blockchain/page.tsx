@@ -64,7 +64,7 @@ const MyComponent = ({
 
     // Replace 'AmazonasCoinJSON' with your contract ABI and address
      
-    const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"//process.env.NEXT_PUBLIC_HARDHAT
+    const contractAddress = "0xc5a5C42992dECbae36851359345FE25997F5C42d"//process.env.NEXT_PUBLIC_HARDHAT
     const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     
     // Get all events from the contract ABI
@@ -206,7 +206,7 @@ const renderPaginationButtons = () => {
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
                       {event['name']=='Approval' && event['data']['returnValues'][0].toString()}
                       {event['name']=='CID' && events[startIndex+index+1]['data']['returnValues'][0].toString()}
-                      {event['name']=='Transfer' && events[startIndex+index+1]['data']['returnValues'][0].toString()}
+                      {event['name']=='Transfer' && events[startIndex+index]['data']['returnValues'][0].toString()}
                       {event['name']=='TokensSold' && event['data']['returnValues'][0].toString()}
                       {event['name']=='TokensPurchased' && event['data']['returnValues'][0].toString()}                      
                     </td>
