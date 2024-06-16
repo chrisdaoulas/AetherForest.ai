@@ -42,6 +42,9 @@ export default function Page() {
     return savedData ? JSON.parse(savedData) : '';
   });
   const [isLoading, setIsLoading] = useState('');
+  const [mapInstance, setMapInstance] = useState(''); // State variable to store the map instance
+  const [showNotification, setshowNotification] = React.useState<boolean>(false);
+  const [inputAlerts, setInputAlerts] = React.useState<any>(null);
 
 
   const { isLoaded, loadError } = useLoadScript({
@@ -64,6 +67,26 @@ export default function Page() {
     }
   }, [responseTableData]);
 
+  useEffect(() => {
+    if (project) {
+      if (project === 'Kayapo') {
+        loadKmlLayerKayapo(mapInstance);
+      } else if (project === 'Yanomami') {
+        loadKmlLayerYanomami(mapInstance);
+      }
+    }
+  }, [project]);
+
+  function Notification() {
+    return (
+      <div className="mb-4 rounded-lg bg-orange-400 bg-success-100 px-6 py-5 text-white text-success-700" role="alert">
+      <strong>Warning</strong> {inputAlerts}
+      <button onClick={() => setshowNotification(false)} className="float-right">
+        Close
+      </button>
+    </div>
+    );
+  }
 
   const handleMapClick = (event) => {
     setPolygonCoordinates((prevCoordinates) => [
@@ -126,75 +149,19 @@ export default function Page() {
     return kmlContent;
 };
 
-// const handleDownloadShapefile = () => {
-//     if (polygonCoordinates.length === 0) return;
-
-//     const shapefileBuffer = generateShapefile(polygonCoordinates);
-//     const blob = new Blob([shapefileBuffer], { type: 'application/zip' });
-//     const url = URL.createObjectURL(blob);
-
-//     const a = document.createElement('a');
-//     a.href = url;
-//     a.download = project + '.zip';
-//     document.body.appendChild(a);
-//     a.click();
-//     document.body.removeChild(a);
-//     URL.revokeObjectURL(url);
-// };
-
-// const generateShapefile = (coordinates) => {
-//     // Ensure coordinates array is not empty
-//     if (coordinates.length === 0) {
-//         throw new Error("Coordinates array is empty");
-//     }
-
-//     // Generate features for the shapefile
-//     const features = [{
-//         type: 'Feature',
-//         properties: {},
-//         geometry: {
-//             type: 'Polygon',
-//             coordinates: [coordinates.map(coord => [coord.lng, coord.lat])]
-//         }
-//     }];
-
-//     // Generate Shapefile buffer
-//     const buffer = shpwrite.zip(features);
-
-//     // Return the Shapefile buffer
-//     return buffer;
-// };
-
-// const handleCalculateDeforestationRate = () => {
-//     // Perform any necessary data validation...
-//     // Assuming you have the KML content stored in a variable named kmlContent
-    
-//     //const kmlContent = generateKML(polygonCoordinates);
-//     const startdate = startDate
-//     axios.post('/utils_sat.py', { startdate })
-//       .then(response => {
-//         // Handle the response from the server...
-//         console.log(response.data);
-//       })
-//       .catch(error => {
-//         // Handle any errors...
-//         console.error('Error:', error);
-//       });
-//   };
-//   async function handleCalculateDeforestationRate() {
-//     const response = await fetch('http://localhost:8000/api/calculate_four_months_before/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ date: startDate })
-//     });
-
-//     const data = await response.json();
-//     setCalculation(data.calculation);
-// }
 
 const handleCalculateDeforestationRate = async () => {
+
+  if (!project) {
+    console.error('No project selected.');
+    setshowNotification(true);
+
+    setTimeout(() => {
+      setshowNotification(false);
+    }, 5000);
+    setInputAlerts('Please Select a Project');
+    return; // Exit the function early if no project is selected
+  }
   
   try {
 
@@ -278,6 +245,64 @@ const handleCalculateDeforestationRate = async () => {
     }
   };
 
+  const loadKmlLayerKayapo = (map) => {
+    const kmlUrl = "https://drive.google.com/uc?id=16c_-xJIaRtq31VMGgckB3rlbkxuV7S8t";
+    const kmlLayer = new window.google.maps.KmlLayer({
+      url: kmlUrl,
+      map:map,
+      suppressInfoWindows: false,  
+      preserveViewport: true 
+      
+
+    });
+
+    kmlLayer.addListener('click', (event) => {
+        
+      console.log('Kayapo KML Layer clicked', event);
+    });
+
+    kmlLayer.set('options', {
+        preserveViewport: true,
+        suppressInfoWindows: true,
+        clickable: false,
+        zIndex: 1,
+        strokeColor: '#00FF00', // Green color
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#00FF00', // Green color
+        fillOpacity: 0.35,
+      });
+  };
+
+  const loadKmlLayerYanomami = (map) => {
+    const kmlUrl = "https://gateway.pinata.cloud/ipfs/QmXQDaAk6RkmDWuefL6H4EGJp9F9hpoRq6BkfqWaR75XPm";
+    const kmlLayer = new window.google.maps.KmlLayer({
+      url: kmlUrl,
+      map:map,
+      suppressInfoWindows: false,  
+      preserveViewport: true 
+      
+
+    });
+
+    kmlLayer.addListener('click', (event) => {
+        
+      console.log('Yanomami KML Layer clicked', event);
+    });
+
+    kmlLayer.set('options', {
+        preserveViewport: true,
+        suppressInfoWindows: true,
+        clickable: false,
+        zIndex: 1,
+        strokeColor: '#00FF00', // Green color
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#00FF00', // Green color
+        fillOpacity: 0.35,
+      });
+  };
+
   const handleProjectChange = (event) => {
     const selectedProject = event.target.value;
     setProject(selectedProject);
@@ -357,6 +382,7 @@ const handleCalculateDeforestationRate = async () => {
     <h1 className={`${lusitana.className} text-1xl mt-5 mb-4` } style={{  margin:  `10px`, marginLeft: `0px` }} >To utilize our deforestation monitoring tool, begin by defining your area of interest by clicking points on the map to create a polygon boundary, representing the region for monitoring. Next, select the start and end dates to specify the monitoring period. Clicking the `Define AOI` button generates a KML file containing the defined area and time range. Import this file into GIS software to analyze deforestation rates. Regularly monitor changes and take action to mitigate deforestation. For further assistance, contact our support team.</h1>
 
     <Spacer height="10px" />
+
     <GoogleMap
         mapContainerStyle={mapContainerStyle}
         mapTypeId={google.maps.MapTypeId.SATELLITE}
@@ -364,6 +390,8 @@ const handleCalculateDeforestationRate = async () => {
         zoom={8}
         center={mapCenter}
         onClick={handleMapClick}
+        onLoad={map => setMapInstance(map)} // Get the map instance
+
       >
         {polygonCoordinates.length > 0 && (
           <Polygon
@@ -456,6 +484,7 @@ const handleCalculateDeforestationRate = async () => {
             
             </HStack>
             <Spacer height="30px" />
+            {showNotification && <Notification />}
             {isLoading && (
         <p style={{ color: 'green' }}>Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes</p>
       )}
