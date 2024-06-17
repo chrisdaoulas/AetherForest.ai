@@ -29,7 +29,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 import folium
-from utils.utils_sat import four_months_before, read_python_file, save_python_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin
+from utils.utils_sat import four_months_before, read_python_file, save_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin
 from utils.SQL_database import pd_to_sqlDB, row_to_sql, sql_query_to_pd, remove_last_sql
 from utils.IPFS import upload_ipfs_pinata
 from utils.satellite_analysis import satellite_analysis

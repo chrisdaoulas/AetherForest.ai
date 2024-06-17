@@ -12,6 +12,13 @@ import time
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 
+import sqlite3
+from eth_utils import address
+from web3 import Web3
+from solcx import compile_standard, install_solc
+from dotenv import load_dotenv
+import json
+
 
 
 def read_python_file(filename):
@@ -19,7 +26,7 @@ def read_python_file(filename):
         return f.read()
     
 
-def save_python_file(contents, filename):
+def save_file(contents, filename):
     with open(filename, 'w') as f:
         f.write(contents)    
 
@@ -43,8 +50,9 @@ def kml2shape(kml):
     
     fiona.drvsupport.supported_drivers['KML'] = 'rw'
     os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\myproject\\satellite_data\\kml\\")
-      
-    fp = os.path.join(os.getcwd()+"\\"+kml)
+    
+        
+    fp = os.path.join(os.getcwd(), kml)
 
 
     gdf_list = []
@@ -171,7 +179,7 @@ def deploy_smartcontract(w3,chain_id, private_key, my_address):
     # `contract address`)
     # Do Not Copy from here, contract address will be different 
     # for different contracts.
-    deployed_contract_address = '0xc5a5C42992dECbae36851359345FE25997F5C42d'
+    deployed_contract_address = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
      
     # load contract info as JSON
     with open(compiled_contract_path) as file:

@@ -37,7 +37,7 @@ from django.http import JsonResponse
 
 
 import folium
-from utils.utils_sat import four_months_before, read_python_file, save_python_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin, deploy_smartcontract, transfercarbon, deforestation_analysis
+from utils.utils_sat import four_months_before, read_python_file, save_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin, deploy_smartcontract, transfercarbon, deforestation_analysis
 from utils.SQL_database import pd_to_sqlDB, row_to_sql, sql_query_to_pd, remove_last_sql
 from utils.IPFS import upload_ipfs_pinata
 import shutil
@@ -85,10 +85,11 @@ class CalculateDeforestationRateProjectViewSet(viewsets.ViewSet):
 
         response_data = {
 	    'Project': result[0],
-            'Net Deforestation Rate': result[1],
-            'Statistical Loss': result[2] ,
-            'Statistical Gain': result[3] ,
-	    'IPFS CID': result[4]
+            'Date & Time': result[1],
+            'Net Deforestation Rate': result[2],
+            'Statistical Loss': result[3] ,
+            'Statistical Gain': result[4] ,
+	    'IPFS CID': result[5]
         }
 
         return Response(response_data)
@@ -118,10 +119,11 @@ class CalculateDeforestationRateAoiViewSet(viewsets.ViewSet):
 
         response_data = {
 	    'Project': result[0],
-            'Net Deforestation Rate': result[1],
-            'Statistical Loss': result[2] ,
-            'Statistical Gain': result[3] ,
-	    'IPFS CID': result[4]
+            'Date & Time': result[1],
+            'Net Deforestation Rate': result[2],
+            'Statistical Loss': result[3] ,
+            'Statistical Gain': result[4] ,
+	    'IPFS CID': result[5]
         }
 
         return Response(response_data)

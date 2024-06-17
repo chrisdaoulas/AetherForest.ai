@@ -23,7 +23,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 import folium
-from utils.utils_sat import four_months_before, read_python_file, save_python_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin, deploy_smartcontract, transfercarbon, deforestation_analysis
+from utils.utils_sat import four_months_before, read_python_file, save_file, get_latest_commit_id, delete_files, kml2shape, eight_months_before,check_task_status, geelogin, deploy_smartcontract, transfercarbon, deforestation_analysis
 from utils.SQL_database import pd_to_sqlDB, row_to_sql, sql_query_to_pd, remove_last_sql
 from utils.IPFS import upload_ipfs_pinata
 import shutil
@@ -542,7 +542,7 @@ def satellite_analysis(project):
     
     os.chdir(os.path.dirname(os.getcwd())+'\\toipfs\\')
     
-    save_python_file(file_contents, 'current_script_version.py')
+    save_file(file_contents, 'current_script_version.py')
     get_latest_commit_id()
     
     shutil.make_archive(output_filename, 'zip')
@@ -562,7 +562,7 @@ def satellite_analysis(project):
 
     print("Event published on Blockchain")     
 
-    front = [project, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(pinata)]
+    front = [project, now, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(pinata)]
 
     return front
 
@@ -1114,6 +1114,6 @@ def satellite_analysis_aoi(kml):
 
     print("Event published on Blockchain")     
 
-    front = [project, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(cid)]
+    front = [project, now, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(cid)]
 
     return front

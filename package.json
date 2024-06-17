@@ -2,11 +2,13 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run custom-script\"",
+    "next-dev": "dev",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
-    "seed": "node -r dotenv/config ./scripts/seed.js"
+    "seed": "node -r dotenv/config ./scripts/seed.js",
+    "custom-script": "./start_dev.sh"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -59,8 +61,9 @@
     "@types/react-dom": "18.2.14",
     "@types/sql.js": "^1.4.9",
     "@vercel/style-guide": "^5.0.1",
-    "chai": "^5.1.1",
+    "chai": "^4.4.1",
     "chai-as-promised": "^7.1.2",
+    "concurrently": "^7.6.0",
     "dotenv": "^16.3.1",
     "eslint": "^8.52.0",
     "eslint-config-next": "^14.2.3",
