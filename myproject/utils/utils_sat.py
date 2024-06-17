@@ -41,17 +41,11 @@ def delete_files(directory):
 
 def kml2shape(kml):
     
-    #kml = 'uaoi.kml'
-    #gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
     fiona.drvsupport.supported_drivers['KML'] = 'rw'
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\myproject\\satellite_data\\kml\\")
+      
+    fp = os.path.join(os.getcwd()+"\\"+kml)
 
-    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\shapefiles\\")
-    
-    
-    
-    fp = os.path.join(os.getcwd(), kml)
-    
-    
 
     gdf_list = []
     for layer in fiona.listlayers(fp):    
@@ -161,14 +155,9 @@ def geelogin():
 
 
 
+def deploy_smartcontract(w3,chain_id, private_key, my_address):
+    
 
-
-def deploy_smartcontract():
-    # set up connection
-    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
-    chain_id = 1337
-    my_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
     
     w3.eth.defaultAccount = w3.eth.accounts[0]
      
@@ -182,7 +171,7 @@ def deploy_smartcontract():
     # `contract address`)
     # Do Not Copy from here, contract address will be different 
     # for different contracts.
-    deployed_contract_address = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+    deployed_contract_address = '0xc5a5C42992dECbae36851359345FE25997F5C42d'
      
     # load contract info as JSON
     with open(compiled_contract_path) as file:
@@ -194,15 +183,25 @@ def deploy_smartcontract():
         contract_bytecode = contract_json["bytecode"]
      
     # Fetching deployed contract reference
-    amazoncoin = w3.eth.contract(address = deployed_contract_address, abi = contract_abi,bytecode=contract_bytecode)
+    amazoncoin = w3.eth.contract(address = deployed_contract_address, abi = contract_abi, bytecode=contract_bytecode)
+    
+    return amazoncoin
 
 
 def transfercarbon(to_address,value_to_transfer,cid):
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    my_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+
+    chain_id = 1337
+    private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+    amazoncoin = deploy_smartcontract(w3,chain_id,private_key,my_address)
+
    
     nonce = w3.eth.get_transaction_count(my_address)
     adjusted_gas_price = 2 + w3.eth.gas_price  # Adjust this value as needed
     
-    transaction = amazoncoin2.functions.transfer(to_address, value_to_transfer,cid).build_transaction({
+    transaction = amazoncoin.functions.transfer(to_address, value_to_transfer,cid).build_transaction({
         "chainId": chain_id,    
          "gas":2000000,
         "gasPrice": adjusted_gas_price, 
@@ -214,9 +213,36 @@ def transfercarbon(to_address,value_to_transfer,cid):
     signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_key)
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
-    events = amazoncoin2.events.Transfer().process_receipt(tx_receipt)
 
-    return events
+    return tx_receipt
     
+
+def deforestation_analysis( cid, project):
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    my_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+
+    chain_id = 1337
+    private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+    amazoncoin = deploy_smartcontract(w3,chain_id,private_key,my_address)
+
+   
+    nonce = w3.eth.get_transaction_count(my_address)
+    adjusted_gas_price = 2 + w3.eth.gas_price  # Adjust this value as needed
+    
+    transaction = amazoncoin.functions.deforestation_analysis(cid,project).build_transaction({
+        "chainId": chain_id,    
+         "gas":2000000,
+        "gasPrice": adjusted_gas_price, 
+        "from": my_address, 
+        "nonce": nonce
+    })
+    
+    
+    signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+    return tx_receipt
 
 

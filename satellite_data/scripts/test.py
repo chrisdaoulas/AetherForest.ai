@@ -122,3 +122,28 @@ relGaininfo = relGain.getInfo()*100
 print("Calculation of Real Gain complete")
 
 net = relLossinfo - relGaininfo
+
+
+
+def kml2shape(kml):
+    
+    fiona.drvsupport.supported_drivers['KML'] = 'rw'
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\myproject\\satellite_data\\kml\\")
+    
+    kml = kml[19:]        
+    fp = os.path.join(os.getcwd()+"\\"+kml)
+
+
+    gdf_list = []
+    for layer in fiona.listlayers(fp):    
+        gdf = gpd.read_file(fp, driver='KML', layer=layer)
+        gdf_list.append(gdf)
+
+    gdf = gpd.GeoDataFrame(pd.concat(gdf_list, ignore_index=True))
+    #gdf.set_crs('epsg:32721',allow_override=True)
+
+    gpd.io.file.fiona.drvsupport.supported_drivers['ESRI Shapefile'] = 'raw'
+    
+        
+    shapefile = kml[:-4]+'.shp'
+    gdf.to_file(shapefile)

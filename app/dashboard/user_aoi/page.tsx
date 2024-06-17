@@ -263,7 +263,6 @@ const handleCalculateDeforestationRate = async () => {
     console.log("Please wait while Google Earth Engine analyses your AOI's deforestation rate... Average waiting time is 15-20 minutes");
 
     const formData = new FormData();
-    let response;
 
     // Generate KML content from selected map polygons
     if (polygonCoordinates.length > 0) {
@@ -271,16 +270,37 @@ const handleCalculateDeforestationRate = async () => {
       const kmlBlob = new Blob([kmlContent], { type: 'text/xml' });
       formData.append('project', kmlBlob, `${project}.kml`);
             
-      const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate_project_aoi/calculate/', {
+      const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate_aoi/calculate/', {
         method: 'POST',
         body: formData
-      });      
+      }); 
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      setCalculation(data.result);//.calculation);
+      setResponseTableData(data); // Set the response data to be displayed in the table
+  
+      console.log(data); // Log the response data to the console
+
     } else {
       formData.append('project', project);
       const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate_project/calculate/', {
         method: 'POST',
         body: formData
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      setCalculation(data.result);//.calculation);
+      setResponseTableData(data); // Set the response data to be displayed in the table
+  
+      console.log(data); // Log the response data to the console
     }
 
 /*     const response = await fetch('http://localhost:8000/api/calculate_deforestation_rate/calculate/', {
@@ -292,15 +312,7 @@ const handleCalculateDeforestationRate = async () => {
       body: formData
     }); */
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data = await response.json();
-    setCalculation(data.result);//.calculation);
-    setResponseTableData(data); // Set the response data to be displayed in the table
-
-    console.log(data); // Log the response data to the console
+   
     
 
   } catch (error) {

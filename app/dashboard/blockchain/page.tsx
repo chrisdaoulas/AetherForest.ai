@@ -64,7 +64,7 @@ const MyComponent = ({
 
     // Replace 'AmazonasCoinJSON' with your contract ABI and address
      
-    const contractAddress = "0xc5a5C42992dECbae36851359345FE25997F5C42d"//process.env.NEXT_PUBLIC_HARDHAT
+    const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"//process.env.NEXT_PUBLIC_HARDHAT
     const contract = new web3.eth.Contract(AmazonasCoinJSON.abi, contractAddress);
     
     // Get all events from the contract ABI
@@ -172,7 +172,7 @@ const renderPaginationButtons = () => {
                     <th scope="col" className="px-3 py-5 font-medium"><strong>Timestamp</strong></th>
                     <th scope="col" className="px-3 py-5 font-medium"><strong>From</strong></th>
                     <th scope="col" className="px-3 py-5 font-medium"><strong>To</strong></th>
-                    <th scope="col" className="px-3 py-5 font-medium"><strong>Credits/ Cid/ Allowance</strong></th>
+                    <th scope="col" className="px-3 py-5 font-medium"><strong>Credits/ Cid/ Allowance/ Project</strong></th>
                     <th scope="col" className="px-3 py-5 font-medium"><strong>Block Hash</strong></th>
                     <th scope="col" className="px-3 py-5 font-medium"><strong>Transaction Hash</strong></th>
 
@@ -191,6 +191,7 @@ const renderPaginationButtons = () => {
 
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['name']}</strong></td>
 
+{/* timestamp */}
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['name']=='CarbonOffsetsClaimed' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
                       {event['name']=='CID' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
@@ -198,9 +199,11 @@ const renderPaginationButtons = () => {
                       {event['name']=='Transfer' && format(fromUnixTime(Number(events[startIndex+index-1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
                       {event['name']=='TokensPurchased' && format(fromUnixTime(Number(events[startIndex+index-1]['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}                                          
                       {event['name']=='TokensSold' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
+                      {event['name']=='PublicDeforestationAnalysis' && format(fromUnixTime(Number(event['data']['returnValues']['timestamp'].toString())),"dd-MM-yyyy HH:mm:ss xxx")}
 
                     </td>
 
+{/* from */}
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['data']['returnValues']['from']}
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][0].toString()}
@@ -210,17 +213,18 @@ const renderPaginationButtons = () => {
                       {event['name']=='TokensSold' && event['data']['returnValues'][0].toString()}
                       {event['name']=='TokensPurchased' && event['data']['returnValues'][0].toString()}                      
                     </td>
-
+{/* To */}
                     <td className="whitespace-nowrap px-3 py-3"> 
                       <strong>{event['data']['returnValues'][1]}</strong>
                       <strong>{event['name']=='Transfer' && event['data']['returnValues'][1].toString}</strong>
                       <strong>{event['name']=='CID' && events[index+1]['data']['returnValues'][0].toString()}</strong>
                       <strong>{event['name']=='TokensPurchased' && events[index]['data']['returnValues'][0].toString()}</strong>
                       <strong>{event['name']=='TokensSold' && events[index+1]['data']['returnValues'][0].toString()}</strong>                      
+                      <strong>{event['name']=='PublicDeforestationAnalysis' && ''}</strong>                      
 
 
                     </td>
-                    
+                    {/* Credits/ Cid/ Allowance */}
                     <td className="whitespace-nowrap px-3 py-3">
                       {event['name']=='CarbonOffsetsClaimed' && event['data']['returnValues'][1].toString().concat(" AMZ")}
                       {event['name']=='Approval' && event['data']['returnValues'][2].toString().concat(" AMZ")}
@@ -228,6 +232,8 @@ const renderPaginationButtons = () => {
                       {event['name']=='Transfer' && event['data']['returnValues'][2].toString().concat(" AMZ")}
                       {event['name']=='TokensSold' && event['data']['returnValues'][1].toString().concat(" AMZ")}                      
                       {event['name']=='TokensPurchased' && events[index+1]['data']['returnValues'][1].toString().concat(" AMZ")}                      
+                      {event['name']=='PublicDeforestationAnalysis' && event['data']['returnValues'][1].toString().concat('/ ').concat(event['data']['returnValues']['cid'])}                      
+
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3"><strong>{event['data']['blockHash']}</strong></td>

@@ -40,10 +40,10 @@ import logging
 
 
 def satellite_analysis(project):
-    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\satellite_data\\scripts")
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\myproject\\satellite_data\\scripts")
 
     
-    file_contents = read_python_file(os.getcwd()+"//satellite_function.py")
+    file_contents = read_python_file(os.getcwd()+"\\satellite_function.py")
     
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
@@ -557,48 +557,10 @@ def satellite_analysis(project):
     
     print("Data Uploaded to IPFS")     
     
-    totable = pd.DataFrame(totable, columns=['Rate_of_Deforestation','Time','File_Hash','Project']) 
-    
-    
-    delete_files(os.getcwd())
-    
-    os.chdir(os.path.dirname(os.getcwd()))
-    
-    
-    try:
-        pd_to_sqlDB(totable,table_name='Deforestation_Rate',db_name='defrate.db')
-    except:
-        row_to_sql(totable, table_name='Deforestation_Rate',db_name='defrate.db')
-    
-    print("Deforestation metadata Data Uploaded to SQL")     
-    
-
-    
-    # Step 3: Write the SQL query in a string variable
-    sql_query_string = """
-        SELECT * FROM Deforestation_Rate
-    
-    """
-    
-    # Step 4: Exectue the SQL query
-    result_df = sql_query_to_pd(sql_query_string, db_name='defrate.db')
-    result_df
-    
-    
-    # Step 5: Check time duplicates
-    n_rows=len(result_df)
-    
-    if n_rows>1:
-      timecheck = result_df.iloc[n_rows-1,1]== result_df.iloc[n_rows-2,1]
-    
-      if timecheck==True:
-          remove_last_sql(table_name='Deforestation_Rate',db_name='defrate.db')
-          print("SQL Table Duplicate Removed")
-      else:
-          print("SQL Table Unique Values Ensured")
-    
-
+   
     deforestation_analysis(cid, project)
+
+    print("Event published on Blockchain")     
 
     front = [project, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(pinata)]
 
@@ -606,8 +568,11 @@ def satellite_analysis(project):
 
 
 def satellite_analysis_aoi(kml):
+
+    os.chdir("C:\\Users\\cdaou\\OneDrive\\Documents\\MSBDGA\\Github\\AmazoniaCoin\\myproject\\satellite_data\\scripts")
     
-    file_contents = read_python_file(os.getcwd()+"//satellite_aoi_final.py")
+    file_contents = read_python_file(os.getcwd()+"\\satellite_aoi_final.py")
+
     
     service_account = 'ee-blockchain@ee-blockchain.iam.gserviceaccount.com'
     private_key_path =os.path.abspath(os.path.dirname(os.getcwd())+'\\.private-key.json')
@@ -640,17 +605,22 @@ def satellite_analysis_aoi(kml):
     EE_TILES = 'https://earthengine.googleapis.com/map/{mapid}/{{z}}/{{x}}/{{y}}?token={token}'
     
 
+    kml = kml[19:]
+
+
     kml2shape(kml)
     
-    project = kml[:-4]
-    project = ''.join([char for char in project if char.isalpha()])
+
     
-    shape = gpd.read_file(os.path.join(f"{project}.shp"))
+    shape = gpd.read_file(os.path.join(f"{kml[:-4]}.shp"))
 
     js = json.loads(shape.to_json())
     
     
     delete_files(os.getcwd())
+
+    project = kml[:-4]
+    project = ''.join([char for char in project if char.isalpha()])
     
     project_geom = f"{project}"
     
@@ -1140,7 +1110,9 @@ def satellite_analysis_aoi(kml):
     # Publish Event on the Blockchain
     
 
-    deforestation_analysis(cid, project)
+    deforestation_analysis(str(cid), project)
+
+    print("Event published on Blockchain")     
 
     front = [project, net, str(statsLoss.getInfo()) , str(statsGain.getInfo()), str(cid)]
 

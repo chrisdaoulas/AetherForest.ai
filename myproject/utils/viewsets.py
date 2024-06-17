@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jun 16 17:57:06 2024
+
+@author: cdaou
+"""
+
 from rest_framework import routers, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -8,7 +15,9 @@ from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 
 import ee
 import os
@@ -45,6 +54,11 @@ import logging
 
 # Initialize logging
 logger = logging.getLogger(__name__)
+
+
+
+
+
 
 class CalculateFourMonthsBeforeViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
@@ -94,11 +108,13 @@ class CalculateDeforestationRateAoiViewSet(viewsets.ViewSet):
             logger.error("Missing project parameter")
             return Response({'error': 'No KML file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-       file_path = default_storage.save(f'C:/Users/cdaou/OneDrive/Documents/MSBDGA/Github/AmazoniaCoin/satellite_data/kml/{project}', ContentFile(project.read()))
+
+
+        file_path = default_storage.save(f'satellite_data/kml/{project}', ContentFile(project.read()))
 
 
          # Call the satellite_analysis function and get the result
-        result = satellite_analysis_aoi(project)
+        result = satellite_analysis_aoi(file_path)
 
         response_data = {
 	    'Project': result[0],
