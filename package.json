@@ -2,13 +2,14 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "concurrently \"npm run next-dev\" \"npm run custom-script\"",
-    "next-dev": "dev",
+    "dev": "next dev", 
+    "bash":  "npm run custom-script",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "custom-script": "./start_dev.sh"
+    "database": "node -r dotenv/config ./scripts/database.js",
+    "custom-script": "start_dev.sh"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -63,7 +64,6 @@
     "@vercel/style-guide": "^5.0.1",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.2",
-    "concurrently": "^7.6.0",
     "dotenv": "^16.3.1",
     "eslint": "^8.52.0",
     "eslint-config-next": "^14.2.3",
@@ -74,6 +74,7 @@
     "html-loader": "^5.0.0",
     "mock-aws-s3": "^4.0.2",
     "prettier": "^3.0.3",
+    "concurrently": "8.2.2",
     "prettier-plugin-tailwindcss": "0.5.4"
   },
   "engines": {

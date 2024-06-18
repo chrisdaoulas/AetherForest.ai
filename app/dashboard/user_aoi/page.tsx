@@ -402,6 +402,28 @@ const handleCalculateDeforestationRate = async () => {
   if (!isLoaded) return <div>Loading...</div>;
 
   const ResponseTable = ({ responseData }) => {
+
+    const convertToCSV = () => {
+      const header = Object.keys(responseData);
+      const rows = [header.join(',')];
+  
+      const values = Object.values(responseData);
+      rows.push(values.join(','));
+  
+      const csvContent = rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+  
+      // Create a temporary anchor element and click it to trigger the download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'response_data.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
     return (
       <div>
 
@@ -424,6 +446,11 @@ const handleCalculateDeforestationRate = async () => {
             ))}
           </tbody>
         </table>
+
+
+      <button className={`bg-green-600 hover:bg-blue-700 text-white font-${lusitana.className} font-bold py-2 px-4 rounded mt-4`} onClick={convertToCSV}>
+        Download CSV
+      </button>
 
       </div>
     );

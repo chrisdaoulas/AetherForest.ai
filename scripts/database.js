@@ -6,7 +6,6 @@ const port = 3001;
 
 app.use(cors());
 
-//npx kill-port 3001
 let i = 0;
 
 while (i < 10) {
