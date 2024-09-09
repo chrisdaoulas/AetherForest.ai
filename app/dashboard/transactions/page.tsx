@@ -260,6 +260,8 @@ const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"//process.en
             <Spacer />
 
             <Box h='30px'/>
+            {user?.role != 'Public' && (
+          <>
             <Text className={`${lusitana.className} text-1xl`}><strong>Transfer Triggered AmazonCoin Carbon Credits</strong></Text>
             
             <HStack w='md'>
@@ -290,6 +292,8 @@ const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"//process.en
             </HStack>
             <ColoredLine color="grey" />
             
+            </>
+          )}
             
             <Box h='30px' />
             
@@ -351,7 +355,7 @@ const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"//process.en
               </>
         )}
               
-        {user?.role != 'Beneficiaries' && (        
+        {user?.role != 'Public' && (        
           <>
             <Text className={`${lusitana.className} text-1xl`}><strong>Claim Carbon Offset</strong>s</Text>
             <Input

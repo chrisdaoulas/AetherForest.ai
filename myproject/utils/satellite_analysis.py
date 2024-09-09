@@ -558,7 +558,7 @@ def satellite_analysis(project):
     print("Data Uploaded to IPFS")     
     
    
-    deforestation_analysis(cid, project)
+    deforestation_analysis(pinata, project)
 
     print("Event published on Blockchain")     
 
@@ -966,8 +966,7 @@ def satellite_analysis_aoi(kml):
     
     print("Image Classification complete")
     
-    ee.Reset()
-    ee.Initialize(credentials, project='ee-blockchain')
+
     
     classified2015_10m = ee.Image(globals()[assetId_2015])
     classified2023_10m = ee.Image(globals()[assetId_2023])

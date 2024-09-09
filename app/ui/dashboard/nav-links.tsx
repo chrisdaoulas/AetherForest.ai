@@ -76,7 +76,7 @@ const NavLinks: React.FC = () => {
   
 
   const filteredLinks = links.filter((link) => {
-    return !(user?.role === 'Public' && link.name === 'Transactions');
+    return !(user?.role === 'Public' && link.name === 'Inexisting Button');
   });
 
   const pathname = usePathname();
