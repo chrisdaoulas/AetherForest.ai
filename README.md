@@ -1,4 +1,4 @@
-## AmazonCoin: An Open Permissioned ReFi Carbon Market Blockchain Prototype
+## AetherForest.ai: An Open Permissioned ReFi Carbon Market Blockchain Prototype
 
 Public permissioned blockchains are a type of distributed ledger technology that aims to bring some of the benefits of decentralization to traditional systems of public administration in lower trust environments. Main benefits include increased participation in the democratic process and reduced risk of corruption. These characteristics can be enhanced using FAIR principles, where systems can facilitate transparency, accountability, and collaboration, improving the efficiency and effectiveness of a wide range of government processes and operations, whose sources and outputs become more easily Findable, Accessible, Interoperable, and Reusable by the civic community.
 
