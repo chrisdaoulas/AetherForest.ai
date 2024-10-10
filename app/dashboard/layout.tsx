@@ -1,5 +1,7 @@
 import SideNav from "../ui/dashboard/sidenav";
-import Provider from "../components/context";
+import {Provider} from "../components/context";
+
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
