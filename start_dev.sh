@@ -1,5 +1,6 @@
 #!/bin/bash
-
+npx kill-port 3000
+npx kill-port 8545
 
 # Navigate to Django project directory
 cd myproject

@@ -29,6 +29,7 @@ const MyComponent = ({
   };
 }) => {  
   
+  //const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
   const web3 = new Web3('http://localhost:8545');
   const queryParam = searchParams.query || '';
   //const currentPage = Number(searchParams.page) || 1;
